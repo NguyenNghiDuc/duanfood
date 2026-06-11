@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trang chủ</title>
+    <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+    <header class="topbar">
+        <div class="container topbar-inner">
+            <a class="brand" href="/">
+                <img src="/images/logo.svg" alt="Mini Food logo" class="brand-logo" />
+                <span class="brand-text">Mini Food</span>
+            </a>
+            <span>📞 Hotline: 0909 999 999</span>
+            <div class="topbar-links">
+                <% if (user) { %>
+                    <a href="/profile">Xin chào, <strong><%= user.username %></strong></a>
+                <% } else { %>
+                    <a href="/login">Đăng nhập</a>
+                    <a href="/register">Đăng ký</a>
+                <% } %>
+                <a href="/cart">Giỏ hàng</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <nav class="main-nav card">
+            <a href="/">Trang chủ</a>
+            <a href="/about">Giới thiệu về món ăn</a>
+            <a href="/foods">Thực đơn</a>
+            <a href="/promotion">Khuyến mãi</a>
+            <a href="/contact">Liên hệ</a>
+            <a href="/orders">Đơn hàng</a>
+        </nav>
+
+        <section class="hero-grid card">
+            <article>
+                <span class="badge">Fast Food & Drinks</span>
+                <h1>Đặt món nhanh, ngon, tiện lợi</h1>
+                <p>Khám phá các món ăn nổi bật, tìm kiếm món yêu thích và trải nghiệm giao diện đặt hàng hiện đại.</p>
+                <div class="cta-row">
+                    <a class="btn" href="/foods">Đặt ngay</a>
+                    <a class="btn btn-secondary" href="/promotion">Xem khuyến mãi</a>
+                </div>
+            </article>
+
+            <aside class="banner-stack">
+                <div class="mini-banner"> Burger</div>
+                <div class="mini-banner"> Pizza</div>
+                <div class="mini-banner"> Gà rán</div>
+            </aside>
+        </section>
+
+        <section class="card">
+            <h2>Khuyến mãi</h2>
+            <div class="promo-grid">
+                <article class="promo-card">Giảm giá 50%</article>
+                <article class="promo-card">Mua 2 tặng 1</article>
+                <article class="promo-card">Miễn phí vận chuyển</article>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2>Danh mục món ăn</h2>
+            <div class="category-grid">
+                <% if (categories && categories.length) { %>
+                    <% categories.forEach(category => { %>
+                        <a class="category-card" href="/foods?categoryId=<%= category.id %>">
+                        <strong><%= category.name %></strong>
+                            <span>Khám phá ngay</span>
+                        </a>
+                    <% }) %>
+                <% } else { %>
+                    <p>Chưa có danh mục nào.</p>
+                <% } %>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2>Danh sách sản phẩm</h2>
+            <div class="product-grid">
+                <% if (foods && foods.length) { %>
+                    <% foods.forEach(food => { %>
+                        <article class="product-card">
+                        <% if (food.image) { %>
+                            <img src="<%= food.image %>" alt="<%= food.title %>" />
+                        <% } %>
+                        <h3><%= food.title %></h3>
+                        <p><%= food.description %></p>
+                        <div class="product-meta">
+                            <strong><%= Number(food.price).toLocaleString('vi-VN') %> ₫</strong>
+                            <form method="POST" action="/cart/add/<%= food.id %>">
+                                <button class="btn" type="submit">Thêm vào giỏ</button>
+                            </form>
+                        </div>
+                    </article>
+                    <% }) %>
+                <% } else { %>
+                    <p>Chưa có món ăn nào.</p>
+                <% } %>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer card">
+        <div class="container footer-grid">
+            <div>
+                <h3>Địa chỉ</h3>
+                <p>Dương Nội , Hà Đông , Hà Nội</p>
+            </div>
+            <div>
+                <h3>Hotline</h3>
+                <p>0909 999 999</p>
+            </div>
+            <div>
+                <h3>Facebook</h3>
+                <p>facebook.com/mini-food</p>
+            </div>
+            <div>
+                <h3>Email</h3>
+                <p>support@minifood.vn</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

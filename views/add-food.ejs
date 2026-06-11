@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thêm món ăn</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <main class="container">
+    <section class="card">
+      <h1>Thêm món ăn</h1>
+      <nav>
+        <a href="/">Trang chủ</a>
+        <a href="/foods">Món ăn</a>
+        <a href="/logout">Đăng xuất</a>
+      </nav>
+
+      <form method="POST" action="/admin/foods/add" class="food-filter">
+        <label>Tiêu đề
+          <input type="text" name="title" required />
+        </label>
+        <label>Giá
+          <input type="number" name="price" min="0" required />
+        </label>
+        <label>Danh mục
+          <select name="category_id">
+            <% categories.forEach(category => { %>
+              <option value="<%= category.id %>"><%= category.name %></option>
+            <% }) %>
+          </select>
+        </label>
+        <label>Ảnh (URL)
+          <input type="text" name="image" placeholder="https://..." />
+        </label>
+        <label>Mô tả
+          <textarea name="description" rows="4" required></textarea>
+        </label>
+        <button type="submit" class="btn">Lưu món ăn</button>
+      </form>
+    </section>
+  </main>
+</body>
+</html>

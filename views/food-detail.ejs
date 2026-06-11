@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chi tiết món ăn</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <nav>
+    <a href="/">Trang chủ</a> |
+    <a href="/foods">Món ăn</a>
+  </nav>
+
+  <% if (food) { %>
+    <h1><%= food.title %></h1>
+    <% if (food.image) { %>
+      <img src="<%= food.image %>" alt="<%= food.title %>" style="max-width:320px;border-radius:10px;" />
+    <% } %>
+    <p><%= food.description %></p>
+    <p><strong>Danh mục:</strong> <%= food.category_name || 'Chưa phân loại' %></p>
+    <p><strong>Giá:</strong> <%= Number(food.price).toLocaleString('vi-VN') %> ₫</p>
+    <form method="POST" action="/cart/add/<%= food.id %>">
+      <button type="submit" class="btn">Thêm vào giỏ</button>
+    </form>
+    <p><a href="/foods">← Quay lại danh sách</a></p>
+  <% } else { %>
+    <p>Không tìm thấy món ăn.</p>
+  <% } %>
+</body>
+</html>

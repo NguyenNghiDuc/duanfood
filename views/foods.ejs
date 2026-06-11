@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Danh sách món ăn</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <main class="food-page">
+  <h1>Danh sách món ăn</h1>
+  <nav>
+    <a href="/">Trang chủ</a> |
+    <a href="/foods">Món ăn</a> |
+    <% if (user && user.role === 'admin') { %>
+      <a href="/admin/foods/add">Thêm món ăn</a> |
+      Xin chào, <%= user.username %> |
+      <a href="/logout">Đăng xuất</a>
+    <% } else { %>
+      <a href="/login">Đăng nhập</a> |
+      <a href="/register">Đăng ký</a>
+    <% } %>
+  </nav>
+
+  <form method="GET" action="/foods" class="food-filter">
+    <input type="text" name="keyword" value="<%= keyword || '' %>" placeholder="Tìm món ăn..." />
+    <select name="categoryId">
+      <option value="">Tất cả danh mục</option>
+      <% categories.forEach(c => { %>
+        <option value="<%= c.id %>" <%= String(c.id) === String(categoryId) ? 'selected' : '' %>><%= c.name %></option>
+      <% }) %>
+    </select>
+    <button type="submit">Tìm kiếm</button>
+  </form>
+
+  <% if (foods && foods.length > 0) { %>
+    <ul class="food-list">
+      <% foods.forEach(food => { %>
+        <li>
+          <% if (food.image) { %>
+            <img src="<%= food.image %>" alt="<%= food.title %>" style="max-width:180px;display:block;margin-bottom:8px;border-radius:8px;" />
+          <% } %>
+          <h3><%= food.title %></h3>
+          <p><%= food.description %></p>
+          <p><strong>Danh mục:</strong> <%= food.category_name || 'Chưa phân loại' %></p>
+          <p><strong>Giá:</strong> <%= Number(food.price).toLocaleString('vi-VN') %> ₫</p>
+          <p><a href="/foods/<%= food.id %>">Xem chi tiết</a></p>
+          <form method="POST" action="/cart/add/<%= food.id %>">
+            <button type="submit" class="btn">Thêm vào giỏ</button>
+          </form>
+        </li>
+      <% }) %>
+    </ul>
+  <% } else { %>
+    <p>Chưa có món ăn nào.</p>
+  <% } %>
+  </main>
+</body>
+</html>

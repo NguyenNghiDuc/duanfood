@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sửa bài viết</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <nav>
+        <a href="/">Trang chủ</a>
+        <a href="/news">Tin tức</a>
+        <% if (user) { %>
+            | Xin chào, <%= user.username %> |
+            <a href="/logout">Đăng xuất</a>
+        <% } else { %>
+            | <a href="/login">Đăng nhập</a>
+        <% } %>
+    </nav>
+    
+    <h1>Sửa bài viết</h1>
+    
+    <form method="POST" action="/news/<%= post.id %>/edit">
+        <div>
+            <label>Tiêu đề</label>
+            <input type="text" name="title" value="<%= post.title %>" required>
+        </div>
+        
+        <div>
+            <label>Mô tả</label>
+            <textarea name="description" required><%= post.description %></textarea>
+        </div>
+
+        <button type="submit">Cập nhật</button>
+    </form>
+</body>
+</html>

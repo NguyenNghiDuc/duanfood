@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tài khoản</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <main>
+    <section class="card">
+      <h1>Tài khoản</h1>
+      <p class="subtext">Xin chào, <strong><%= user.username %></strong>.</p>
+      <p>Số dư ví: <strong><%= Number(user.balance || 0).toLocaleString('vi-VN') %> ₫</strong></p>
+      <p><a href="/wallet/top-up">Nạp tiền vào ví</a></p>
+      <nav>
+        <a href="/">Trang chủ</a>
+        <a href="/orders">Đơn hàng</a>
+        <a href="/cart">Giỏ hàng</a>
+        <a href="/logout">Đăng xuất</a>
+      </nav>
+    </section>
+  </main>
+</body>
+</html>

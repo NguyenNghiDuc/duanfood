@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nạp tiền vào ví</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <main class="container">
+    <section class="card">
+      <h1>Nạp tiền vào ví</h1>
+      <nav>
+        <a href="/">Trang chủ</a>
+        <a href="/cart">Giỏ hàng</a>
+        <a href="/orders">Đơn hàng</a>
+      </nav>
+
+      <% if (error) { %>
+        <p class="notice"><%= error %></p>
+      <% } %>
+      <% if (success) { %>
+        <p class="notice"><%= success %></p>
+      <% } %>
+
+      <form method="POST" action="/wallet/top-up" class="food-filter">
+        <label>Số tiền nạp (₫)
+          <input type="number" name="amount" min="1000" step="1000" required />
+        </label>
+        <button type="submit" class="btn">Nạp tiền</button>
+      </form>
+
+      <p>Số dư hiện tại: <strong><%= Number(user.balance || 0).toLocaleString('vi-VN') %> ₫</strong></p>
+    </section>
+  </main>
+</body>
+</html>

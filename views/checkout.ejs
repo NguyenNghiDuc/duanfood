@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thanh toán</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <main class="container">
+    <section class="card">
+      <h1>Thanh toán</h1>
+      <nav>
+        <a href="/">Trang chủ</a>
+        <a href="/cart">Giỏ hàng</a>
+        <a href="/orders">Đơn hàng</a>
+      </nav>
+
+      <div class="checkout-layout">
+        <section class="checkout-box">
+          <h2>Thông tin thanh toán</h2>
+          <form method="POST" action="/checkout">
+            <label>Phương thức thanh toán</label>
+            <select name="paymentMethod">
+              <option value="COD">Thanh toán khi nhận hàng (COD)</option>
+              <option value="wallet">Thanh toán bằng ví</option>
+              <option value="Banking">Chuyển khoản ngân hàng</option>
+              <option value="Momo">Ví MoMo</option>
+            </select>
+            <button type="submit" class="btn">Xác nhận thanh toán</button>
+          </form>
+        </section>
+
+        <aside class="cart-summary">
+          <h2>Đơn hàng của bạn</h2>
+          <p><strong>Tổng tiền:</strong> <%= Number(total || 0).toLocaleString('vi-VN') %> ₫</p>
+          <p>Số dư ví hiện tại: <strong><%= Number(user.balance || 0).toLocaleString('vi-VN') %> ₫</strong></p>
+          <p><a href="/wallet/top-up">Nạp tiền vào ví</a></p>
+          <ul>
+            <% cart.forEach(item => { %>
+              <li>
+                <strong><%= item.title %></strong> — <%= item.quantity %> x <%= Number(item.price).toLocaleString('vi-VN') %> ₫
+              </li>
+            <% }) %>
+          </ul>
+        </aside>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

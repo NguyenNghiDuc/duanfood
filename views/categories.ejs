@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Danh mục món ăn</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <main>
+    <section class="card">
+      <h1>Danh mục món ăn</h1>
+      <p class="subtext">Khám phá các nhóm món phù hợp với nhu cầu của bạn.</p>
+      <nav>
+        <a href="/">Trang chủ</a>
+        <a href="/foods">Món ăn</a>
+        <a href="/promotion">Khuyến mãi</a>
+        <% if (user) { %>
+          <a href="/logout">Đăng xuất</a>
+        <% } else { %>
+          <a href="/login">Đăng nhập</a>
+        <% } %>
+      </nav>
+
+      <% if (categories && categories.length > 0) { %>
+        <ul>
+          <% categories.forEach(category => { %>
+            <li>
+              <h3><%= category.name %></h3>
+              <p>Danh mục này sẽ được dùng để lọc món ăn trên trang món ăn.</p>
+            </li>
+          <% }) %>
+        </ul>
+      <% } else { %>
+        <p>Chưa có danh mục nào.</p>
+      <% } %>
+    </section>
+  </main>
+</body>
+</html>

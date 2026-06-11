@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Khuyến mãi</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <main>
+    <section class="card">
+      <h1>Khuyến mãi</h1>
+      <p class="subtext">Đây là trang giới thiệu nhanh các chương trình khuyến mãi hiện có.</p>
+      <nav>
+        <a href="/">Trang chủ</a>
+        <a href="/foods">Món ăn</a>
+        <a href="/categories">Danh mục</a>
+        <% if (user) { %>
+          <a href="/logout">Đăng xuất</a>
+        <% } else { %>
+          <a href="/login">Đăng nhập</a>
+        <% } %>
+      </nav>
+
+      <div class="account-box">
+        <h2>Ưu đãi hôm nay</h2>
+        <p>Giảm 10% cho đơn hàng từ 100.000đ trở lên.</p>
+        <p>Miễn phí giao hàng cho đơn từ 200.000đ.</p>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

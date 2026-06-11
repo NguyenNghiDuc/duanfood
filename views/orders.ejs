@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Đơn hàng</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <main class="container">
+    <section class="card">
+      <h1>Đơn hàng</h1>
+      <nav>
+        <a href="/">Trang chủ</a>
+        <a href="/cart">Giỏ hàng</a>
+        <a href="/profile">Tài khoản</a>
+        <a href="/logout">Đăng xuất</a>
+      </nav>
+
+      <% if (orders && orders.length) { %>
+        <% orders.forEach(order => { %>
+          <article class="account-box">
+            <h3>Đơn #<%= order.id %></h3>
+            <p>Ngày: <%= new Date(order.created_at).toLocaleString('vi-VN') %></p>
+            <p>Thanh toán: <strong><%= order.payment_method %></strong></p>
+            <p>Trạng thái: <strong><%= order.status %></strong></p>
+            <p>Tổng tiền: <strong><%= Number(order.total).toLocaleString('vi-VN') %> ₫</strong></p>
+          </article>
+        <% }) %>
+      <% } else { %>
+        <p>Bạn chưa có đơn hàng nào. Hãy đặt món ngay.</p>
+      <% } %>
+    </section>
+  </main>
+</body>
+</html>
