@@ -258,6 +258,20 @@ app.post("/checkout", requireLogin, async (req, res) => {
     }
 })
 
+app.get("/bank", requireLogin, (req, res) => {
+    const cart = getCart(req)
+    if (!cart.length) return res.redirect("/cart")
+
+    res.render("bank", {
+        orderId: req.query.orderId || "001",
+        totalPrice: getCartTotal(cart)
+    })
+})
+
+app.post("/payment-success", requireLogin, (req, res) => {
+    res.redirect("/orders")
+})
+
 app.get("/wallet/top-up", requireLogin, (req, res) => {
     res.render("wallet", { error: null, success: null, user: req.session.user })
 })

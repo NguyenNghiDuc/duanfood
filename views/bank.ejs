@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thanh toán</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<div class="container">
+
+    <div class="card">
+        <h1> Thanh Toán Đơn Hàng</h1>
+
+        <h3>Thông tin chuyển khoản</h3>
+
+        <p><strong>Ngân hàng:</strong> Vietcombank</p>
+        <p><strong>Số tài khoản:</strong> 123456789</p>
+        <p><strong>Chủ tài khoản:</strong> MINI FOOD STORE</p>
+        <p><strong>Nội dung CK:</strong> DH<%= orderId || "001" %></p>
+
+        <hr>
+
+        <h3>Số tiền cần thanh toán</h3>
+
+        <p class="price">
+            <%= totalPrice ? Number(totalPrice).toLocaleString('vi-VN') : '0' %> ₫
+        </p>
+
+        <div style="text-align:center;margin-top:20px;">
+            <p class="small-note">Vui lòng quét mã QR bên dưới để hoàn tất chuyển khoản trước khi xác nhận.</p>
+            <img
+                src="/images/qr-bank.svg"
+                alt="Mã QR chuyển khoản"
+                width="250"
+                height="250"
+            >
+        </div>
+
+        <br>
+
+        <form action="/payment-success" method="POST">
+            <input type="hidden" name="orderId" value="<%= orderId %>">
+
+            <button type="submit" class="btn">
+                Tôi đã thanh toán
+            </button>
+        </form>
+
+        <br>
+
+        <a href="/cart" class="btn btn-secondary">
+            Quay lại giỏ hàng
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>
