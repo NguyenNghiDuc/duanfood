@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thống kê admin</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <main class="container">
+    <section class="card">
+      <h1>Thống kê doanh thu</h1>
+      <nav>
+        <a href="/admin/orders">Đơn hàng</a>
+        <a href="/admin/categories">Danh mục</a>
+        <a href="/logout">Đăng xuất</a>
+      </nav>
+      <div class="stats-grid">
+        <article class="stat-card">
+          <h2>Tổng đơn</h2>
+          <p><%= totalOrders %></p>
+        </article>
+        <article class="stat-card">
+          <h2>Doanh thu</h2>
+          <p><%= Number(totalRevenue).toLocaleString('vi-VN') %> ₫</p>
+        </article>
+      </div>
+      <h2>Đơn hàng mới</h2>
+      <% if (recentOrders && recentOrders.length) { %>
+        <div class="order-grid">
+          <% recentOrders.forEach(order => { %>
+            <article class="order-card">
+              <h3>Đơn #<%= order.id %></h3>
+              <p><strong>Khách:</strong> <%= order.username %></p>
+              <p><strong>Tổng:</strong> <%= Number(order.total + order.shipping_fee).toLocaleString('vi-VN') %> ₫</p>
+              <p><strong>Trạng thái:</strong> <%= order.status %></p>
+            </article>
+          <% }) %>
+        </div>
+      <% } else { %>
+        <p>Chưa có đơn mới.</p>
+      <% } %>
+    </section>
+  </main>
+</body>
+</html>

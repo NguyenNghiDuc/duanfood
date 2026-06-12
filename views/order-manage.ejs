@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quản lý đơn hàng</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <main class="container">
+    <section class="card">
+      <h1>Quản lý đơn hàng</h1>
+      <nav>
+        <a href="/admin/categories">Danh mục</a>
+        <a href="/admin/stats">Thống kê</a>
+        <a href="/logout">Đăng xuất</a>
+      </nav>
+      <% if (orders && orders.length) { %>
+        <div class="order-grid">
+          <% orders.forEach(order => { %>
+            <article class="order-card">
+              <h3>Đơn #<%= order.id %></h3>
+              <p><strong>Khách hàng:</strong> <%= order.username %></p>
+              <p><strong>Thanh toán:</strong> <%= order.payment_method %></p>
+              <p><strong>Địa chỉ:</strong> <%= order.delivery_address %></p>
+              <p><strong>Vận chuyển:</strong> <%= order.delivery_company %> (<%= Number(order.shipping_fee).toLocaleString('vi-VN') %> ₫)</p>
+              <p><strong>Tổng:</strong> <%= Number(order.total + order.shipping_fee).toLocaleString('vi-VN') %> ₫</p>
+              <p><strong>Trạng thái:</strong> <%= order.status %></p>
+              <form method="POST" action="/admin/orders/update/<%= order.id %>">
+                <select name="status">
+                  <option value="Chờ xác nhận" <%= order.status === 'Chờ xác nhận' ? 'selected' : '' %>>Chờ xác nhận</option>
+                  <option value="Đang giao" <%= order.status === 'Đang giao' ? 'selected' : '' %>>Đang giao</option>
+                  <option value="Hoàn thành" <%= order.status === 'Hoàn thành' ? 'selected' : '' %>>Hoàn thành</option>
+                  <option value="Đã hủy" <%= order.status === 'Đã hủy' ? 'selected' : '' %>>Đã hủy</option>
+                </select>
+                <button class="btn" type="submit">Cập nhật</button>
+              </form>
+            </article>
+          <% }) %>
+        </div>
+      <% } else { %>
+        <p>Chưa có đơn hàng nào.</p>
+      <% } %>
+    </section>
+  </main>
+</body>
+</html>

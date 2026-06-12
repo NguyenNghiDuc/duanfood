@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thêm địa chỉ giao hàng</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <main class="container">
+    <section class="card">
+      <h1>Thêm địa chỉ giao hàng</h1>
+      <nav>
+        <a href="/profile">Tài khoản</a>
+        <a href="/profile/addresses">Danh sách địa chỉ</a>
+        <a href="/logout">Đăng xuất</a>
+      </nav>
+      <% if (error) { %>
+        <p class="notice"><%= error %></p>
+      <% } %>
+      <form method="POST" action="/profile/addresses/add" class="form-grid">
+        <label>Tiêu đề</label>
+        <input type="text" name="label" placeholder="Nhà riêng / Cơ quan" />
+        <label>Địa chỉ</label>
+        <textarea name="address" rows="4" placeholder="Địa chỉ giao hàng"></textarea>
+        <label>Điện thoại</label>
+        <input type="text" name="phone" placeholder="Số điện thoại" />
+        <button type="submit" class="btn">Lưu địa chỉ</button>
+      </form>
+    </section>
+  </main>
+</body>
+</html>

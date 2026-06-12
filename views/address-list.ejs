@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Địa chỉ giao hàng</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <main class="container">
+    <section class="card">
+      <h1>Địa chỉ giao hàng</h1>
+      <nav>
+        <a href="/profile">Tài khoản</a>
+        <a href="/profile/addresses/add">Thêm địa chỉ</a>
+        <a href="/logout">Đăng xuất</a>
+      </nav>
+      <% if (addresses && addresses.length) { %>
+        <div class="address-grid">
+          <% addresses.forEach(address => { %>
+            <article class="address-card">
+              <h3><%= address.label %></h3>
+              <p><%= address.address %></p>
+              <p><strong>Điện thoại:</strong> <%= address.phone %></p>
+              <form method="POST" action="/profile/addresses/delete/<%= address.id %>">
+                <button type="submit" class="btn btn-danger">Xóa</button>
+              </form>
+            </article>
+          <% }) %>
+        </div>
+      <% } else { %>
+        <p>Chưa có địa chỉ nào.</p>
+      <% } %>
+    </section>
+  </main>
+</body>
+</html>

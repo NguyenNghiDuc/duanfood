@@ -2,6 +2,25 @@ const db = require("../config/db")
 
 async function initFoodSchema() {
   await db.query(`
+    CREATE TABLE IF NOT EXISTS delivery_companies (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      name VARCHAR(255) NOT NULL,
+      fee DECIMAL(10,2) NOT NULL DEFAULT 0
+    )
+  `)
+
+  await db.query(`
+    CREATE TABLE IF NOT EXISTS addresses (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      username VARCHAR(255) NOT NULL,
+      label VARCHAR(255) NOT NULL,
+      address TEXT NOT NULL,
+      phone VARCHAR(50),
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+  `)
+
+  await db.query(`
     CREATE TABLE IF NOT EXISTS categories (
       id INT AUTO_INCREMENT PRIMARY KEY,
       name VARCHAR(100) NOT NULL UNIQUE
@@ -25,6 +44,9 @@ async function initFoodSchema() {
     CREATE TABLE IF NOT EXISTS orders (
       id INT AUTO_INCREMENT PRIMARY KEY,
       username VARCHAR(255) NOT NULL,
+      delivery_company VARCHAR(255) DEFAULT 'Giao hàng tiêu chuẩn',
+      delivery_address TEXT DEFAULT '',
+      shipping_fee DECIMAL(10,2) NOT NULL DEFAULT 0,
       total DECIMAL(10,2) NOT NULL DEFAULT 0,
       payment_method VARCHAR(50) NOT NULL DEFAULT 'COD',
       status VARCHAR(30) NOT NULL DEFAULT 'Chờ xác nhận',
@@ -44,9 +66,32 @@ async function initFoodSchema() {
     )
   `)
 
+  await db.query(`
+    CREATE TABLE IF NOT EXISTS reviews (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      food_id INT NOT NULL,
+      username VARCHAR(255) NOT NULL,
+      rating INT NOT NULL DEFAULT 5,
+      comment TEXT,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (food_id) REFERENCES foods(id) ON DELETE CASCADE
+    )
+  `)
+
   const [existingCategories] = await db.query("SELECT COUNT(*) AS total FROM categories")
   if (existingCategories[0].total === 0) {
     await db.query("INSERT INTO categories (name) VALUES ('Đồ ăn'), ('Đồ uống'), ('Tráng miệng')")
+  }
+
+  const [existingDelivery] = await db.query("SELECT COUNT(*) AS total FROM delivery_companies")
+  if (existingDelivery[0].total === 0) {
+    await db.query(`
+      INSERT INTO delivery_companies (name, fee)
+      VALUES
+      ('Giao hàng tiêu chuẩn', 15000),
+      ('Giao hàng nhanh', 25000),
+      ('Giao hàng tiết kiệm', 10000)
+    `)
   }
 
   const [existingFoods] = await db.query("SELECT COUNT(*) AS total FROM foods")
@@ -58,6 +103,38 @@ async function initFoodSchema() {
       ('Chè đậu xanh', 'Món tráng miệng mát lạnh, ngọt dịu.', 20000, 3, 'https://images.unsplash.com/photo-1488900128323-21503983a07e?auto=format&fit=crop&w=600&q=80')
     `)
   }
+}
+
+
+async function getReviewsByFoodId(foodId) {
+  const [rows] = await db.query(
+    `SELECT * FROM reviews WHERE food_id = ? ORDER BY created_at DESC`,
+    [foodId]
+  )
+  return rows
+}
+
+async function addReview(foodId, username, rating, comment) {
+  await db.query(
+    `INSERT INTO reviews (food_id, username, rating, comment) VALUES (?, ?, ?, ?)`,
+    [foodId, username, rating, comment]
+  )
+}
+
+async function getFoodRatingSummary(foodId) {
+  const [[summary]] = await db.query(
+    `SELECT COUNT(*) AS reviewCount, AVG(rating) AS avgRating FROM reviews WHERE food_id = ?`,
+    [foodId]
+  )
+  return {
+    reviewCount: Number(summary.reviewCount || 0),
+    avgRating: Number(summary.avgRating || 0)
+  }
+}
+
+async function getDeliveryCompanies() {
+  const [rows] = await db.query("SELECT * FROM delivery_companies ORDER BY fee ASC")
+  return rows
 }
 
 async function getAllCategories() {
@@ -120,4 +197,8 @@ module.exports = {
   getFoods,
   getFoodById,
   createFood
+  ,getReviewsByFoodId
+  ,addReview
+  ,getFoodRatingSummary
+  ,getDeliveryCompanies
 }

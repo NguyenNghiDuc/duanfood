@@ -1,87 +1,143 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Liên hệ - Food</title>
-  <link rel="stylesheet" href="/css/style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Khuyến mãi - Food</title>
+  <link rel="stylesheet" href="/css/contact.css">
 </head>
 <body>
+
   <main class="container">
     <section class="card">
-      <h1>Liên hệ với Food</h1>
+
+      <h1> Chương Trình Khuyến Mãi Tại Food</h1>
+
       <p class="subtext">
-        Chúng tôi luôn sẵn sàng hỗ trợ và giải đáp mọi thắc mắc của khách hàng.
+        Chào mừng bạn đến với trang khuyến mãi của Food. Chúng tôi luôn mang đến
+        những ưu đãi hấp dẫn nhằm giúp khách hàng thưởng thức các món ăn yêu thích
+        với mức giá tiết kiệm nhất.
       </p>
 
       <nav>
         <a href="/">Trang chủ</a>
-        <a href="/foods">Thực đơn</a>
-        <a href="/promotion">Khuyến mãi</a>
+        <a href="/foods">Món ăn</a>
+        <a href="/categories">Danh mục</a>
+
+        <% if (user) { %>
+          <a href="/logout">Đăng xuất</a>
+        <% } else { %>
+          <a href="/login">Đăng nhập</a>
+        <% } %>
       </nav>
 
       <hr>
 
-      <h2>Thông tin liên hệ</h2>
+      <h2> Ưu Đãi Nổi Bật Hôm Nay</h2>
 
-      <p>
-        <strong> Địa chỉ:</strong><br>
-        Dương Nội, Hà Đông, Hà Nội
-      </p>
+      <div class="promo-grid">
 
-      <p>
-        <strong> Hotline:</strong><br>
-        0909 999 999
-      </p>
+        <div class="promo-card">
+          <h3> Giảm 10%</h3>
+          <p>
+            Giảm ngay 10% cho tất cả đơn hàng có giá trị từ
+            <strong>100.000đ</strong> trở lên.
+          </p>
+        </div>
 
-      <p>
-        <strong> Email:</strong><br>
-        support@food.vn
-      </p>
+        <div class="promo-card">
+          <h3> Miễn Phí Vận Chuyển</h3>
+          <p>
+            Miễn phí giao hàng cho các đơn hàng từ
+            <strong>200.000đ</strong>.
+          </p>
+        </div>
 
-      <p>
-        <strong> Website:</strong><br>
-        www.food.vn
-      </p>
+        <div class="promo-card">
+          <h3> Mua 2 Tặng 1</h3>
+          <p>
+            Áp dụng cho một số dòng Pizza đặc biệt vào cuối tuần.
+          </p>
+        </div>
 
-      <p>
-        <strong> Facebook:</strong><br>
-        facebook.com/food
-      </p>
+        <div class="promo-card">
+          <h3> Combo Tiết Kiệm</h3>
+          <p>
+            Giảm đến 20% khi mua Combo Gà Rán + Khoai Tây + Nước Ngọt.
+          </p>
+        </div>
+
+        <div class="promo-card">
+          <h3> Tặng Nước Miễn Phí</h3>
+          <p>
+            Tặng 1 đồ uống bất kỳ cho đơn hàng trên 300.000đ.
+          </p>
+        </div>
+
+        <div class="promo-card">
+          <h3> Khách Hàng Mới</h3>
+          <p>
+            Tặng voucher giảm giá 30.000đ khi đăng ký tài khoản lần đầu.
+          </p>
+        </div>
+
+      </div>
 
       <hr>
 
-      <h2>Thời gian làm việc</h2>
+      <div class="account-box">
 
-      <ul>
-        <li>Thứ 2 - Thứ 6: 08:00 - 22:00</li>
-        <li>Thứ 7 - Chủ Nhật: 08:00 - 23:00</li>
-        <li>Hỗ trợ khách hàng trực tuyến 24/7</li>
-      </ul>
+        <h2> Chương Trình Thành Viên</h2>
+
+        <p>
+          Khi đăng ký tài khoản tại Food, khách hàng sẽ được tham gia chương trình
+          tích điểm thành viên. Mỗi đơn hàng thành công sẽ được cộng điểm thưởng
+          để đổi lấy các phần quà hấp dẫn và nhiều mã giảm giá giá trị.
+        </p>
+
+        <p>
+          Khách hàng thân thiết còn được nhận thông báo sớm về các chương trình
+          khuyến mãi độc quyền, sự kiện đặc biệt và các sản phẩm mới nhất của Food.
+        </p>
+
+      </div>
 
       <hr>
 
-      <h2>Về chúng tôi</h2>
+      <div class="account-box">
 
-      <p>
-        Food là hệ thống đặt món ăn trực tuyến được xây dựng nhằm mang đến trải nghiệm
-        mua sắm thực phẩm nhanh chóng, tiện lợi và hiện đại. Chúng tôi cung cấp đa dạng
-        các món ăn từ thức ăn nhanh, đồ uống, món ăn truyền thống đến các combo tiết kiệm
-        phù hợp với mọi nhu cầu của khách hàng.
-      </p>
+        <h2> Tại Sao Nên Chọn Food?</h2>
 
-      <p>
-        Với phương châm <strong>"Chất lượng - Nhanh chóng - Tiện lợi"</strong>,
-        Food luôn nỗ lực nâng cao chất lượng dịch vụ, cải thiện trải nghiệm người dùng
-        và mang đến những bữa ăn ngon với mức giá hợp lý nhất.
-      </p>
+        <ul>
+          <li> Thực đơn đa dạng với nhiều món ăn hấp dẫn.</li>
+          <li> Giá cả hợp lý, nhiều chương trình giảm giá.</li>
+          <li> Giao hàng nhanh chóng và tiện lợi.</li>
+          <li>Thanh toán linh hoạt qua nhiều hình thức.</li>
+          <li> Hỗ trợ khách hàng tận tình 24/7.</li>
+        </ul>
 
-      <p>
-        Nếu bạn có bất kỳ góp ý, phản hồi hoặc cần hỗ trợ trong quá trình sử dụng dịch vụ,
-        đừng ngần ngại liên hệ với chúng tôi qua hotline, email hoặc các kênh mạng xã hội.
-        Sự hài lòng của khách hàng chính là động lực để Food phát triển mỗi ngày.
-      </p>
+      </div>
+
+      <hr>
+
+      <div class="account-box">
+        <h2> Lưu Ý</h2>
+
+        <p>
+          Các chương trình khuyến mãi có thể thay đổi theo từng thời điểm.
+          Vui lòng theo dõi website thường xuyên để cập nhật những ưu đãi mới nhất.
+        </p>
+
+        <p>
+          Food xin chân thành cảm ơn sự tin tưởng và đồng hành của quý khách.
+          Chúng tôi sẽ không ngừng nâng cao chất lượng dịch vụ để mang đến những
+          trải nghiệm tuyệt vời nhất cho khách hàng.
+        </p>
+
+      </div>
+
     </section>
   </main>
+
 </body>
 </html>

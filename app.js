@@ -6,7 +6,7 @@ const postModel = require("./controllers/postModel")
 const postController = require("./controllers/postController")
 const foodModel = require("./controllers/foodModel")
 const app = express()
-const port = 5000
+const port = process.env.PORT || 5000
 app.set("view engine", "ejs")
 
 app.use(express.urlencoded({extended:true}))
@@ -55,17 +55,6 @@ function requireAdmin(req, res, next) {
 
 app.set("views", path.join(__dirname, "views"))
 
-async function start() {
-  try {
-    await db.query("ALTER TABLE users ADD COLUMN IF NOT EXISTS balance DECIMAL(10,2) NOT NULL DEFAULT 0")
-    await db.query("INSERT IGNORE INTO users (username, password, balance) VALUES (?, ?, 0)", ["admin", "admin"])
-    await foodModel.initFoodSchema()
-    console.log("Food schema initialized")
-  } catch (error) {
-    console.error("Food schema init failed", error)
-  }
-}
-start()
 
 app.get("/", async (req, res) => {
     try {
@@ -205,14 +194,18 @@ app.post("/cart/remove/:id", requireLogin, (req, res) => {
     res.redirect("/cart")
 })
 
-app.get("/checkout", requireLogin, (req, res) => {
+app.get("/checkout", requireLogin, async (req, res) => {
     const cart = getCart(req)
+    const deliveryCompanies = await foodModel.getDeliveryCompanies()
+    const [addresses] = await db.query("SELECT * FROM addresses WHERE username = ? ORDER BY id DESC", [req.session.user.username])
     res.render("checkout", {
         cart,
         total: getCartTotal(cart),
         error: null,
         user: req.session.user,
-        isEmptyCart: cart.length === 0
+        isEmptyCart: cart.length === 0,
+        deliveryCompanies,
+        addresses
     })
 })
 
@@ -223,28 +216,41 @@ app.post("/checkout", requireLogin, async (req, res) => {
 
         const total = getCartTotal(cart)
         const paymentMethod = req.body.paymentMethod || "COD"
+        const deliveryCompanyId = req.body.deliveryCompanyId || null
+        const addressId = req.body.addressId || null
+
         const [userRows] = await db.query("SELECT * FROM users WHERE username = ?", [req.session.user.username])
         const currentUser = userRows[0]
 
-        if (paymentMethod === "wallet" && Number(currentUser.balance || 0) < total) {
+        const [deliveryRows] = await db.query("SELECT name, fee FROM delivery_companies WHERE id = ?", [deliveryCompanyId])
+        const deliveryCompany = deliveryRows.length ? deliveryRows[0].name : "Giao hàng tiêu chuẩn"
+        const shippingFee = deliveryRows.length ? Number(deliveryRows[0].fee) : 0
+
+        const [addressRows] = await db.query("SELECT address FROM addresses WHERE id = ? AND username = ?", [addressId, req.session.user.username])
+        const deliveryAddress = addressRows.length ? addressRows[0].address : req.body.deliveryAddress || ""
+
+        if (paymentMethod === "wallet" && Number(currentUser.balance || 0) < total + shippingFee) {
             return res.render("checkout", {
                 cart,
                 total,
                 error: "Số dư ví không đủ để thanh toán. Vui lòng nạp tiền trước.",
-                user: req.session.user
+                user: req.session.user,
+                isEmptyCart: cart.length === 0,
+                deliveryCompanies: await foodModel.getDeliveryCompanies(),
+                addresses: await db.query("SELECT * FROM addresses WHERE username = ? ORDER BY id DESC", [req.session.user.username])[0]
             })
         }
 
         let status = "Chờ xác nhận"
         if (paymentMethod === "wallet") {
-            await db.query("UPDATE users SET balance = balance - ? WHERE username = ?", [total, req.session.user.username])
+            await db.query("UPDATE users SET balance = balance - ? WHERE username = ?", [total + shippingFee, req.session.user.username])
             status = "Đã thanh toán bằng ví"
-            req.session.user.balance = Number(currentUser.balance || 0) - total
+            req.session.user.balance = Number(currentUser.balance || 0) - total - shippingFee
         }
 
         const [result] = await db.query(
-            "INSERT INTO orders (username, total, payment_method, status) VALUES (?, ?, ?, ?)",
-            [req.session.user.username, total, paymentMethod, status]
+            "INSERT INTO orders (username, total, payment_method, status, delivery_company, delivery_address, shipping_fee) VALUES (?, ?, ?, ?, ?, ?, ?)",
+            [req.session.user.username, total, paymentMethod, status, deliveryCompany, deliveryAddress, shippingFee]
         )
 
         const orderId = result.insertId
@@ -256,6 +262,10 @@ app.post("/checkout", requireLogin, async (req, res) => {
         ))
 
         req.session.cart = []
+        if (paymentMethod === "Banking" || paymentMethod === "Momo") {
+            return res.redirect(`/bank?orderId=${orderId}`)
+        }
+
         res.redirect("/orders")
     } catch (error) {
         console.error(error)
@@ -263,21 +273,31 @@ app.post("/checkout", requireLogin, async (req, res) => {
     }
 })
 
-app.get("/bank", requireLogin, (req, res) => {
-    const cart = getCart(req)
-    const amountFromQuery = Number(req.query.amount || 0)
-    const totalPrice = cart.length ? getCartTotal(cart) : amountFromQuery
-    const topUpAmount = cart.length ? 0 : amountFromQuery
 
+
+app.get("/bank", requireLogin, (req, res) => {
+    const orderId = req.query.orderId || null
+    const topUpAmount = Number(req.query.amount || 0)
     res.render("bank", {
-        orderId: req.query.orderId || "001",
-        totalPrice,
-        topUpAmount
+        orderId,
+        totalPrice: topUpAmount,
+        topUpAmount,
+        user: req.session.user
     })
 })
 
 app.post("/payment-success", requireLogin, (req, res) => {
+    const orderId = req.body.orderId || null
     const topUpAmount = Number(req.body.amount || 0)
+    if (orderId) {
+        db.query("UPDATE orders SET status = 'Đã thanh toán' WHERE id = ? AND username = ?", [orderId, req.session.user.username])
+            .then(() => res.redirect("/orders"))
+            .catch(error => {
+                console.error(error)
+                res.status(500).send(error.message)
+            })
+        return
+    }
 
     if (topUpAmount > 0) {
         db.query(
@@ -335,8 +355,36 @@ app.get("/orders", requireLogin, async (req, res) => {
     }
 })
 
-app.get("/profile", requireLogin, (req, res) => {
-    res.render("profile", { user: req.session.user })
+
+
+app.post("/admin/categories/add", requireLogin, requireAdmin, async (req, res) => {
+    const { name } = req.body
+    if (!name) return res.redirect("/admin/categories")
+    await db.query("INSERT INTO categories(name) VALUES (?)", [name])
+    res.redirect("/admin/categories")
+})
+
+app.post("/admin/categories/delete/:id", requireLogin, requireAdmin, async (req, res) => {
+    await db.query("DELETE FROM categories WHERE id = ?", [req.params.id])
+    res.redirect("/admin/categories")
+})
+
+app.get("/admin/orders", requireLogin, requireAdmin, async (req, res) => {
+    const [orders] = await db.query("SELECT * FROM orders ORDER BY id DESC")
+    res.render("order-manage", { orders, user: req.session.user })
+})
+
+app.post("/admin/orders/update/:id", requireLogin, requireAdmin, async (req, res) => {
+    const { status } = req.body
+    await db.query("UPDATE orders SET status = ? WHERE id = ?", [status, req.params.id])
+    res.redirect("/admin/orders")
+})
+
+app.get("/admin/stats", requireLogin, requireAdmin, async (req, res) => {
+    const [[{ totalRevenue }]] = await db.query("SELECT SUM(total + shipping_fee) AS totalRevenue FROM orders")
+    const [[{ totalOrders }]] = await db.query("SELECT COUNT(*) AS totalOrders FROM orders")
+    const [recentOrders] = await db.query("SELECT * FROM orders ORDER BY created_at DESC LIMIT 5")
+    res.render("admin-stats", { totalRevenue: totalRevenue || 0, totalOrders, recentOrders, user: req.session.user })
 })
 
 app.get("/news", async (req, res) => {
@@ -387,7 +435,20 @@ app.get("/foods/:id", async (req, res) => {
     try {
         const food = await foodModel.getFoodById(req.params.id)
         if (!food) return res.status(404).send("Không tìm thấy món ăn")
-        res.render("food-detail", { food })
+        const reviews = await foodModel.getReviewsByFoodId(req.params.id)
+        const ratingSummary = await foodModel.getFoodRatingSummary(req.params.id)
+        res.render("food-detail", { food, reviews, ratingSummary, user: req.session.user })
+    } catch (error) {
+        console.error(error)
+        res.status(500).send(error.message)
+    }
+})
+
+app.post("/foods/:id/review", requireLogin, async (req, res) => {
+    try {
+        const { rating, comment } = req.body
+        await foodModel.addReview(req.params.id, req.session.user.username, Number(rating), comment)
+        res.redirect(`/foods/${req.params.id}`)
     } catch (error) {
         console.error(error)
         res.status(500).send(error.message)
@@ -476,6 +537,7 @@ app.get("/news/:id", async (req, res) => {
     }
 })
 
-app.listen(port, "localhost", () => {
-  console.log(`Server is running at http://localhost:${port}`)
+const host = process.env.HOST || "0.0.0.0"
+app.listen(port, host, () => {
+  console.log(`Server is running at http://${host}:${port}`)
 })

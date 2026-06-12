@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quản lý danh mục</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <main class="container">
+    <section class="card">
+      <h1>Quản lý danh mục</h1>
+      <nav>
+        <a href="/admin/orders">Đơn hàng</a>
+        <a href="/admin/stats">Thống kê</a>
+        <a href="/logout">Đăng xuất</a>
+      </nav>
+      <form method="POST" action="/admin/categories/add" class="form-grid">
+        <label>Tên danh mục</label>
+        <input type="text" name="name" placeholder="Nhập tên danh mục" />
+        <button class="btn" type="submit">Thêm danh mục</button>
+      </form>
+      <div class="category-grid">
+        <% categories.forEach(cat => { %>
+          <article class="category-card admin-card">
+            <h3><%= cat.name %></h3>
+            <form method="POST" action="/admin/categories/delete/<%= cat.id %>">
+              <button class="btn btn-danger" type="submit">Xóa</button>
+            </form>
+          </article>
+        <% }) %>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

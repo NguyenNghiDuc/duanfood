@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chỉnh sửa hồ sơ</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <main class="container">
+    <section class="card">
+      <h1>Chỉnh sửa hồ sơ</h1>
+      <nav>
+        <a href="/profile">Tài khoản</a>
+        <a href="/orders">Đơn hàng</a>
+        <a href="/logout">Đăng xuất</a>
+      </nav>
+      <% if (error) { %>
+        <p class="notice"><%= error %></p>
+      <% } %>
+      <% if (success) { %>
+        <p class="success"><%= success %></p>
+      <% } %>
+      <form method="POST" action="/profile/edit" class="form-grid">
+        <label>Họ và tên</label>
+        <input type="text" name="fullname" value="<%= fullname %>" />
+        <label>Tên đăng nhập</label>
+        <input type="text" value="<%= user.username %>" disabled />
+        <label>Mật khẩu mới</label>
+        <input type="password" name="password" placeholder="Để trống nếu không đổi" />
+        <label>Xác nhận mật khẩu</label>
+        <input type="password" name="confirmPassword" placeholder="Nhập lại mật khẩu" />
+        <button type="submit" class="btn">Cập nhật</button>
+      </form>
+    </section>
+  </main>
+</body>
+</html>
