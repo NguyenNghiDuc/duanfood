@@ -24,7 +24,7 @@
         <p class="notice"><%= success %></p>
       <% } %>
 
-      <form method="POST" action="/wallet/top-up" class="food-filter">
+      <form method="GET" action="/bank" class="food-filter">
         <label>Số tiền nạp (₫)
           <input type="number" name="amount" min="1000" step="1000" required />
         </label>

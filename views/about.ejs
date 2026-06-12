@@ -3,19 +3,59 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Giới thiệu</title>
+  <title>Giới thiệu Thực Đơn - Food</title>
   <link rel="stylesheet" href="/css/style.css" />
 </head>
 <body>
-  <main class="container">
-    <section class="card">
-      <img src="/images/anh.png" alt="Ảnh cửa hàng" style="width: 120px; height: auto; margin-bottom: 16px;" loading="lazy" />
-      <h1>Giới thiệu</h1>
-      <p class="subtext">Đây là trang giới thiệu về cửa hàng món ăn nhanh của bạn.</p>
-      <nav>
-        <a href="/">Trang chủ</a>
-        <a href="/foods">Thực đơn</a>
-        <a href="/promotion">Khuyến mãi</a>
+  <main class="container" style="max-width: 800px; margin: 0 auto; padding: 20px;">
+    <section class="card" style="background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+      
+      <!-- Logo/Ảnh cửa hàng từ thư mục public/images/anh.png -->
+      <div style="text-align: center;">
+        <img src="/images/anh.png" alt="Ảnh cửa hàng Food" style="width: 140px; height: auto; margin-bottom: 16px; border-radius: 50%;" loading="lazy" />
+        <h1>Khám Phá Thế Giới Ẩm Thực Tại Food</h1>
+        <p class="subtext" style="color: #666; font-style: italic;">"Nhanh chóng, Tiện lợi, Bùng nổ hương vị trong từng khoảnh khắc"</p>
+      </div>
+
+      <hr style="border: 0; border-top: 1px solid #eee; margin: 25px 0;" />
+
+      <!-- Phần nội dung giới thiệu chi tiết -->
+      <div class="intro-content" style="text-align: left; line-height: 1.8; color: #333;">
+        <p>Tại <strong>Food</strong>, chúng tôi hiểu rằng một bữa ăn nhanh không chỉ cần "nhanh" để bắt kịp nhịp sống hối hả, mà còn phải thật "chất" để nạp đầy năng lượng cho bạn. Đó là lý do thực đơn của chúng tôi được thiết kế đa dạng, tỉ mỉ, kết hợp hài hòa giữa tinh hoa thức ăn nhanh quốc tế và khẩu vị độc đáo của người Việt.</p>
+        
+        <p>Hãy cùng điểm qua những "ngôi sao" sáng nhất trong menu mà bạn nhất định không thể bỏ lỡ:</p>
+
+        <!-- Nhóm 1: Burger -->
+        <h3 style="color: #e44d26; margin-top: 20px;">🍔 1. Dòng Burger Đậm Vị – Vỏ Mềm, Nhân Mọng Nước</h3>
+        <p>Mỗi chiếc Burger tại DuanFood là một tác phẩm nghệ thuật xếp tầng. Phần vỏ bánh mì luôn được nướng vàng nhẹ, giữ độ mềm xốp hoàn hảo. 
+        Nổi bật nhất là <em>Burger Bò Phô Mai Tan Chảy</em> với miếng bò băm thượng hạng được áp chảo vừa chín tới để giữ trọn vị ngọt tự nhiên, phủ lên trên là lớp phô mai Cheddar béo ngậy, kết hợp cùng rau xà lách tươi và sốt BBQ độc quyền. 
+        Nếu bạn thích sự thanh nhẹ hơn, các dòng <em>Burger Gà Giòn Sốt Mayonnaise</em> hay <em>Burger Tôm Biển</em> chắc chắn sẽ làm bạn hài lòng.</p>
+
+        <!-- Nhóm 2: Gà rán -->
+        <h3 style="color: #e44d26; margin-top: 20px;">🍗 2. Gà Rán Giòn Rụm – Thơm Ngon Đến Từng Thớ Thịt</h3>
+        <p>Gà rán chính là niềm tự hào của bếp DuanFood. Chúng tôi lựa chọn những phần thịt gà tươi ngon nhất, tẩm ướp theo công thức bí truyền với hơn 10 loại gia vị thảo mộc thiên nhiên. 
+        Khi thưởng thức, bạn sẽ cảm nhận được lớp da ngoài giòn rụm, cắn vào nghe tiếng "rôm rốp" vui tai, nhưng phần thịt bên trong vẫn giữ được độ mềm, ẩm và ngọt thơm mà không hề bị khô. 
+        Đặc biệt, đừng quên thử qua <em>Gà Rán Sốt Cay Hàn Quốc</em> hoặc <em>Gà Lắc Phô Mai</em> cực cuốn nhé!</p>
+
+        <!-- Nhóm 3: Đồ ăn kèm -->
+        <h3 style="color: #e44d26; margin-top: 20px;">🍟 3. Món Ăn Kèm Hoàn Hảo – Khởi Đầu Cuộc Vui</h3>
+        <p>Để bữa ăn thêm trọn vẹn, danh sách món ăn kèm của DuanFood luôn sẵn sàng chiều lòng bạn. 
+        Đó là những sợi <em>Khoai tây chiên</em> bản lớn được chiên vàng ươm, bên ngoài giòn tan, bên trong bùi ngậy. 
+        Hay những miếng <em>Mực vòng chiên xù</em> thơm phức, <em>Phô mai que</em> kéo sợi kéo dài bất tận và <em>Salad rau củ tươi</em> giúp cân bằng hương vị, ăn hoài mà không ngán.</p>
+
+        <!-- Nhóm 4: Combo và nước -->
+        <h3 style="color: #e44d26; margin-top: 20px;">🥤 4. Đồ Uống Tươi Mát & Các Gói Combo Tiết Kiệm</h3>
+        <p>Đã có món ăn ngon thì không thể thiếu những ly nước giải khát mát lạnh. Từ các dòng nước có ga truyền thống giúp tiêu hóa nhanh, cho đến <em>Trà chanh sả, Trà đào thanh mát</em> được pha chế thủ công mỗi ngày. 
+        Nếu bạn đi cùng gia đình, nhóm bạn hoặc muốn có một bữa ăn "đủ đầy" nhất với mức giá kinh tế, các gói <strong>Combo Tiết Kiệm (Mix & Match)</strong> của chúng tôi chính là sự lựa chọn thông minh, giúp bạn tiết kiệm lên đến 20% chi phí.</p>
+      </div>
+
+      <hr style="border: 0; border-top: 1px solid #eee; margin: 25px 0;" />
+
+      <!-- Thanh điều hướng (Navigation) -->
+      <nav style="text-align: center; margin-top: 24px; font-weight: bold;">
+        <a href="/" style="color: #007bff; text-decoration: none; margin: 0 10px;">Trang chủ</a> | 
+        <a href="/foods" style="color: #007bff; text-decoration: none; margin: 0 10px;">Thực đơn</a> | 
+        <a href="/promotion" style="color: #007bff; text-decoration: none; margin: 0 10px;">Khuyến mãi</a>
       </nav>
     </section>
   </main>

@@ -207,8 +207,13 @@ app.post("/cart/remove/:id", requireLogin, (req, res) => {
 
 app.get("/checkout", requireLogin, (req, res) => {
     const cart = getCart(req)
-    if (!cart.length) return res.redirect("/cart")
-    res.render("checkout", { cart, total: getCartTotal(cart), error: null, user: req.session.user })
+    res.render("checkout", {
+        cart,
+        total: getCartTotal(cart),
+        error: null,
+        user: req.session.user,
+        isEmptyCart: cart.length === 0
+    })
 })
 
 app.post("/checkout", requireLogin, async (req, res) => {
@@ -260,15 +265,40 @@ app.post("/checkout", requireLogin, async (req, res) => {
 
 app.get("/bank", requireLogin, (req, res) => {
     const cart = getCart(req)
-    if (!cart.length) return res.redirect("/cart")
+    const amountFromQuery = Number(req.query.amount || 0)
+    const totalPrice = cart.length ? getCartTotal(cart) : amountFromQuery
+    const topUpAmount = cart.length ? 0 : amountFromQuery
 
     res.render("bank", {
         orderId: req.query.orderId || "001",
-        totalPrice: getCartTotal(cart)
+        totalPrice,
+        topUpAmount
     })
 })
 
 app.post("/payment-success", requireLogin, (req, res) => {
+    const topUpAmount = Number(req.body.amount || 0)
+
+    if (topUpAmount > 0) {
+        db.query(
+            "UPDATE users SET balance = balance + ? WHERE username = ?",
+            [topUpAmount, req.session.user.username]
+        )
+            .then(async () => {
+                const [rows] = await db.query(
+                    "SELECT balance FROM users WHERE username = ?",
+                    [req.session.user.username]
+                )
+                req.session.user.balance = Number(rows[0].balance || 0)
+                res.redirect("/wallet/top-up")
+            })
+            .catch(error => {
+                console.error(error)
+                res.status(500).send(error.message)
+            })
+        return
+    }
+
     res.redirect("/orders")
 })
 
