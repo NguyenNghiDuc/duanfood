@@ -1,147 +1,264 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Trang chủ</title>
-    <link rel="stylesheet" href="/css/style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini Food</title>
+
+    <link rel="stylesheet" href="/css/style.css">
 </head>
+
 <body>
+
     <header class="topbar">
+
         <div class="container topbar-inner">
-            <a class="brand" href="/">
-                <img src="/images/anh.png" alt="Mini Food logo" class="brand-logo" />
-                <span class="brand-text">Mini Food</span>
+
+            <a href="/" class="brand">
+                <img src="/images/anh.png" class="brand-logo">
+                <span class="brand-text">
+                    Mini Food
+                </span>
             </a>
-            <span> Hotline: 0909 999 999</span>
             <div class="topbar-links">
-                <% if (user) { %>
-                    <a href="/profile">Xin chào, <strong><%= user.username %></strong></a>
+                <% if(user){ %>
+                    <a href="/profile">
+                        <%= user.username %>
+                    </a>
+                    <a href="/orders">  Đơn hàng</a>
+                    <a href="/logout"> Đăng xuất</a>
+
                 <% } else { %>
-                    <a href="/login">Đăng nhập</a>
-                    <a href="/register">Đăng ký</a>
-                    <a href="/wallet/top-up">Nạp tiền</a>
+
+                    <a href="/login">Đăng nhập </a>
+
+                    <a href="/register">  Đăng ký</a>
+
                 <% } %>
-                <a href="/cart">Giỏ hàng</a>
+
+                <a href="/cart">
+                    Giỏ hàng
+                </a>
+
             </div>
+
         </div>
+
     </header>
 
+
     <main class="container">
-        <nav class="main-nav card">
+
+        <nav class="main-nav">
+
             <a href="/">Trang chủ</a>
-            <a href="/about">Giới thiệu về món ăn</a>
-            <a href="/foods">Thực đơn</a>
-            <a href="/promotion">Khuyến mãi</a>
-            <a href="/contact">Liên hệ</a>
-            <a href="/orders">Đơn hàng</a>
+
+            <a href="/about">
+                Giới thiệu
+            </a>
+
+            <a href="/foods">
+                Thực đơn
+            </a>
+
+            <a href="/promotion">
+                Khuyến mãi
+            </a>
+
+            <a href="/contact">
+                Liên hệ
+            </a>
+
         </nav>
 
-        <section class="hero-grid card">
+
+        <section class="hero-grid">
+
             <article>
-                <span class="badge">Fast Food & Drinks</span>
-                <h1>Đặt món nhanh, ngon, tiện lợi</h1>
-                <p>Khám phá các món ăn nổi bật, tìm kiếm món yêu thích và trải nghiệm giao diện đặt hàng hiện đại.</p>
+
+                <span class="badge">
+                    FAST FOOD
+                </span>
+
+                <h1>
+                    Đặt món ăn nhanh chóng
+                </h1>
+
+                <p>
+                    Khám phá các món ăn nổi bật và trải nghiệm đặt món tiện lợi.
+                </p>
+
                 <div class="cta-row">
-                    <a class="btn" href="/foods">Đặt ngay</a>
-                    <a class="btn btn-secondary" href="/promotion">Xem khuyến mãi</a>
+
+                    <a class="btn" href="/foods">
+                        Đặt ngay
+                    </a>
+
+                    <a class="btn btn-secondary" href="/promotion">
+                        Xem ưu đãi
+                    </a>
+
                 </div>
+
             </article>
 
             <aside class="banner-stack">
-                <div class="mini-banner"> Burger</div>
-                <div class="mini-banner"> Pizza</div>
-                <div class="mini-banner"> Gà rán</div>
+
+                <div class="mini-banner">
+                    BURGER
+                </div>
+
+                <div class="mini-banner">
+                    PIZZA
+                </div>
+
+                <div class="mini-banner">
+                    GÀ RÁN
+                </div>
+
             </aside>
+
         </section>
 
+
         <section class="card">
-            <h2>Khuyến mãi</h2>
+
+            <h2>
+                Khuyến mãi
+            </h2>
+
             <div class="promo-grid">
-                <article class="promo-card">Giảm giá 50%</article>
-                <article class="promo-card">Mua 2 tặng 1</article>
-                <article class="promo-card">Miễn phí vận chuyển</article>
+
+                <div class="promo-card">
+                    Giảm giá 50%
+                </div>
+
+                <div class="promo-card">
+                    Mua 2 tặng 1
+                </div>
+
+                <div class="promo-card">
+                    Miễn phí vận chuyển
+                </div>
+
             </div>
+
         </section>
 
-        <section class="card">
-            <h2>Các cách thanh toán</h2>
-            <p class="small-note">Bạn có thể chọn một trong các phương thức thanh toán sau khi đặt món.</p>
-            <div class="payment-grid">
-                <article class="payment-card">
-                    <strong>COD</strong>
-                    <span>Thanh toán khi nhận hàng, tiện lợi và an toàn.</span>
-                </article>
-                <article class="payment-card">
-                    <strong>Ví điện tử</strong>
-                    <a href="/bank"><span>Thanh toán nhanh qua ví của bạn trên hệ thống.</span></a>
-                </article>
-                <article class="payment-card">
-                    <strong>Chuyển khoản</strong>
-                    <a href="/bank"><span>Chuyển khoản ngân hàng qua số tài khoản được hỗ trợ.</span></a>
-                </article>
-                <article class="payment-card">
-                    <strong>MoMo</strong>
-                    <a href="/bank"><span>Thanh toán qua ví MoMo tiện lợi, nhanh chóng.</span></a>
-                </article>
-            </div>
-        </section>
 
         <section class="card">
-            <h2>Danh mục món ăn</h2>
+
+            <h2>
+                Danh mục món ăn
+            </h2>
+
             <div class="category-grid">
-                <% if (categories && categories.length) { %>
-                    <% categories.forEach(category => { %>
-                        <a class="category-card" href="/foods?categoryId=<%= category.id %>">
-                        <strong><%= category.name %></strong>
-                            <span>Khám phá ngay</span>
+
+                <% if(categories && categories.length){ %>
+
+                    <% categories.forEach(category=>{ %>
+
+                        <a
+                            class="category-card"
+                            href="/foods?categoryId=<%= category.id %>"
+                        >
+
+                            <strong>
+                                <%= category.name %>
+                            </strong>
+
+                            <span>
+                                Xem thêm
+                            </span>
+
                         </a>
+
                     <% }) %>
-                <% } else { %>
-                    <p>Chưa có danh mục nào.</p>
+
                 <% } %>
+
             </div>
+
         </section>
+
 
         <section class="card">
-            <h2>Danh sách sản phẩm</h2>
-            <div class="product-grid">
-                <% if (foods && foods.length) { %>
-                    <% foods.forEach(food => { %>
-                        <article class="product-card">
-                        <% if (food.image) { %>
-                            <img src="<%= food.image %>" alt="<%= food.title %>" />
-                        <% } %>
-                        <h3><%= food.title %></h3>
-                        <p><%= food.description %></p>
-                        <div class="product-meta">
-                            <strong><%= Number(food.price).toLocaleString('vi-VN') %> ₫</strong>
-                            <form method="POST" action="/cart/add/<%= food.id %>">
-                                <button class="btn" type="submit">Thêm vào giỏ</button>
-                            </form>
-                        </div>
-                    </article>
-                    <% }) %>
-                <% } else { %>
-                    <p>Chưa có món ăn nào.</p>
-                <% } %>
-            </div>
-        </section>
-    </main>
 
-    <footer class="footer card">
+            <h2>
+                Sản phẩm nổi bật
+            </h2>
+
+            <div class="product-grid">
+
+                <% if(foods && foods.length){ %>
+
+                    <% foods.forEach(food=>{ %>
+
+                        <article class="product-card">
+
+                            <% if(food.image){ %>
+
+                                <img
+                                    src="<%= food.image %>"
+                                    alt="<%= food.title %>"
+                                >
+
+                            <% } %>
+
+                            <h3>
+                                <%= food.title %>
+                            </h3>
+
+                            <p>
+                                <%= food.description %>
+                            </p>
+
+                            <div class="product-meta">
+
+                                <strong>
+                                    <%= Number(food.price).toLocaleString("vi-VN") %> đ
+                                </strong>
+
+                                <form
+                                    method="POST"
+                                    action="/cart/add/<%= food.id %>"
+                                >
+
+                                    <button class="btn">
+                                        Thêm vào giỏ
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        </article>
+
+                    <% }) %>
+
+                <% } %>
+
+            </div>
+
+        </section>
+
+    </main>
+    <footer class="footer">
+
         <div class="container footer-grid">
+
             <div>
                 <h3>Địa chỉ</h3>
-                <p>Dương Nội , Hà Đông , Hà Nội</p>
+
+                <p>Dương Nội - Hà Đông</p>
+
             </div>
+
             <div>
-                <h3>Hotline</h3>
+
+                <h3> Hotline</h3>
                 <p>0909 999 999</p>
-            </div>
-            <div>
-                <h3>Facebook</h3>
-                <p>facebook.com/mini-food</p>
             </div>
             <div>
                 <h3>Email</h3>
@@ -150,4 +267,5 @@
         </div>
     </footer>
 </body>
+
 </html>
