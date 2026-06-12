@@ -3,28 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Danh sách tin tức</title>
+    <title>Các món ăn mới</title>
+    <link rel="stylesheet" href="/css/news.css">
 </head>
 <body>
-    <h1>Danh sách các món ăn</h1>
-    <nav>
-        <a href="/">Trang chủ</a> |
-        <a href="/news">Các món mới</a>
-        <a href="/foods">Món ăn</a>
-    </nav>
 
-    <% if (posts && posts.length > 0) { %>
-        <ul>
-            <% posts.forEach(post => { %>
-                <li>
-                    <strong><%= post.title %></strong><br>
-                    <p><%= post.description %></p>
-                </li>
-            <% }) %>
-        </ul>
-    <% } else { %>
-        <p>Chưa có bài viết nào.</p>
-    <% } %>
+<div class="container">
+
+    <div class="card">
+
+        <h1> Các Món Ăn Mới Nhất</h1>
+        <p class="subtext">
+            Cập nhật những món ăn mới và hấp dẫn nhất tại Food
+        </p>
+
+        <nav class="news-nav">
+            <a href="/">Trang chủ</a>
+            <a href="/news">Món mới</a>
+            <a href="/foods">Thực đơn</a>
+        </nav>
+
+        <% if (posts && posts.length > 0) { %>
+
+            <div class="news-grid">
+
+                <% posts.forEach(post => { %>
+
+                    <div class="news-card">
+                        <div class="news-icon">🍽️</div>
+
+                        <h2><%= post.title %></h2>
+
+                        <p>
+                            <%= post.description %>
+                        </p>
+
+                    </div>
+
+                <% }) %>
+
+            </div>
+
+        <% } else { %>
+
+            <div class="empty-news">
+                <h3>📢 Chưa có món ăn mới</h3>
+                <p>Vui lòng quay lại sau để xem các cập nhật mới nhất.</p>
+            </div>
+
+        <% } %>
+
+    </div>
+
+</div>
+
 </body>
 </html>
-

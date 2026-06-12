@@ -1,20 +1,29 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Khuyến mãi</title>
-  <link rel="stylesheet" href="/css/style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Khuyến mãi - Food</title>
+  <link rel="stylesheet" href="/css/promotion.css">
 </head>
 <body>
-  <main>
+
+  <main class="container">
     <section class="card">
-      <h1>Khuyến mãi</h1>
-      <p class="subtext">Đây là trang giới thiệu nhanh các chương trình khuyến mãi hiện có.</p>
+
+      <h1> Chương Trình Khuyến Mãi Tại Food</h1>
+
+      <p class="subtext">
+        Chào mừng bạn đến với trang khuyến mãi của Food. Chúng tôi luôn mang đến
+        những ưu đãi hấp dẫn nhằm giúp khách hàng thưởng thức các món ăn yêu thích
+        với mức giá tiết kiệm nhất.
+      </p>
+
       <nav>
         <a href="/">Trang chủ</a>
         <a href="/foods">Món ăn</a>
         <a href="/categories">Danh mục</a>
+
         <% if (user) { %>
           <a href="/logout">Đăng xuất</a>
         <% } else { %>
@@ -22,12 +31,114 @@
         <% } %>
       </nav>
 
-      <div class="account-box">
-        <h2>Ưu đãi hôm nay</h2>
-        <p>Giảm 10% cho đơn hàng từ 100.000đ trở lên.</p>
-        <p>Miễn phí giao hàng cho đơn từ 200.000đ.</p>
+      <hr>
+
+      <h2> Ưu Đãi Nổi Bật Hôm Nay</h2>
+
+      <div class="promo-grid">
+
+        <div class="promo-card">
+          <h3> Giảm 10%</h3>
+          <p>
+            Giảm ngay 10% cho tất cả đơn hàng có giá trị từ
+            <strong>100.000đ</strong> trở lên.
+          </p>
+        </div>
+
+        <div class="promo-card">
+          <h3> Miễn Phí Vận Chuyển</h3>
+          <p>
+            Miễn phí giao hàng cho các đơn hàng từ
+            <strong>200.000đ</strong>.
+          </p>
+        </div>
+
+        <div class="promo-card">
+          <h3> Mua 2 Tặng 1</h3>
+          <p>
+            Áp dụng cho một số dòng Pizza đặc biệt vào cuối tuần.
+          </p>
+        </div>
+
+        <div class="promo-card">
+          <h3> Combo Tiết Kiệm</h3>
+          <p>
+            Giảm đến 20% khi mua Combo Gà Rán + Khoai Tây + Nước Ngọt.
+          </p>
+        </div>
+
+        <div class="promo-card">
+          <h3> Tặng Nước Miễn Phí</h3>
+          <p>
+            Tặng 1 đồ uống bất kỳ cho đơn hàng trên 300.000đ.
+          </p>
+        </div>
+
+        <div class="promo-card">
+          <h3> Khách Hàng Mới</h3>
+          <p>
+            Tặng voucher giảm giá 30.000đ khi đăng ký tài khoản lần đầu.
+          </p>
+        </div>
+
       </div>
+
+      <hr>
+
+      <div class="account-box">
+
+        <h2> Chương Trình Thành Viên</h2>
+
+        <p>
+          Khi đăng ký tài khoản tại Food, khách hàng sẽ được tham gia chương trình
+          tích điểm thành viên. Mỗi đơn hàng thành công sẽ được cộng điểm thưởng
+          để đổi lấy các phần quà hấp dẫn và nhiều mã giảm giá giá trị.
+        </p>
+
+        <p>
+          Khách hàng thân thiết còn được nhận thông báo sớm về các chương trình
+          khuyến mãi độc quyền, sự kiện đặc biệt và các sản phẩm mới nhất của Food.
+        </p>
+
+      </div>
+
+      <hr>
+
+      <div class="account-box">
+
+        <h2> Tại Sao Nên Chọn Food?</h2>
+
+        <ul>
+          <li> Thực đơn đa dạng với nhiều món ăn hấp dẫn.</li>
+          <li> Giá cả hợp lý, nhiều chương trình giảm giá.</li>
+          <li> Giao hàng nhanh chóng và tiện lợi.</li>
+          <li> Thanh toán linh hoạt qua nhiều hình thức.</li>
+          <li> Hỗ trợ khách hàng tận tình 24/7.</li>
+        </ul>
+
+      </div>
+
+      <hr>
+
+      <div class="account-box">
+
+        <h2> Lưu Ý</h2>
+
+        <p>
+          Các chương trình khuyến mãi có thể thay đổi theo từng thời điểm.
+          Vui lòng theo dõi website thường xuyên để cập nhật những ưu đãi mới nhất.
+        </p>
+
+        <p>
+          Food xin chân thành cảm ơn sự tin tưởng và đồng hành của quý khách.
+          Chúng tôi sẽ không ngừng nâng cao chất lượng dịch vụ để mang đến những
+          trải nghiệm tuyệt vời nhất cho khách hàng.
+        </p>
+
+      </div>
+
     </section>
   </main>
+
 </body>
 </html>

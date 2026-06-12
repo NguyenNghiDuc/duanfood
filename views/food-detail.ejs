@@ -1,31 +1,70 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Chi tiết món ăn</title>
-  <link rel="stylesheet" href="/css/style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= food.title %></title>
+    <link rel="stylesheet" href="/css/food-detail.css">
 </head>
 <body>
-  <nav>
-    <a href="/">Trang chủ</a> |
-    <a href="/foods">Món ăn</a>
-  </nav>
 
-  <% if (food) { %>
-    <h1><%= food.title %></h1>
-    <% if (food.image) { %>
-      <img src="<%= food.image %>" alt="<%= food.title %>" style="max-width:320px;border-radius:10px;" />
+<div class="food-detail-container">
+
+    <div class="detail-nav">
+        <a href="/"> Trang chủ</a>
+        <a href="/foods"> Thực đơn</a>
+    </div>
+
+    <% if (food) { %>
+
+    <div class="food-detail-card">
+
+        <div class="food-detail-image">
+            <% if(food.image){ %>
+                <img src="<%= food.image %>" alt="<%= food.title %>">
+            <% } else { %>
+                <img src="/images/default-food.jpg" alt="Food">
+            <% } %>
+        </div>
+
+        <div class="food-detail-content">
+            <h1><%= food.title %></h1>
+
+            <span class="category-badge">
+                <%= food.category_name || 'Chưa phân loại' %>
+            </span>
+
+            <p class="food-description">
+                <%= food.description %>
+            </p>
+
+            <div class="food-price">
+                <%= Number(food.price).toLocaleString('vi-VN') %> ₫
+            </div>
+
+            <form method="POST" action="/cart/add/<%= food.id %>">
+                <button type="submit" class="add-cart-btn">
+                    🛒 Thêm vào giỏ hàng
+                </button>
+            </form>
+
+            <a href="/foods" class="back-btn">
+                ← Quay lại danh sách món ăn
+            </a>
+        </div>
+
+    </div>
+
+    <% } else { %>
+
+    <div class="food-not-found">
+        <h2>Không tìm thấy món ăn</h2>
+        <a href="/foods">Quay lại thực đơn</a>
+    </div>
+
     <% } %>
-    <p><%= food.description %></p>
-    <p><strong>Danh mục:</strong> <%= food.category_name || 'Chưa phân loại' %></p>
-    <p><strong>Giá:</strong> <%= Number(food.price).toLocaleString('vi-VN') %> ₫</p>
-    <form method="POST" action="/cart/add/<%= food.id %>">
-      <button type="submit" class="btn">Thêm vào giỏ</button>
-    </form>
-    <p><a href="/foods">← Quay lại danh sách</a></p>
-  <% } else { %>
-    <p>Không tìm thấy món ăn.</p>
-  <% } %>
+
+</div>
+
 </body>
 </html>

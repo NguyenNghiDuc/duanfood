@@ -1,69 +1,135 @@
+body{
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg,#fff8f2,#ffe7d6);
+    margin:0;
+    padding:0;
+}
+
 .container{
     width:90%;
-    max-width:1200px;
-    margin:auto;
+    max-width:1300px;
+    margin:40px auto;
 }
 
 .card{
     background:#fff;
-    border-radius:20px;
-    padding:30px;
-    margin:30px auto;
-    box-shadow:0 8px 20px rgba(0,0,0,0.08);
+    border-radius:25px;
+    padding:40px;
+    box-shadow:0 15px 40px rgba(0,0,0,.08);
 }
 
 h1{
-    color:#c65a00;
-    font-size:42px;
-    margin-bottom:10px;
+    text-align:center;
+    color:#ff6b35;
+    font-size:56px;
+    margin-bottom:15px;
+    font-weight:800;
 }
 
 .subtext{
+    text-align:center;
     color:#666;
-    margin-bottom:20px;
+    font-size:18px;
+    margin-bottom:35px;
 }
 
-.main-nav{
+nav{
     display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
     gap:15px;
-    margin-bottom:30px;
+    margin-bottom:40px;
 }
 
-.main-nav a{
+nav a{
     text-decoration:none;
-    padding:10px 18px;
-    border-radius:10px;
-    background:#fff3e8;
-    color:#c65a00;
+    color:#444;
     font-weight:600;
+    padding:12px 24px;
+    background:white;
+    border-radius:30px;
+    box-shadow:0 4px 12px rgba(0,0,0,.05);
     transition:.3s;
 }
 
-.main-nav a:hover{
-    background:#c65a00;
+nav a:hover{
+    background:#ff6b35;
     color:white;
+    transform:translateY(-3px);
+}
+
+.account-box{
+    margin-top:35px;
+    padding:30px;
+    border-radius:20px;
+    background:linear-gradient(135deg,#fff7f0,#fff);
+    border:2px solid #ffe0cc;
+}
+
+.account-box h2{
+    text-align:center;
+    color:#ff6b35;
+    font-size:38px;
+    margin-bottom:30px;
 }
 
 .promo-grid{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-    gap:20px;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:25px;
 }
 
 .promo-card{
-    background:#fff7f1;
-    border:1px solid #f5c7a6;
-    border-radius:15px;
-    padding:20px;
+    background:linear-gradient(135deg,#ff6b35,#ff9f1c);
+    color:white;
+    border-radius:20px;
+    padding:30px;
+    box-shadow:0 10px 25px rgba(255,107,53,.25);
     transition:.3s;
 }
 
 .promo-card:hover{
-    transform:translateY(-5px);
-    box-shadow:0 8px 15px rgba(0,0,0,.1);
+    transform:translateY(-10px);
 }
 
 .promo-card h3{
-    color:#c65a00;
-    margin-bottom:10px;
+    margin-top:0;
+    font-size:26px;
+    margin-bottom:15px;
+}
+
+.promo-card p{
+    line-height:1.8;
+    color:white;
+}
+
+hr{
+    border:none;
+    height:3px;
+    border-radius:10px;
+    background:linear-gradient(to right,#ff6b35,#ffb347,transparent);
+    margin:40px 0;
+}
+
+footer{
+    margin-top:40px;
+    text-align:center;
+    color:#777;
+    padding:20px;
+}
+
+.btn{
+    display:inline-block;
+    padding:12px 25px;
+    background:linear-gradient(135deg,#ff6b35,#ff9f1c);
+    color:white;
+    text-decoration:none;
+    border-radius:30px;
+    font-weight:bold;
+    transition:.3s;
+}
+
+.btn:hover{
+    transform:translateY(-3px);
+    box-shadow:0 8px 20px rgba(255,107,53,.3);
 }

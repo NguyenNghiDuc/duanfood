@@ -3,43 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Danh sách bài viết</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <title>Món ăn mới</title>
+    <link rel="stylesheet" href="/css/news.css">
 </head>
 <body>
-    <h1>Danh sách bài viết</h1>
-    <nav>
-        <a href="/">Trang chủ</a> |
-        <a href="/news">Các Món Ăn Mới</a>
-        <% if (user) { %>
-            | <a href="/foods">Thêm Các Món Ăn</a>
-            | Xin chào, <%= user.username %> |
-            <a href="/logout">Đăng xuất</a>
-        <% } else { %>
-            | <a href="/login">Đăng nhập</a>
-        <% } %>
-    </nav>
 
-    <% if (posts && posts.length > 0) { %>
-        <ul>
-            <% posts.forEach(post => { %>
-                <li>
-                    <h3><%= post.title %></h3>
-                    <p><%= post.description %></p>
-                    <div>
-                        <a href="/news/<%= post.id %>">Xem chi tiết</a>
-                        <% if (user) { %>
-                            | <a href="/news/<%= post.id %>/edit">Sửa</a>
-                            | <form action="/news/<%= post.id %>/delete" method="POST" style="display:inline;">
-                                <button type="submit" onclick="return confirm('Bạn chắc chắn muốn xóa?')">Xóa</button>
-                            </form>
-                        <% } %>
-                    </div>
-                </li>
-            <% }) %>
-        </ul>
-    <% } else { %>
-        <p>Chưa có bài viết nào.</p>
+<div class="news-wrapper">
+
+    <div class="news-header">
+        <h1> Các Món Ăn Mới</h1>
+        <p>Khám phá những món ăn mới nhất vừa được cập nhật</p>
+    </div>
+
+    <div class="news-nav">
+        <a href="/">Trang chủ</a>
+        <a href="/foods">Thực đơn</a>
+        <a href="/promotion">Khuyến mãi</a>
+
+        <% if(user){ %>
+            <a href="/logout">Đăng xuất</a>
+        <% }else{ %>
+            <a href="/login">Đăng nhập</a>
+        <% } %>
+    </div>
+
+    <% if(user){ %>
+        <div class="user-box">
+             Xin chào <strong><%= user.username %></strong>
+        </div>
     <% } %>
+
+    <% if(posts && posts.length > 0){ %>
+
+        <div class="news-grid">
+
+            <% posts.forEach(post => { %>
+
+                <div class="news-card">
+
+                    <div class="news-tag">
+                        Món mới
+                    </div>
+
+                    <h2><%= post.title %></h2>
+
+                    <p>
+                        <%= post.description %>
+                    </p>
+
+                    <div class="news-actions">
+
+                        <a class="view-btn"
+                           href="/news/<%= post.id %>">
+                           Xem chi tiết
+                        </a>
+
+                        <% if(user){ %>
+
+                            <a class="edit-btn"
+                               href="/news/<%= post.id %>/edit">
+                               Sửa
+                            </a>
+
+                            <form action="/news/<%= post.id %>/delete"
+                                  method="POST">
+                                <button class="delete-btn">
+                                    Xóa
+                                </button>
+                            </form>
+
+                        <% } %>
+
+                    </div>
+
+                </div>
+
+            <% }) %>
+
+        </div>
+
+    <% } else { %>
+
+        <div class="empty-news">
+             Hiện chưa có món ăn mới nào được cập nhật.
+        </div>
+
+    <% } %>
+
+</div>
+
 </body>
 </html>

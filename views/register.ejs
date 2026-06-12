@@ -1,33 +1,53 @@
 <!DOCTYPE html>
-<html>
+<html lang="vi">
 <head>
-    <title>Đăng ký</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng ký tài khoản</title>
+    <link rel="stylesheet" href="/css/register.css">
 </head>
-<link rel="stylesheet" href="/css/style.css">
 <body>
-    <h1>Đăng ký</h1>
 
-    <% if(error){ %>
-        <p style="color:red"><%= error %></p>
-    <% } %>
+<div class="auth-container">
+    <div class="auth-card">
+        <h1> Đăng ký tài khoản</h1>
+        <p class="auth-subtitle">
+            Tạo tài khoản để đặt món và nhận nhiều ưu đãi hấp dẫn từ Food.
+        </p>
 
-    <form method="POST" action="/register">
-        <div>
-            <label>Username</label>
-            <input type="text" name="username" required>
+        <% if(error){ %>
+            <div class="error-box">
+                <%= error %>
+            </div>
+        <% } %>
+
+        <form method="POST" action="/register">
+
+            <div class="form-group">
+                <label>Tên đăng nhập</label>
+                <input type="text" name="username" placeholder="Nhập username..." required>
+            </div>
+
+            <div class="form-group">
+                <label>Mật khẩu</label>
+                <input type="password" name="password" placeholder="Nhập mật khẩu..." required>
+            </div>
+
+            <button type="submit" class="btn-auth">
+                Đăng ký
+            </button>
+        </form>
+
+        <div class="auth-footer">
+            Đã có tài khoản?
+            <a href="/login">Đăng nhập ngay</a>
         </div>
 
-        <div>
-            <label>Password</label>
-            <input type="password" name="password" required>
+        <div class="back-home">
+            <a href="/">← Quay về trang chủ</a>
         </div>
+    </div>
+</div>
 
-        <button type="submit">Đăng ký</button>
-    </form>
-
-    <p>
-        Đã có tài khoản?
-        <a href="/login">Đăng nhập</a>
-    </p>
 </body>
 </html>

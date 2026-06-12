@@ -1,60 +1,121 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Giỏ hàng</title>
-  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/cart.css">
 </head>
 <body>
-  <main class="container">
-    <section class="card">
-      <h1>Giỏ hàng</h1>
-      <nav>
-        <a href="/">Trang chủ</a>
-        <a href="/foods">Món ăn</a>
-        <a href="/orders">Đơn hàng</a>
-        <a href="/logout">Đăng xuất</a>
-      </nav>
 
-      <% if (cart && cart.length) { %>
-        <div class="cart-layout">
-          <div>
-            <ul>
-              <% cart.forEach(item => { %>
-                <li>
-                  <h3><%= item.title %></h3>
-                  <p>Giá: <%= Number(item.price).toLocaleString('vi-VN') %> ₫</p>
-                  <form method="POST" action="/cart/update/<%= item.foodId %>" class="inline-form">
-                    <input type="hidden" name="title" value="<%= item.title %>" />
-                    <input type="hidden" name="price" value="<%= item.price %>" />
-                    <input type="hidden" name="image" value="<%= item.image || '' %>" />
-                    <label>Số lượng
-                      <input type="number" name="quantity" min="1" value="<%= item.quantity %>" />
-                    </label>
-                    <button type="submit">Cập nhật</button>
-                  </form>
-                  <form method="POST" action="/cart/remove/<%= item.foodId %>">
-                    <button type="submit">Xóa</button>
-                  </form>
-                </li>
-              <% }) %>
-            </ul>
-          </div>
+<div class="cart-container">
 
-          <aside class="cart-summary">
-            <h2>Tóm tắt đơn hàng</h2>
-            <p><strong>Tổng tiền:</strong> <%= Number(total || 0).toLocaleString('vi-VN') %> ₫</p>
-            <div class="cta-row">
-              <a class="btn" href="/checkout">Thanh toán</a>
-              <a class="btn btn-secondary" href="/foods">Tiếp tục mua</a>
-            </div>
-          </aside>
+  <div class="cart-header">
+    <h1> Giỏ Hàng Của Bạn</h1>
+    <p>Kiểm tra món ăn trước khi thanh toán</p>
+  </div>
+
+  <nav class="cart-nav">
+    <a href="/">Trang chủ</a>
+    <a href="/foods">Thực đơn</a>
+    <a href="/orders">Đơn hàng</a>
+    <a href="/logout">Đăng xuất</a>
+  </nav>
+
+  <% if (cart && cart.length) { %>
+
+  <div class="cart-layout">
+
+    <div class="cart-items">
+
+      <% cart.forEach(item => { %>
+
+      <div class="cart-item">
+
+        <% if(item.image){ %>
+          <img src="<%= item.image %>" alt="<%= item.title %>">
+        <% } %>
+
+        <div class="cart-info">
+          <h3><%= item.title %></h3>
+
+          <p class="price">
+            <%= Number(item.price).toLocaleString('vi-VN') %> ₫
+          </p>
+
+          <form method="POST"
+                action="/cart/update/<%= item.foodId %>"
+                class="update-form">
+
+            <input type="hidden" name="title" value="<%= item.title %>">
+            <input type="hidden" name="price" value="<%= item.price %>">
+            <input type="hidden" name="image" value="<%= item.image || '' %>">
+
+            <label>Số lượng</label>
+
+            <input type="number"
+                   name="quantity"
+                   min="1"
+                   value="<%= item.quantity %>">
+
+            <button type="submit">
+              Cập nhật
+            </button>
+          </form>
+
+          <form method="POST"
+                action="/cart/remove/<%= item.foodId %>">
+
+            <button class="delete-btn">
+              Xóa món
+            </button>
+
+          </form>
+
         </div>
-      <% } else { %>
-        <p>Giỏ hàng đang trống. Hãy chọn món để thanh toán.</p>
-      <% } %>
-    </section>
-  </main>
+
+      </div>
+
+      <% }) %>
+
+    </div>
+
+    <aside class="cart-summary">
+
+      <h2> Tóm tắt đơn hàng</h2>
+
+      <div class="summary-row">
+        <span>Tổng tiền:</span>
+        <strong>
+          <%= Number(total || 0).toLocaleString('vi-VN') %> ₫
+        </strong>
+      </div>
+
+      <a class="checkout-btn" href="/checkout">
+        Thanh toán ngay
+      </a>
+
+      <a class="continue-btn" href="/foods">
+        Tiếp tục mua hàng
+      </a>
+
+    </aside>
+
+  </div>
+
+  <% } else { %>
+
+  <div class="empty-cart">
+    <h2> Giỏ hàng đang trống</h2>
+    <p>Hãy chọn món ăn yêu thích của bạn.</p>
+    <a href="/foods" class="checkout-btn">
+      Xem thực đơn
+    </a>
+  </div>
+
+  <% } %>
+
+</div>
+
 </body>
 </html>

@@ -1,63 +1,215 @@
+```ejs
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Giới thiệu Thực Đơn - Food</title>
-  <link rel="stylesheet" href="/css/style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giới thiệu về Food</title>
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-  <main class="container" style="max-width: 800px; margin: 0 auto; padding: 20px;">
-    <section class="card" style="background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
-      
-      <!-- Logo/Ảnh cửa hàng từ thư mục public/images/anh.png -->
-      <div style="text-align: center;">
-        <img src="/images/anh.png" alt="Ảnh cửa hàng Food" style="width: 140px; height: auto; margin-bottom: 16px; border-radius: 50%;" loading="lazy" />
-        <h1>Khám Phá Thế Giới Ẩm Thực Tại Food</h1>
-        <p class="subtext" style="color: #666; font-style: italic;">"Nhanh chóng, Tiện lợi, Bùng nổ hương vị trong từng khoảnh khắc"</p>
-      </div>
 
-      <hr style="border: 0; border-top: 1px solid #eee; margin: 25px 0;" />
+<main class="container" style="max-width: 1000px; margin: 30px auto;">
+    <section class="card" style="padding:40px;">
 
-      <!-- Phần nội dung giới thiệu chi tiết -->
-      <div class="intro-content" style="text-align: left; line-height: 1.8; color: #333;">
-        <p>Tại <strong>Food</strong>, chúng tôi hiểu rằng một bữa ăn nhanh không chỉ cần "nhanh" để bắt kịp nhịp sống hối hả, mà còn phải thật "chất" để nạp đầy năng lượng cho bạn. Đó là lý do thực đơn của chúng tôi được thiết kế đa dạng, tỉ mỉ, kết hợp hài hòa giữa tinh hoa thức ăn nhanh quốc tế và khẩu vị độc đáo của người Việt.</p>
-        
-        <p>Hãy cùng điểm qua những "ngôi sao" sáng nhất trong menu mà bạn nhất định không thể bỏ lỡ:</p>
+        <div style="text-align:center;">
+            <img src="/images/anh.png"
+                 alt="Food Logo"
+                 style="width:150px;height:150px;border-radius:50%;margin-bottom:20px;">
 
-        <!-- Nhóm 1: Burger -->
-        <h3 style="color: #e44d26; margin-top: 20px;">🍔 1. Dòng Burger Đậm Vị – Vỏ Mềm, Nhân Mọng Nước</h3>
-        <p>Mỗi chiếc Burger tại DuanFood là một tác phẩm nghệ thuật xếp tầng. Phần vỏ bánh mì luôn được nướng vàng nhẹ, giữ độ mềm xốp hoàn hảo. 
-        Nổi bật nhất là <em>Burger Bò Phô Mai Tan Chảy</em> với miếng bò băm thượng hạng được áp chảo vừa chín tới để giữ trọn vị ngọt tự nhiên, phủ lên trên là lớp phô mai Cheddar béo ngậy, kết hợp cùng rau xà lách tươi và sốt BBQ độc quyền. 
-        Nếu bạn thích sự thanh nhẹ hơn, các dòng <em>Burger Gà Giòn Sốt Mayonnaise</em> hay <em>Burger Tôm Biển</em> chắc chắn sẽ làm bạn hài lòng.</p>
+            <h1>Giới Thiệu Về Food – Nơi Hội Tụ Tinh Hoa Ẩm Thực Và Công Nghệ</h1>
 
-        <!-- Nhóm 2: Gà rán -->
-        <h3 style="color: #e44d26; margin-top: 20px;">🍗 2. Gà Rán Giòn Rụm – Thơm Ngon Đến Từng Thớ Thịt</h3>
-        <p>Gà rán chính là niềm tự hào của bếp DuanFood. Chúng tôi lựa chọn những phần thịt gà tươi ngon nhất, tẩm ướp theo công thức bí truyền với hơn 10 loại gia vị thảo mộc thiên nhiên. 
-        Khi thưởng thức, bạn sẽ cảm nhận được lớp da ngoài giòn rụm, cắn vào nghe tiếng "rôm rốp" vui tai, nhưng phần thịt bên trong vẫn giữ được độ mềm, ẩm và ngọt thơm mà không hề bị khô. 
-        Đặc biệt, đừng quên thử qua <em>Gà Rán Sốt Cay Hàn Quốc</em> hoặc <em>Gà Lắc Phô Mai</em> cực cuốn nhé!</p>
+            <p style="color:#666;font-style:italic;">
+                "Nhanh chóng, tiện lợi, ngon trong từng khoảnh khắc"
+            </p>
+        </div>
 
-        <!-- Nhóm 3: Đồ ăn kèm -->
-        <h3 style="color: #e44d26; margin-top: 20px;">🍟 3. Món Ăn Kèm Hoàn Hảo – Khởi Đầu Cuộc Vui</h3>
-        <p>Để bữa ăn thêm trọn vẹn, danh sách món ăn kèm của DuanFood luôn sẵn sàng chiều lòng bạn. 
-        Đó là những sợi <em>Khoai tây chiên</em> bản lớn được chiên vàng ươm, bên ngoài giòn tan, bên trong bùi ngậy. 
-        Hay những miếng <em>Mực vòng chiên xù</em> thơm phức, <em>Phô mai que</em> kéo sợi kéo dài bất tận và <em>Salad rau củ tươi</em> giúp cân bằng hương vị, ăn hoài mà không ngán.</p>
+        <hr style="margin:25px 0;">
 
-        <!-- Nhóm 4: Combo và nước -->
-        <h3 style="color: #e44d26; margin-top: 20px;">🥤 4. Đồ Uống Tươi Mát & Các Gói Combo Tiết Kiệm</h3>
-        <p>Đã có món ăn ngon thì không thể thiếu những ly nước giải khát mát lạnh. Từ các dòng nước có ga truyền thống giúp tiêu hóa nhanh, cho đến <em>Trà chanh sả, Trà đào thanh mát</em> được pha chế thủ công mỗi ngày. 
-        Nếu bạn đi cùng gia đình, nhóm bạn hoặc muốn có một bữa ăn "đủ đầy" nhất với mức giá kinh tế, các gói <strong>Combo Tiết Kiệm (Mix & Match)</strong> của chúng tôi chính là sự lựa chọn thông minh, giúp bạn tiết kiệm lên đến 20% chi phí.</p>
-      </div>
+        <p>
+            Chào mừng bạn đến với <strong>Food</strong>, nền tảng đặt món ăn trực tuyến
+            hiện đại được xây dựng với mong muốn mang đến cho khách hàng những trải nghiệm
+            ẩm thực tuyệt vời nhất. Trong thời đại công nghệ số phát triển mạnh mẽ, nhu cầu
+            thưởng thức những món ăn ngon mà không cần mất quá nhiều thời gian di chuyển ngày
+            càng trở nên phổ biến.
+        </p>
 
-      <hr style="border: 0; border-top: 1px solid #eee; margin: 25px 0;" />
+        <p>
+            Food ra đời với sứ mệnh kết nối khách hàng với những món ăn chất lượng,
+            giúp việc đặt món trở nên nhanh chóng, thuận tiện và dễ dàng hơn bao giờ hết.
+            Chúng tôi không chỉ cung cấp dịch vụ đặt món trực tuyến mà còn xây dựng một
+            không gian ẩm thực số hiện đại, nơi khách hàng có thể khám phá hàng trăm món ăn
+            hấp dẫn đến từ nhiều nền văn hóa khác nhau.
+        </p>
 
-      <!-- Thanh điều hướng (Navigation) -->
-      <nav style="text-align: center; margin-top: 24px; font-weight: bold;">
-        <a href="/" style="color: #007bff; text-decoration: none; margin: 0 10px;">Trang chủ</a> | 
-        <a href="/foods" style="color: #007bff; text-decoration: none; margin: 0 10px;">Thực đơn</a> | 
-        <a href="/promotion" style="color: #007bff; text-decoration: none; margin: 0 10px;">Khuyến mãi</a>
-      </nav>
+        <p>
+            Từ các món ăn nhanh nổi tiếng như Burger, Pizza, Gà Rán, Hotdog cho đến các món ăn
+            truyền thống Việt Nam, đồ uống giải khát và món tráng miệng, tất cả đều được lựa chọn
+            kỹ lưỡng nhằm mang đến chất lượng tốt nhất cho người dùng.
+        </p>
+
+        <h2> Burger Đậm Vị – Best Seller Hàng Đầu</h2>
+
+        <p>
+            Burger là một trong những món ăn được yêu thích nhất tại Food.
+            Những chiếc bánh burger được làm từ nguyên liệu tươi ngon,
+            kết hợp giữa bánh mì mềm thơm, thịt bò hoặc thịt gà chất lượng cao,
+            rau củ tươi sạch cùng các loại sốt đặc trưng tạo nên hương vị khó quên.
+        </p>
+
+        <p>
+            Nổi bật nhất là Burger Bò Phô Mai Đặc Biệt với lớp phô mai tan chảy,
+            thịt bò nướng thơm lừng và nước sốt độc quyền của Food.
+        </p>
+
+        <h2> Pizza Hải Sản Đặc Biệt</h2>
+
+        <p>
+            Pizza Hải Sản là món ăn luôn nằm trong danh sách bán chạy nhất.
+            Lớp đế bánh được nướng vàng giòn kết hợp cùng tôm, mực,
+            thanh cua và phô mai Mozzarella kéo sợi tạo nên hương vị hấp dẫn.
+        </p>
+
+        <p>
+            Đây là lựa chọn hoàn hảo cho các buổi họp mặt gia đình,
+            sinh nhật hoặc những bữa ăn cùng bạn bè.
+        </p>
+
+        <h2> Gà Rán Giòn Cay Hàn Quốc</h2>
+
+        <p>
+            Gà rán là niềm tự hào của Food. Chúng tôi sử dụng công thức tẩm ướp
+            đặc biệt với nhiều loại gia vị tự nhiên giúp tạo nên lớp vỏ ngoài giòn rụm,
+            trong khi phần thịt bên trong vẫn giữ được độ mềm và ngọt.
+        </p>
+
+        <p>
+            Các hương vị nổi bật gồm:
+        </p>
+
+        <ul>
+            <li>Gà Rán Truyền Thống</li>
+            <li>Gà Cay Hàn Quốc</li>
+            <li>Gà Lắc Phô Mai</li>
+            <li>Gà Sốt BBQ</li>
+        </ul>
+
+        <h2> Hotdog Và Các Món Ăn Nhanh</h2>
+
+        <p>
+            Bên cạnh Burger và Pizza, Food còn phục vụ nhiều loại Hotdog,
+            Sandwich và các món ăn nhanh hấp dẫn khác.
+            Tất cả đều được chế biến theo quy trình hiện đại nhằm đảm bảo chất lượng
+            và độ tươi ngon khi đến tay khách hàng.
+        </p>
+
+        <h2> Món Ăn Kèm Hấp Dẫn</h2>
+
+        <p>
+            Những món ăn kèm tại Food luôn được khách hàng đánh giá cao:
+        </p>
+
+        <ul>
+            <li>Khoai Tây Chiên Giòn</li>
+            <li>Phô Mai Que Kéo Sợi</li>
+            <li>Mực Chiên Xù</li>
+            <li>Salad Rau Củ</li>
+            <li>Xúc Xích Chiên</li>
+        </ul>
+
+        <p>
+            Những món ăn này giúp bữa ăn trở nên phong phú và trọn vẹn hơn.
+        </p>
+
+        <h2> Đồ Uống Tươi Mát</h2>
+
+        <p>
+            Food cung cấp đa dạng các loại đồ uống như:
+        </p>
+
+        <ul>
+            <li>Trà Đào Cam Sả</li>
+            <li>Trà Chanh</li>
+            <li>Trà Sữa</li>
+            <li>Nước Ép Trái Cây</li>
+            <li>Nước Ngọt Có Ga</li>
+        </ul>
+
+        <p>
+            Mỗi thức uống đều được chuẩn bị cẩn thận nhằm mang đến cảm giác
+            tươi mát và cân bằng hương vị cho bữa ăn.
+        </p>
+
+        <h2> Cam Kết Về Chất Lượng</h2>
+
+        <p>
+            Food luôn đặt vấn đề vệ sinh an toàn thực phẩm lên hàng đầu.
+            Tất cả nguyên liệu đều được lựa chọn từ các nhà cung cấp uy tín,
+            có nguồn gốc rõ ràng và được kiểm tra nghiêm ngặt trước khi đưa vào chế biến.
+        </p>
+
+        <p>
+            Đội ngũ đầu bếp luôn nghiên cứu và cập nhật các xu hướng ẩm thực mới nhất,
+            mang đến cho khách hàng nhiều lựa chọn hấp dẫn và phù hợp với khẩu vị đa dạng.
+        </p>
+
+        <h2> Tầm Nhìn Và Định Hướng Phát Triển</h2>
+
+        <p>
+            Trong tương lai, Food hướng tới việc trở thành một trong những nền tảng
+            đặt đồ ăn trực tuyến được yêu thích và tin dùng hàng đầu tại Việt Nam.
+        </p>
+
+        <p>
+            Chúng tôi không ngừng đầu tư vào công nghệ, nâng cao chất lượng dịch vụ,
+            mở rộng hệ sinh thái ẩm thực và phát triển các tính năng thông minh
+            nhằm mang đến trải nghiệm tốt nhất cho khách hàng.
+        </p>
+
+        <p>
+            Food mong muốn trở thành người bạn đồng hành đáng tin cậy trong mỗi bữa ăn,
+            giúp khách hàng tiết kiệm thời gian và tận hưởng những món ăn ngon một cách dễ dàng.
+        </p>
+
+        <p>
+            Bên cạnh đó, hệ thống sẽ tiếp tục được nâng cấp với các tính năng như:
+        </p>
+
+        <ul>
+            <li>Đánh giá món ăn trực tuyến</li>
+            <li>Theo dõi đơn hàng theo thời gian thực</li>
+            <li>Gợi ý món ăn cá nhân hóa</li>
+            <li>Tích điểm đổi quà</li>
+            <li>Khuyến mãi dành cho khách hàng thân thiết</li>
+        </ul>
+
+        <p>
+            Với phương châm
+            <strong>"Chất lượng tạo nên uy tín – Khách hàng là ưu tiên hàng đầu"</strong>,
+            Food cam kết không ngừng đổi mới và phát triển để mang đến dịch vụ tốt nhất.
+        </p>
+
+        <p>
+            Xin chân thành cảm ơn quý khách đã tin tưởng và lựa chọn Food.
+            Sự hài lòng của khách hàng chính là động lực lớn nhất để chúng tôi
+            tiếp tục hoàn thiện mỗi ngày.
+        </p>
+
+        <div style="text-align:center;margin-top:40px;">
+            <h3> Food – Nhanh chóng, tiện lợi, ngon trong từng khoảnh khắc!</h3>
+        </div>
+
+        <hr style="margin:25px 0;">
+
+        <div style="text-align:center;">
+            <a href="/">Trang chủ</a> |
+            <a href="/foods">Thực đơn</a> |
+            <a href="/promotion">Khuyến mãi</a>
+        </div>
+
     </section>
-  </main>
+</main>
+
 </body>
 </html>
+```
