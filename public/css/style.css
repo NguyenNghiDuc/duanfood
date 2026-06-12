@@ -113,6 +113,14 @@ p {
 .small-note {
     color: var(--text-light);
 }
+.payment-card a{
+    text-decoration: none;
+    color: inherit;
+}
+
+.payment-card a:hover{
+    text-decoration: none;
+}
 
 .topbar {
     position: sticky;
