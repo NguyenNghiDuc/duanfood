@@ -64,9 +64,13 @@ async function init() {
 
     const adminPlain = '27032006'
     const adminHash = await bcrypt.hash(adminPlain, 10)
-    await db.query("INSERT IGNORE INTO users (username, password, balance) VALUES (?, ?, 0)", ["admin", adminHash])
+    const [existingAdmins] = await db.query("SELECT id FROM users WHERE username = ?", ["admin"])
+    if (existingAdmins && existingAdmins.length > 0) {
+      await db.query("UPDATE users SET password = ? WHERE username = ?", [adminHash, "admin"])
+    } else {
+      await db.query("INSERT INTO users (username, password, balance) VALUES (?, ?, 0)", ["admin", adminHash])
+    }
 
-    
     await foodModel.initFoodSchema()
 
     console.log('Database initialization complete.')

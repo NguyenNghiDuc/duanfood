@@ -147,7 +147,7 @@ const dbInterface = {
 module.exports = dbInterface;
 
 (async function init() {
-  // Only try MySQL when explicitly enabled to avoid accidental remote MySQL usage
+
   const useMySQL = process.env.USE_MYSQL === '1';
 
   if (useMySQL) {
@@ -167,7 +167,12 @@ module.exports = dbInterface;
     
     const bcrypt = require('bcrypt');
     const adminHash = await bcrypt.hash('27032006', 10);
-    await sqliteQuery(sqliteDb, 'INSERT OR IGNORE INTO users (username, password, balance) VALUES (?, ?, 0)', ['admin', adminHash]);
+    const [existingAdmins] = await sqliteQuery(sqliteDb, 'SELECT id FROM users WHERE username = ?', ['admin']);
+    if (existingAdmins && existingAdmins.length > 0) {
+      await sqliteQuery(sqliteDb, 'UPDATE users SET password = ? WHERE username = ?', [adminHash, 'admin']);
+    } else {
+      await sqliteQuery(sqliteDb, 'INSERT INTO users (username, password, balance) VALUES (?, ?, 0)', ['admin', adminHash]);
+    }
   } catch (e) {
     console.error('Failed to initialize SQLite fallback DB:', e.message);
   }

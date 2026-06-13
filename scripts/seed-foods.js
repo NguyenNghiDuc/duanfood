@@ -13,7 +13,7 @@ const foods = [
     description: 'Bún chả Hà Nội, thịt nướng thơm, nước chấm đậm vị.',
     price: 70000,
     category_id: null,
-    image: 'https://ibb.co/mVPb08gN'
+    image: '/images/bun-cha.jpg'
   },
   {
     title: 'Gà rán cay',
@@ -48,7 +48,7 @@ const foods = [
     description: 'Thịt heo ngon, Đậm đà',
     price: 80000,
     category_id: null,
-    image: 'https://ibb.co/mVPb08gN'
+    image: "/images/thitheo.png"
   }
   
 ]

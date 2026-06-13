@@ -4,3 +4,19 @@ Server is running at http://localhost:5000
 Database engine: SQLite (fallback)
 GET /
 GET /
+GET /
+GET /
+GET /
+POST /cart/add/7
+GET /login
+POST /login
+GET /news
+GET /
+POST /cart/add/7
+GET /cart
+GET /checkout
+POST /checkout
+POST /login
+POST /admin/foods/add
+GET /foods
+GET /wallet/top-up

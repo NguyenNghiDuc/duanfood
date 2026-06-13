@@ -7,34 +7,51 @@
   <link rel="stylesheet" href="/css/style.css" />
 </head>
 <body>
-  <main class="container">
-    <section class="card">
-      <h1>Thêm món ăn</h1>
-      <nav>
+  <main class="admin-page">
+    <section class="card admin-card">
+      <div class="admin-header">
+        <div>
+          <h1>Thêm món ăn mới</h1>
+          <p>Nhập thông tin món ăn và dán đường dẫn ảnh trực tiếp để hiện trên trang.</p>
+        </div>
+        <div class="admin-actions">
+          <a href="/foods" class="btn btn-secondary">Quay lại danh sách</a>
+        </div>
+      </div>
+
+      <nav class="admin-breadcrumb">
         <a href="/">Trang chủ</a>
+        <span>›</span>
         <a href="/foods">Món ăn</a>
-        <a href="/logout">Đăng xuất</a>
+        <span>›</span>
+        <span>Thêm món ăn</span>
       </nav>
 
-      <form method="POST" action="/admin/foods/add" class="food-filter">
-        <label>Tiêu đề
+      <form method="POST" action="/admin/foods/add" class="form-grid admin-form">
+        <label>
+          Tiêu đề món ăn
           <input type="text" name="title" required />
         </label>
-        <label>Giá
+        <label>
+          Giá bán (₫)
           <input type="number" name="price" min="0" required />
         </label>
-        <label>Danh mục
+        <label>
+          Danh mục
           <select name="category_id">
             <% categories.forEach(category => { %>
               <option value="<%= category.id %>"><%= category.name %></option>
             <% }) %>
           </select>
         </label>
-        <label>Ảnh (URL)
+        <label>
+          URL ảnh món ăn
           <input type="text" name="image" placeholder="https://..." />
+          <small>Không cần upload, dùng link ảnh trực tiếp hoặc đường dẫn local như /images/tenfile.png</small>
         </label>
-        <label>Mô tả
-          <textarea name="description" rows="4" required></textarea>
+        <label>
+          Mô tả món ăn
+          <textarea name="description" rows="5" required></textarea>
         </label>
         <button type="submit" class="btn">Lưu món ăn</button>
       </form>
