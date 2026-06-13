@@ -1,7 +1,9 @@
+require('dotenv').config();
 const express = require("express")
 const path = require("path")
 const db = require("./config/db")
 const session = require("express-session")
+const bcrypt = require('bcrypt')
 const postModel = require("./controllers/postModel")
 const postController = require("./controllers/postController")
 const foodModel = require("./controllers/foodModel")
@@ -13,9 +15,10 @@ app.use(express.urlencoded({extended:true}))
 app.use(express.static(path.join(__dirname, "public")))
 
 app.use(session({
-    secret: "mysecretkey",
+    secret: process.env.SESSION_SECRET || 'dev_secret_only',
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
+    cookie: { secure: false }
 }))
 
 app.use((req, res, next) => {
@@ -85,9 +88,10 @@ app.post("/register", async (req, res) => {
                 error: "Tên đăng nhập đã tồn tại"
             })
         }
+        const hash = await bcrypt.hash(password, 10)
         await db.query(
             "INSERT INTO users(username, password, balance) VALUES (?, ?, 0)",
-            [username, password]
+            [username, hash]
         )
         res.redirect("/login")
     } catch (error) {
@@ -99,23 +103,30 @@ app.get("/login", (req, res) => {
     res.render("login", { error: null })
 })
 app.post("/login", async (req, res) => {
-    const username = req.body.username
-    const password = req.body.password
-    const [users] = await db.query(
-        "SELECT * FROM users WHERE username = ? AND password = ?",
-        [username, password]
-    )
-    if (users.length === 0) {
-        return res.render("login", { error: "Sai username hoặc password" })
+    try {
+        const username = req.body.username
+        const password = req.body.password
+        const [users] = await db.query(
+            "SELECT * FROM users WHERE username = ?",
+            [username]
+        )
+        if (users.length === 0) {
+            return res.render("login", { error: "Sai username hoặc password" })
+        }
+        const user = users[0]
+        const match = await bcrypt.compare(password, user.password)
+        if (!match) return res.render("login", { error: "Sai username hoặc password" })
+        const isAdmin = username === 'admin'
+        req.session.user = {
+            username,
+            role: isAdmin ? "admin" : "user",
+            balance: Number(user.balance || 0)
+        }
+        return res.redirect("/news")
+    } catch (error) {
+        console.error(error)
+        return res.render("login", { error: "Lỗi đăng nhập" })
     }
-    const user = users[0]
-    const isAdmin = username === "admin" && password === "admin"
-    req.session.user = {
-        username,
-        role: isAdmin ? "admin" : "user",
-        balance: Number(user.balance || 0)
-    }
-    return res.redirect("/news")
 })
 
 app.get("/logout", (req, res) => {
@@ -320,6 +331,10 @@ app.post("/payment-success", requireLogin, (req, res) => {
     }
 
     res.redirect("/orders")
+})
+
+app.get("/wallet", requireLogin, (req, res) => {
+    res.redirect("/wallet/top-up")
 })
 
 app.get("/wallet/top-up", requireLogin, (req, res) => {
@@ -537,7 +552,7 @@ app.get("/news/:id", async (req, res) => {
     }
 })
 
-const host = process.env.HOST || "0.0.0.0"
+const host = process.env.HOST || "localhost"
 app.listen(port, host, () => {
   console.log(`Server is running at http://${host}:${port}`)
 })

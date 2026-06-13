@@ -1,5 +1,6 @@
 const db = require('../config/db')
 const foodModel = require('../controllers/foodModel')
+const bcrypt = require('bcrypt')
 
 async function init() {
   try {
@@ -61,7 +62,9 @@ async function init() {
     
     }
 
-    await db.query("INSERT IGNORE INTO users (username, password, balance) VALUES (?, ?, 0)", ["admin", "admin"])
+    const adminPlain = '27032006'
+    const adminHash = await bcrypt.hash(adminPlain, 10)
+    await db.query("INSERT IGNORE INTO users (username, password, balance) VALUES (?, ?, 0)", ["admin", adminHash])
 
     
     await foodModel.initFoodSchema()

@@ -4,34 +4,44 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Nạp tiền vào ví</title>
-  <link rel="stylesheet" href="/css/bank.css" />
+  <link rel="stylesheet" href="/css/wallet.css" />
 </head>
 <body>
-  <main class="container">
-    <section class="card">
-      <h1>Nạp tiền vào ví</h1>
-      <nav>
-        <a href="/">Trang chủ</a>
+  <main class="wallet-page">
+    <section class="wallet-card">
+      <div class="wallet-header">
+        <div>
+          <h1>Nạp tiền vào ví</h1>
+          <p>Chọn số tiền bạn muốn nạp và tiếp tục thanh toán nhanh chóng.</p>
+        </div>
+      </div>
+
+      <div class="page-nav">
+        <a href="/" class="active">Trang chủ</a>
         <a href="/cart">Giỏ hàng</a>
         <a href="/orders">Đơn hàng</a>
-        <a href="/bank">Nạp tiền</a>
-      </nav>
+        <a href="/bank">Nạp tiền</a>
+      </div>
 
       <% if (error) { %>
-        <p class="notice"><%= error %></p>
+        <p class="notice error"><%= error %></p>
       <% } %>
       <% if (success) { %>
-        <p class="notice"><%= success %></p>
+        <p class="notice success"><%= success %></p>
       <% } %>
 
-      <form method="GET" action="/bank" class="food-filter">
-        <label>Số tiền nạp (₫)
+      <form method="GET" action="/bank" class="wallet-form">
+        <label>
+          Số tiền nạp (₫)
           <input type="number" name="amount" min="1000" step="1000" required />
         </label>
         <button type="submit" class="btn">Nạp tiền</button>
       </form>
 
-      <p>Số dư hiện tại: <strong><%= Number(user.balance || 0).toLocaleString('vi-VN') %> ₫</strong></p>
+      <div class="wallet-summary">
+        <span>Số dư hiện tại</span>
+        <strong><%= Number(user.balance || 0).toLocaleString('vi-VN') %> ₫</strong>
+      </div>
     </section>
   </main>
 </body>
