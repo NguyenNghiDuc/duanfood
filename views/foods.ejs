@@ -45,9 +45,16 @@
           <p><strong>Danh mục:</strong> <%= food.category_name || 'Chưa phân loại' %></p>
           <p><strong>Giá:</strong> <%= Number(food.price).toLocaleString('vi-VN') %> ₫</p>
           <p><a href="/foods/<%= food.id %>">Xem chi tiết</a></p>
-          <form method="POST" action="/cart/add/<%= food.id %>">
-            <button type="submit" class="btn">Thêm vào giỏ</button>
-          </form>
+          <div class="food-actions">
+            <form method="POST" action="/cart/add/<%= food.id %>">
+              <button type="submit" class="btn">Thêm vào giỏ</button>
+            </form>
+            <% if (user && user.role === 'admin') { %>
+              <form method="POST" action="/admin/foods/delete/<%= food.id %>" onsubmit="return confirm('Bạn có chắc muốn xóa món ăn này không?')">
+                <button type="submit" class="delete-btn">Xóa món</button>
+              </form>
+            <% } %>
+          </div>
         </li>
       <% }) %>
     </ul>

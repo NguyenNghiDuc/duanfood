@@ -446,6 +446,19 @@ app.post("/admin/foods/add", requireLogin, requireAdmin, async (req, res) => {
     }
 })
 
+app.all("/admin/foods/delete/:id", requireLogin, requireAdmin, async (req, res) => {
+    if (req.method === "GET") {
+        return res.redirect("/foods")
+    }
+    try {
+        await db.query("DELETE FROM foods WHERE id = ?", [req.params.id])
+        res.redirect("/foods")
+    } catch (error) {
+        console.error(error)
+        res.status(500).send(error.message)
+    }
+})
+
 app.get("/foods/:id", async (req, res) => {
     try {
         const food = await foodModel.getFoodById(req.params.id)
