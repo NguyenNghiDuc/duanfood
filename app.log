@@ -3,3 +3,4 @@
 Server is running at http://localhost:5000
 Database engine: SQLite (fallback)
 GET /
+GET /
