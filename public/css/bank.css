@@ -1,0 +1,136 @@
+
+
+body.bank-page {
+    margin: 0;
+    padding: 40px 20px;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #ffffff;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 650px;
+    margin: 0 auto;
+}
+
+.card {
+    background: #ffffff;
+    border: 1px solid #e5e5e5;
+    border-radius: 16px;
+    padding: 35px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.card h1 {
+    text-align: center;
+    color: #222;
+    font-size: 30px;
+    margin-bottom: 30px;
+}
+
+.card h3 {
+    color: #333;
+    font-size: 20px;
+    margin-bottom: 15px;
+    border-left: 4px solid #4caf50;
+    padding-left: 10px;
+}
+
+.card p {
+    font-size: 16px;
+    color: #555;
+    margin: 10px 0;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid #eeeeee;
+    margin: 25px 0;
+}
+
+.price {
+    text-align: center;
+    font-size: 38px;
+    font-weight: bold;
+    color: #e53935;
+    margin: 20px 0;
+}
+
+.bank-qr-box {
+    text-align: center;
+    background: #fafafa;
+    border: 1px solid #e5e5e5;
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.bank-qr-box img {
+    width: 250px;
+    height: 250px;
+    border-radius: 10px;
+    background: #ffffff;
+    padding: 8px;
+    border: 1px solid #dddddd;
+}
+
+.small-note {
+    color: #777777;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+.btn {
+    width: 100%;
+    display: block;
+    padding: 14px;
+    border: none;
+    border-radius: 10px;
+    background: #28a745;
+    color: white;
+    text-decoration: none;
+    text-align: center;
+    font-size: 17px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+    box-sizing: border-box;
+}
+
+.btn:hover {
+    background: #218838;
+}
+
+.btn-secondary {
+    background: #6c757d;
+}
+
+.btn-secondary:hover {
+    background: #5a6268;
+}
+
+form {
+    margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
+
+    .card {
+        padding: 20px;
+    }
+
+    .card h1 {
+        font-size: 26px;
+    }
+
+    .price {
+        font-size: 32px;
+    }
+
+    .bank-qr-box img {
+        width: 200px;
+        height: 200px;
+    }
+}

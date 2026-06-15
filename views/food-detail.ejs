@@ -14,18 +14,17 @@
         <a href="/"> Trang chủ</a>
         <a href="/foods"> Thực đơn</a>
     </div>
-
-    <% if (food) { %>
-
-    <div class="food-detail-card">
-
-        <div class="food-detail-image">
+    <div class="food-detail-image">
             <% if(food.image){ %>
                 <img src="<%= food.image %>" alt="<%= food.title %>">
             <% } else { %>
                 <img src="/images/default-food.jpg" alt="Food">
             <% } %>
         </div>
+
+    <% if (food) { %>
+
+    <div class="food-detail-card">
 
         <div class="food-detail-content">
             <h1><%= food.title %></h1>
@@ -44,7 +43,7 @@
 
             <form method="POST" action="/cart/add/<%= food.id %>">
                 <button type="submit" class="add-cart-btn">
-                    🛒 Thêm vào giỏ hàng
+                     Thêm vào giỏ hàng
                 </button>
             </form>
 

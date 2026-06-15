@@ -1,48 +1,7 @@
 const db = require('../config/db')
 
 const foods = [
-  {
-    title: 'Phở bò tái',
-    description: 'Phở bò tái thơm ngon, nước dùng đậm đà.',
-    price: 60000,
-    category_id: null,
-    image: 'https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=600&q=80'
-  },
-  {
-    title: 'Bún chả',
-    description: 'Bún chả Hà Nội, thịt nướng thơm, nước chấm đậm vị.',
-    price: 70000,
-    category_id: null,
-    image: '/images/bun-cha.jpg'
-  },
-  {
-    title: 'Gà rán cay',
-    description: 'Gà rán giòn rụm, ướp sốt cay hấp dẫn.',
-    price: 90000,
-    category_id: null,
-    image: 'https://images.unsplash.com/photo-1604948277987-57f5f8c6b8d4?auto=format&fit=crop&w=600&q=80'
-  },
-  {
-    title: 'Pizza hải sản',
-    description: 'Pizza nóng hổi với hải sản tươi sống.',
-    price: 120000,
-    category_id: null,
-    image: 'https://images.unsplash.com/photo-1548365328-9b7f6b1f7f3b?auto=format&fit=crop&w=600&q=80'
-  },
-  {
-    title: 'Trà sữa trân châu',
-    description: 'Trà sữa thơm béo, trân châu dai ngon.',
-    price: 35000,
-    category_id: null,
-    image: 'https://images.unsplash.com/photo-1499638673689-79a0b5115d87?auto=format&fit=crop&w=600&q=80'
-  },
-  {
-    title: 'Cơm tấm',
-    description: 'Cơm tấm sườn nướng, thịt bò nướng, rau sống.',
-    price: 80000,
-    category_id: null,
-    image: 'https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=600&q=80'
-  },
+  
   {
     title: 'Thịt Heo',
     description: 'Thịt heo ngon, Đậm đà',

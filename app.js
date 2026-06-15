@@ -459,6 +459,50 @@ app.all("/admin/foods/delete/:id", requireLogin, requireAdmin, async (req, res) 
     }
 })
 
+
+app.get("/admin/foods/edit/:id", requireLogin, requireAdmin, async (req, res) => {
+
+    try {
+
+        const food = await foodModel.getFoodById(req.params.id)
+
+        const categories = await foodModel.getAllCategories()
+
+        if (!food) {
+            return res.status(404).send("Không tìm thấy món ăn")
+        }
+
+        res.render("edit-food", {
+            food,
+            categories
+        })
+
+    } catch (error) {
+
+        console.error(error)
+        res.status(500).send(error.message)
+
+    }
+
+})
+
+app.get("/admin/categories ", requireLogin, requireAdmin, async (req, res) => {
+    try {
+        const categories = await foodModel.getAllCategories()
+
+        console.log(categories)
+
+        res.render("category-manage", {
+            categories,
+            user: req.session.user
+        })
+    } catch (err) {
+        console.log(err)
+        res.send(err.message)
+    }
+})
+
+
 app.get("/foods/:id", async (req, res) => {
     try {
         const food = await foodModel.getFoodById(req.params.id)
