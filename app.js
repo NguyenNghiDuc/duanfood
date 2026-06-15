@@ -485,17 +485,17 @@ app.get("/admin/foods/edit/:id", requireLogin, requireAdmin, async (req, res) =>
     }
 
 })
-
-app.get("/admin/categories ", requireLogin, requireAdmin, async (req, res) => {
+app.get("/admin/categories/add", requireLogin, requireAdmin, async (req, res) => {
     try {
         const categories = await foodModel.getAllCategories()
 
         console.log(categories)
 
-        res.render("category-manage", {
+        res.render("categories-manage", {
             categories,
             user: req.session.user
         })
+
     } catch (err) {
         console.log(err)
         res.send(err.message)
