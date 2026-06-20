@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt')
 async function init() {
   try {
     console.log('Initializing database schema...')
+
     await db.query(`
       CREATE TABLE IF NOT EXISTS users (
           id INT AUTO_INCREMENT PRIMARY KEY,
@@ -53,6 +54,25 @@ async function init() {
     `)
 
     await db.query(`
+      CREATE TABLE IF NOT EXISTS categories (
+          id INT AUTO_INCREMENT PRIMARY KEY,
+          name VARCHAR(255) NOT NULL UNIQUE
+      )
+    `)
+
+    await db.query(`
+      INSERT IGNORE INTO categories (name)
+      VALUES
+        ('Đồ ăn'),
+        ('Đồ uống'),
+        ('Tráng miệng'),
+        ('Đồ dùng trong nhà'),
+        ('Đồ dùng nấu ăn')
+    `)
+
+    await foodModel.initFoodSchema()
+
+    await db.query(`
       CREATE TABLE IF NOT EXISTS reviews (
           id INT AUTO_INCREMENT PRIMARY KEY,
           food_id INT NOT NULL,
@@ -64,28 +84,38 @@ async function init() {
       )
     `)
 
-   
     try {
-      await db.query("ALTER TABLE users ADD COLUMN IF NOT EXISTS balance DECIMAL(10,2) NOT NULL DEFAULT 0")
-    } catch (e) {
-    
-    }
+      await db.query(`
+        ALTER TABLE users 
+        ADD COLUMN IF NOT EXISTS balance DECIMAL(10,2) NOT NULL DEFAULT 0
+      `)
+    } catch (e) {}
 
     const adminPlain = '27032006'
     const adminHash = await bcrypt.hash(adminPlain, 10)
-    const [existingAdmins] = await db.query("SELECT id FROM users WHERE username = ?", ["admin"])
-    if (existingAdmins && existingAdmins.length > 0) {
-      await db.query("UPDATE users SET password = ? WHERE username = ?", [adminHash, "admin"])
-    } else {
-      await db.query("INSERT INTO users (username, password, balance) VALUES (?, ?, 0)", ["admin", adminHash])
-    }
 
-    await foodModel.initFoodSchema()
+    const [existingAdmins] = await db.query(
+      "SELECT id FROM users WHERE username = ?",
+      ["admin"]
+    )
+
+    if (existingAdmins && existingAdmins.length > 0) {
+      await db.query(
+        "UPDATE users SET password = ? WHERE username = ?",
+        [adminHash, "admin"]
+      )
+    } else {
+      await db.query(
+        "INSERT INTO users (username, password, balance) VALUES (?, ?, 0)",
+        ["admin", adminHash]
+      )
+    }
 
     console.log('Database initialization complete.')
     process.exit(0)
+
   } catch (err) {
-    console.error('Database init failed', err)
+    console.error('Database init failed:', err)
     process.exit(1)
   }
 }

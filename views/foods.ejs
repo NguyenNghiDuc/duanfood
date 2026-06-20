@@ -7,53 +7,38 @@
     <link rel="stylesheet" href="/css/foods.css">
 </head>
 <body>
+
 <main class="food-page">
     <h1>Danh sách món ăn</h1>
+
     <nav>
         <a href="/">Trang chủ</a>
         <a href="/foods">Món ăn</a>
         <a href="/addresses">Địa Chỉ</a>
+
         <% if(user){ %>
             <% if(user.role==="admin"){ %>
-                <a href="/admin/foods/add">
-                    Thêm món ăn
-                </a>
-                <a href="/admin/orders">
-                    Quản lý đơn hàng
-                </a>
-                <a href="/admin/categories">
-                    Quản lý danh mục
-                </a>
-                <a href="/admin/stats">
-                    Thống kê doanh thu
-                </a>
+                <a href="/admin/foods/add">Thêm món ăn</a>
+                <a href="/admin/orders">Quản lý đơn hàng</a>
+                <a href="/admin/categories">Quản lý danh mục</a>
+                <a href="/admin/stats">Thống kê doanh thu</a>
             <% }else{ %>
-                <a href="/cart">
-                    Giỏ hàng
-                </a>
-                <a href="/orders">
-                    Đơn hàng
-                </a>
-                <a href="/wallet">
-                    Ví
-               </a>
-               
+                <a href="/cart">Giỏ hàng</a>
+                <a href="/orders">Đơn hàng</a>
+                <a href="/wallet">Ví</a>
             <% } %>
+
             <span>
                 Xin chào, <%= user.username %>
             </span>
-            <a href="/logout">
-                Đăng xuất
-            </a>
+
+            <a href="/logout">Đăng xuất</a>
         <% }else{ %>
-            <a href="/login">
-                Đăng nhập
-            </a>
-            <a href="/register">
-                Đăng ký
-            </a>
+            <a href="/login">Đăng nhập</a>
+            <a href="/register">Đăng ký</a>
         <% } %>
     </nav>
+
     <form method="GET" action="/foods" class="food-filter">
         <input
             type="text"
@@ -61,103 +46,113 @@
             value="<%= keyword || '' %>"
             placeholder="Tìm món ăn..."
         >
+
         <select name="categoryId">
-            <option value="">
-                Tất cả danh mục
+            <option value="">Tất cả danh mục</option>
+
+            <option value="1" <%= String(categoryId)==="1" ? "selected" : "" %>>
+                Đồ ăn
             </option>
-            <% categories.forEach(c=>{ %>
-                <option
-                    value="<%= c.id %>"
-                    <%= String(c.id)===String(categoryId) ? "selected" : "" %>>
-                    <%= c.name %>
-                </option>
-            <% }) %>
+
+            <option value="2" <%= String(categoryId)==="2" ? "selected" : "" %>>
+                Đồ uống
+            </option>
+
+            <option value="3" <%= String(categoryId)==="3" ? "selected" : "" %>>
+                Tráng miệng
+            </option>
+
+            <option value="4" <%= String(categoryId)==="4" ? "selected" : "" %>>
+                Đồ dùng trong nhà
+            </option>
+
+            <option value="5" <%= String(categoryId)==="5" ? "selected" : "" %>>
+                Đồ dùng nấu ăn
+            </option>
         </select>
+
         <button type="submit">
             Tìm kiếm
         </button>
     </form>
-    <% if(foods && foods.length>0){ %>
-    <ul class="food-list">
-        <% foods.forEach(food=>{ %>
-        <li>
-            <div class="food-detail-image">
-                <% if(food.image){ %>
-                    <img
-                        src="<%= food.image %>"
-                        alt="<%= food.title %>"
-                    >
-                <% }else{ %>
-                    <img
-                        src="/images/default-food.jpg"
-                        alt="Food"
-                    >
-                <% } %>
-            </div>
-            <h3>
-                <%= food.title %>
-            </h3>
-            <p>
-                <%= food.description %>
-            </p>
-            <p>
-                <strong>Danh mục:</strong>
-                <%= food.category_name || "Chưa phân loại" %>
-            </p>
-            <p>
-                <strong>Giá:</strong>
-                <%= Number(food.price).toLocaleString("vi-VN") %> ₫
-            </p>
-            <p>
-                <a href="/foods/<%= food.id %>">
-                    Xem chi tiết
-                </a>
-            </p>
-            <div class="food-actions">
-                <form
-                    method="POST"
-                    action="/cart/add/<%= food.id %>"
-                >
-                    <button
-                        type="submit"
-                        class="btn"
-                    >
-                        Thêm vào giỏ
-                    </button>
 
-                </form>
-                <% if(user && user.role==="admin"){ %>
-                    <form
-                        method="POST"
-                        action="/admin/foods/delete/<%= food.id %>"
-                        onsubmit="return confirm('Bạn có chắc muốn xóa món này?')"
-                    >
+    <% if(foods && foods.length > 0){ %>
+        <ul class="food-list">
+            <% foods.forEach(food => { %>
+                <li>
+                    <div class="food-detail-image">
+                        <% if(food.image){ %>
+                            <img
+                                src="<%= food.image %>"
+                                alt="<%= food.title %>"
+                            >
+                        <% }else{ %>
+                            <img
+                                src="/images/default-food.jpg"
+                                alt="Food"
+                            >
+                        <% } %>
+                    </div>
 
-                        <button
-                            type="submit"
-                            class="delete-btn"
+                    <h3>
+                        <%= food.title %>
+                    </h3>
+
+                    <p>
+                        <%= food.description %>
+                    </p>
+
+                    <p>
+                        <strong>Danh mục:</strong>
+                        <%= food.category_name || "Chưa phân loại" %>
+                    </p>
+
+                    <p>
+                        <strong>Giá:</strong>
+                        <%= Number(food.price).toLocaleString("vi-VN") %> ₫
+                    </p>
+
+                    <p>
+                        <a href="/foods/<%= food.id %>">
+                            Xem chi tiết
+                        </a>
+                    </p>
+
+                    <div class="food-actions">
+                        <form
+                            method="POST"
+                            action="/cart/add/<%= food.id %>"
                         >
-                            Xóa món
-                        </button>
+                            <button
+                                type="submit"
+                                class="btn"
+                            >
+                                Thêm vào giỏ
+                            </button>
+                        </form>
 
-                    </form>
-
-                <% } %>
-
-            </div>
-
-        </li>
-
-        <% }) %>
-
-    </ul>
-
+                        <% if(user && user.role==="admin"){ %>
+                            <form
+                                method="POST"
+                                action="/admin/foods/delete/<%= food.id %>"
+                                onsubmit="return confirm('Bạn có chắc muốn xóa món này?')"
+                            >
+                                <button
+                                    type="submit"
+                                    class="delete-btn"
+                                >
+                                    Xóa món
+                                </button>
+                            </form>
+                        <% } %>
+                    </div>
+                </li>
+            <% }) %>
+        </ul>
     <% }else{ %>
-
         <h2 style="text-align:center;margin-top:50px;">
             Chưa có món ăn nào
         </h2>
-
     <% } %>
 
 </main>

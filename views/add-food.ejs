@@ -14,8 +14,11 @@
           <h1>Thêm món ăn mới</h1>
           <p>Nhập thông tin món ăn và dán đường dẫn ảnh trực tiếp để hiện trên trang.</p>
         </div>
+
         <div class="admin-actions">
-          <a href="/foods" class="btn btn-secondary">Quay lại danh sách</a>
+          <a href="/foods" class="btn btn-secondary">
+            Quay lại danh sách
+          </a>
         </div>
       </div>
 
@@ -27,11 +30,21 @@
         <span>Thêm món ăn</span>
       </nav>
 
-      <form method="POST" action="/admin/foods/add" class="form-grid admin-form" id="add-food-form">
+      <form
+        method="POST"
+        action="/admin/foods/add"
+        class="form-grid admin-form"
+        id="add-food-form"
+      >
         <label>
           Tiêu đề món ăn
-          <input type="text" name="title" required />
+          <input
+            type="text"
+            name="title"
+            required
+          />
         </label>
+
         <label>
           Giá bán (₫)
           <input
@@ -43,26 +56,49 @@
             placeholder="1.000"
             required
           />
-          <small>Nhập số và hệ thống sẽ tự thêm dấu chấm cho hàng nghìn.</small>
+          <small>
+            Nhập số và hệ thống sẽ tự thêm dấu chấm cho hàng nghìn.
+          </small>
         </label>
+
         <label>
           Danh mục
           <select name="category_id">
-            <% categories.forEach(category => { %>
-              <option value="<%= category.id %>"><%= category.name %></option>
-            <% }) %>
+            <option value="1">Đồ ăn</option>
+            <option value="2">Đồ uống</option>
+            <option value="3">Tráng miệng</option>
+            <option value="4">Đồ dùng trong nhà</option>
+            <option value="5">Đồ dùng nấu ăn</option>
           </select>
         </label>
+
         <label>
           URL ảnh món ăn
-          <input type="text" name="image" placeholder="https://..." />
-          <small>Không cần upload, dùng link ảnh trực tiếp hoặc đường dẫn local như /images/tenfile.png</small>
+          <input
+            type="text"
+            name="image"
+            placeholder="https://..."
+          />
+          <small>
+            Không cần upload, dùng link ảnh trực tiếp hoặc đường dẫn local như /images/tenfile.png
+          </small>
         </label>
+
         <label>
           Mô tả món ăn
-          <textarea name="description" rows="5" required></textarea>
+          <textarea
+            name="description"
+            rows="5"
+            required
+          ></textarea>
         </label>
-        <button type="submit" class="btn">Lưu món ăn</button>
+
+        <button
+          type="submit"
+          class="btn"
+        >
+          Lưu món ăn
+        </button>
       </form>
     </section>
   </main>

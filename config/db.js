@@ -20,7 +20,7 @@ async function createMySQLPool() {
 function createSqliteDb(filePath) {
   const dbFile = filePath || path.join(__dirname, '..', 'data', 'fallback.db');
   const dir = path.dirname(dbFile);
-  // ensure data dir exists
+  
   try { require('fs').mkdirSync(dir, { recursive: true }) } catch (e) {}
   const db = new sqlite3.Database(dbFile);
   return db;
@@ -125,7 +125,7 @@ async function initFallbackSqlite(db) {
 
 let mysqlPool = null;
 let sqliteDb = null;
-// export a stable interface immediately so other modules can require it
+
 const dbInterface = {
   query: async (sql, params) => {
     params = params || [];
