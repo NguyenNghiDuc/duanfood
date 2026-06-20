@@ -1,4 +1,4 @@
-const foodModel = require('../models/foodModel')
+const foodModel = require('../models/foodModels')
 
 async function showHome(req, res, next) {
   try {

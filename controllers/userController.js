@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt')
-const userModel = require('../models/userModel')
-const orderModel = require('../models/orderModel')
+const db = require('../config/db')
+const userModel = require('../models/userModels')
+const orderModel = require('../models/orderModels')
 
 async function showRegister(req, res) {
   res.render('register', { error: null })

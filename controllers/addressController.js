@@ -1,5 +1,5 @@
 const addressModel = require('../models/addressModel')
-const userModel = require('../models/userModel')
+const userModel = require('../models/userModels')
 
 async function listAddresses(req, res, next) {
   try {

@@ -1,6 +1,6 @@
-const foodModel = require('../models/foodModel')
-const orderModel = require('../models/orderModel')
-const userModel = require('../models/userModel')
+const foodModel = require('../models/foodModels')
+const orderModel = require('../models/orderModels')
+const userModel = require('../models/userModels')
 const addressModel = require('../models/addressModel')
 const { getCart, getCartTotal } = require('../middleware/cartHelpers')
 

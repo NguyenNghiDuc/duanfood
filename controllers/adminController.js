@@ -1,5 +1,5 @@
-const foodModel = require('../models/foodModel')
-const orderModel = require('../models/orderModel')
+const foodModel = require('../models/foodModels')
+const orderModel = require('../models/orderModels')
 
 async function addCategory(req, res, next) {
   try {

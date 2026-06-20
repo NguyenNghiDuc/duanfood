@@ -29,7 +29,7 @@ app.set("views", path.join(__dirname, "views"))
 
 
 const routes = require('./routes')
-const { notFoundHandler, errorHandler } = require('./middleware/errorHandler')
+const { notFoundHandler, errorHandler } = require('./middleware/errorHandles')
 app.use('/', routes)
 
 app.use(notFoundHandler)
