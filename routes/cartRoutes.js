@@ -1,16 +1,11 @@
 const express = require('express')
 const router = express.Router()
-const foodController = require('../controllers/foodController')
+const cartController = require('../controllers/cartController')
 const { requireLogin } = require('../middleware/auth')
 
-router.get('/', foodController.showHome)
-router.get('/foods', foodController.showFoods)
-router.get('/foods/:id', foodController.showFoodDetail)
-router.post('/foods/:id/review', requireLogin, foodController.createReview)
-router.get('/categories', foodController.showCategories)
-router.get('/promotion', foodController.showPromotion)
-router.get('/about', foodController.showAbout)
-router.get('/contact', foodController.showContact)
-router.get('/menu', foodController.redirectMenu)
+router.get('/cart', requireLogin, cartController.showCart)
+router.post('/cart/add/:id', requireLogin, cartController.addToCart)
+router.post('/cart/update/:id', requireLogin, cartController.updateCart)
+router.post('/cart/remove/:id', requireLogin, cartController.removeFromCart)
 
 module.exports = router

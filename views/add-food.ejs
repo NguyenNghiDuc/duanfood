@@ -27,14 +27,23 @@
         <span>Thêm món ăn</span>
       </nav>
 
-      <form method="POST" action="/admin/foods/add" class="form-grid admin-form">
+      <form method="POST" action="/admin/foods/add" class="form-grid admin-form" id="add-food-form">
         <label>
           Tiêu đề món ăn
           <input type="text" name="title" required />
         </label>
         <label>
           Giá bán (₫)
-          <input type="number" name="price" min="0" required />
+          <input
+            type="text"
+            name="price"
+            id="price-input"
+            inputmode="numeric"
+            autocomplete="off"
+            placeholder="1.000"
+            required
+          />
+          <small>Nhập số và hệ thống sẽ tự thêm dấu chấm cho hàng nghìn.</small>
         </label>
         <label>
           Danh mục
@@ -57,66 +66,23 @@
       </form>
     </section>
   </main>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Thêm món ăn</title>
-  <link rel="stylesheet" href="/css/style.css" />
-</head>
-<body>
-  <main class="admin-page">
-    <section class="card admin-card">
-      <div class="admin-header">
-        <div>
-          <h1>Thêm món ăn mới</h1>
-          <p>Nhập thông tin món ăn và dán đường dẫn ảnh trực tiếp để hiện trên trang.</p>
-        </div>
-        <div class="admin-actions">
-          <a href="/foods" class="btn btn-secondary">Quay lại danh sách</a>
-        </div>
-      </div>
 
-      <nav class="admin-breadcrumb">
-        <a href="/">Trang chủ</a>
-        <span>›</span>
-        <a href="/foods">Món ăn</a>
-        <span>›</span>
-        <span>Thêm món ăn</span>
-      </nav>
+  <script>
+    const priceInput = document.getElementById('price-input')
+    const addFoodForm = document.getElementById('add-food-form')
 
-      <form method="POST" action="/admin/foods/add" class="form-grid admin-form">
-        <label>
-          Tiêu đề món ăn
-          <input type="text" name="title" required />
-        </label>
-        <label>
-          Giá bán (₫)
-          <input type="number" name="price" min="0" required />
-        </label>
-        <label>
-          Danh mục
-          <select name="category_id">
-            <% categories.forEach(category => { %>
-              <option value="<%= category.id %>"><%= category.name %></option>
-            <% }) %>
-          </select>
-        </label>
-        <label>
-          URL ảnh món ăn
-          <input type="text" name="image" placeholder="https://..." />
-          <small>Không cần upload, dùng link ảnh trực tiếp hoặc đường dẫn local như /images/tenfile.png</small>
-        </label>
-        <label>
-          Mô tả món ăn
-          <textarea name="description" rows="5" required></textarea>
-        </label>
-        <button type="submit" class="btn">Lưu món ăn</button>
-      </form>
-    </section>
-  </main>
+    function formatPrice(value) {
+      const digits = String(value || '').replace(/\D/g, '')
+      return digits.replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+    }
+
+    priceInput.addEventListener('input', () => {
+      priceInput.value = formatPrice(priceInput.value)
+    })
+
+    addFoodForm.addEventListener('submit', () => {
+      priceInput.value = priceInput.value.replace(/\./g, '')
+    })
+  </script>
 </body>
 </html>

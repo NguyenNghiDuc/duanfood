@@ -3,7 +3,7 @@ const router = express.Router()
 const addressController = require('../controllers/addressController')
 const { requireLogin } = require('../middleware/auth')
 
-router.get('/addresses', requireLogin, addressController.listAddresses)
+router.get('/addresses', addressController.listAddresses)
 router.get('/profile/addresses', requireLogin, addressController.listAddresses)
 router.get('/profile/addresses/add', requireLogin, addressController.showAddAddress)
 router.post('/profile/addresses/add', requireLogin, addressController.createAddress)

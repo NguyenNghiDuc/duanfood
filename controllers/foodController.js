@@ -14,9 +14,14 @@ async function showFoods(req, res, next) {
   try {
     const keyword = req.query.keyword || ''
     const categoryId = req.query.categoryId || ''
-    const foods = await foodModel.getFoods({ keyword, categoryId })
     const categories = await foodModel.getAllCategories()
-    res.render('foods', { foods, categories, keyword, categoryId })
+    const categoryName = req.query.category || ''
+    const matchedCategory = !categoryId && categoryName
+      ? categories.find(category => category.name === categoryName)
+      : null
+    const selectedCategoryId = categoryId || (matchedCategory ? matchedCategory.id : '')
+    const foods = await foodModel.getFoods({ keyword, categoryId: selectedCategoryId })
+    res.render('foods', { foods, categories, keyword, categoryId: selectedCategoryId, categoryName })
   } catch (error) {
     next(error)
   }

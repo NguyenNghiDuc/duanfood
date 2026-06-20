@@ -3,8 +3,16 @@ const userModel = require('../models/userModels')
 
 async function listAddresses(req, res, next) {
   try {
+    if (!req.session.user) {
+      return res.render('addresses', {
+        addresses: [],
+        user: null,
+        notice: 'Vui lòng đăng nhập để xem và quản lý địa chỉ giao hàng.'
+      })
+    }
+
     const addresses = await addressModel.getAddressesByUsername(req.session.user.username)
-    res.render('address-list', { addresses })
+    res.render('addresses', { addresses, user: req.session.user, notice: null })
   } catch (error) {
     next(error)
   }

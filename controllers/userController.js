@@ -33,7 +33,7 @@ async function login(req, res, next) {
     if (!match) return res.render('login', { error: 'Sai username hoặc password' })
     const isAdmin = username === 'admin'
     req.session.user = { username, role: isAdmin ? 'admin' : 'user', balance: Number(user.balance || 0) }
-    res.redirect('/news')
+    res.redirect('/')
   } catch (error) {
     next(error)
   }
@@ -73,6 +73,60 @@ async function showWalletTopUp(req, res) {
   res.render('wallet', { error: null, success: null, user: req.session.user })
 }
 
+async function showProfile(req, res, next) {
+  try {
+    const currentUser = await userModel.findByUsername(req.session.user.username)
+    if (!currentUser) return res.status(404).send('Không tìm thấy tài khoản')
+    res.render('profile', { user: req.session.user, fullname: currentUser.fullname || '' })
+  } catch (error) {
+    next(error)
+  }
+}
+
+async function showEditProfile(req, res, next) {
+  try {
+    const currentUser = await userModel.findByUsername(req.session.user.username)
+    if (!currentUser) return res.status(404).send('Không tìm thấy tài khoản')
+    res.render('profile-edit', {
+      user: req.session.user,
+      fullname: currentUser.fullname || '',
+      error: null,
+      success: null
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
+async function updateProfile(req, res, next) {
+  try {
+    const { fullname = '', password = '', confirmPassword = '' } = req.body
+    if (password && password !== confirmPassword) {
+      return res.render('profile-edit', {
+        user: req.session.user,
+        fullname,
+        error: 'Mật khẩu xác nhận không khớp',
+        success: null
+      })
+    }
+
+    const hashedPassword = password ? await bcrypt.hash(password, 10) : ''
+    await userModel.updateProfile(req.session.user.username, { fullname, password: hashedPassword })
+
+    const currentUser = await userModel.findByUsername(req.session.user.username)
+    req.session.user.fullname = currentUser.fullname || fullname || ''
+
+    res.render('profile-edit', {
+      user: req.session.user,
+      fullname: req.session.user.fullname || '',
+      error: null,
+      success: 'Cập nhật hồ sơ thành công'
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
 async function walletTopUp(req, res, next) {
   try {
     const amount = Number(req.body.amount || 0)
@@ -95,5 +149,8 @@ module.exports = {
   showBank,
   paymentSuccess,
   showWalletTopUp,
+  showProfile,
+  showEditProfile,
+  updateProfile,
   walletTopUp
 }

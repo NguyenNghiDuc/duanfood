@@ -1,6 +1,11 @@
 const foodModel = require('../models/foodModels')
 const orderModel = require('../models/orderModels')
 
+function normalizePrice(price) {
+  const cleaned = String(price || '').replace(/[^0-9]/g, '')
+  return cleaned ? Number(cleaned) : 0
+}
+
 async function addCategory(req, res, next) {
   try {
     const { name } = req.body
@@ -70,7 +75,7 @@ async function showAddFood(req, res, next) {
 async function addFood(req, res, next) {
   try {
     const { title, description, price, category_id, image } = req.body
-    await foodModel.createFood({ title, description, price, category_id, image })
+    await foodModel.createFood({ title, description, price: normalizePrice(price), category_id, image })
     res.redirect('/foods')
   } catch (error) {
     next(error)
@@ -100,7 +105,7 @@ async function showEditFood(req, res, next) {
 async function updateFood(req, res, next) {
   try {
     const { title, description, price, category_id, image } = req.body
-    await foodModel.updateFood({ id: req.params.id, title, description, price, category_id, image })
+    await foodModel.updateFood({ id: req.params.id, title, description, price: normalizePrice(price), category_id, image })
     res.redirect('/foods')
   } catch (error) {
     next(error)

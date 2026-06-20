@@ -4,17 +4,26 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Địa chỉ giao hàng</title>
-  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/addresses.css" />
 </head>
 <body>
   <main class="container">
     <section class="card">
       <h1>Địa chỉ giao hàng</h1>
       <nav>
-        <a href="/profile">Tài khoản</a>
-        <a href="/profile/addresses/add">Thêm địa chỉ</a>
-        <a href="/logout">Đăng xuất</a>
+        <% if (user) { %>
+          <a href="/profile">Tài khoản</a>
+          <a href="/profile/addresses/add">Thêm địa chỉ</a>
+          <a href="/logout">Đăng xuất</a>
+        <% } else { %>
+          <a href="/login">Đăng nhập</a>
+          <a href="/register">Đăng ký</a>
+        <% } %>
       </nav>
+
+      <% if (notice) { %>
+        <p class="notice"><%= notice %></p>
+      <% } %>
 
       <% if (addresses && addresses.length) { %>
         <div class="address-grid">

@@ -14,8 +14,22 @@ async function updateBalance(username, amount) {
   await db.query('UPDATE users SET balance = balance + ? WHERE username = ?', [amount, username])
 }
 
+async function updateProfile(username, { fullname, password }) {
+  const fields = ['fullname = ?']
+  const params = [fullname || '']
+
+  if (password) {
+    fields.push('password = ?')
+    params.push(password)
+  }
+
+  params.push(username)
+  await db.query(`UPDATE users SET ${fields.join(', ')} WHERE username = ?`, params)
+}
+
 module.exports = {
   findByUsername,
   createUser,
-  updateBalance
+  updateBalance,
+  updateProfile
 }

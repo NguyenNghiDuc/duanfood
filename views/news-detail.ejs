@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi tiết món mới</title>
+    <link rel="stylesheet" href="/css/news.css">
+</head>
+<body>
+<div class="news-wrapper">
+    <div class="news-header">
+        <h1><%= post.title %></h1>
+        <p><%= post.description %></p>
+    </div>
+    <div class="news-nav">
+        <a href="/">Trang chủ</a>
+        <a href="/news">Món mới</a>
+        <a href="/foods">Thực đơn</a>
+        <% if (user) { %>
+            <a href="/logout">Đăng xuất</a>
+        <% } else { %>
+            <a href="/login">Đăng nhập</a>
+        <% } %>
+    </div>
+    <div class="news-card">
+        <p><%= post.description %></p>
+    </div>
+</div>
+</body>
+</html>

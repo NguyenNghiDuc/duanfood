@@ -162,7 +162,7 @@
 
                         <a
                             class="category-card"
-                            href="/foods?categoryId=<%= category.id %>"
+                            href="/foods?category=<%= encodeURIComponent(category.name) %>"
                         >
 
                             <strong>
