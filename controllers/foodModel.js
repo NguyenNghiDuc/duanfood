@@ -12,11 +12,20 @@ async function initFoodSchema() {
   await db.query(`
     CREATE TABLE IF NOT EXISTS addresses (
       id INT AUTO_INCREMENT PRIMARY KEY,
+      user_id INT,
       username VARCHAR(255) NOT NULL,
       label VARCHAR(255) NOT NULL,
-      address TEXT NOT NULL,
-      phone VARCHAR(50),
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      full_name VARCHAR(255) NOT NULL,
+      phone VARCHAR(50) NOT NULL,
+      city VARCHAR(255) NOT NULL,
+      district VARCHAR(255) NOT NULL,
+      ward VARCHAR(255) NOT NULL,
+      street VARCHAR(255) NOT NULL,
+      detail_address TEXT NOT NULL,
+      note TEXT,
+      is_default TINYINT(1) NOT NULL DEFAULT 0,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     )
   `)
 

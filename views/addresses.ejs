@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Địa chỉ giao hàng</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <main class="container">
+    <section class="card">
+      <h1>Địa chỉ giao hàng</h1>
+      <nav>
+        <a href="/profile">Tài khoản</a>
+        <a href="/profile/addresses/add">Thêm địa chỉ</a>
+        <a href="/logout">Đăng xuất</a>
+      </nav>
+
+      <% if (addresses && addresses.length) { %>
+        <div class="address-grid">
+          <% addresses.forEach(address => { %>
+            <article class="address-card">
+              <header class="address-card-header">
+                <div>
+                  <h3><%= address.label %></h3>
+                  <% if (address.is_default) { %>
+                    <span class="badge">Mặc định</span>
+                  <% } %>
+                </div>
+                <div class="address-actions">
+                  <form method="POST" action="/profile/addresses/default/<%= address.id %>">
+                    <% if (!address.is_default) { %>
+                      <button type="submit" class="btn btn-secondary">Đặt mặc định</button>
+                    <% } %>
+                  </form>
+                  <a href="/profile/addresses/edit/<%= address.id %>" class="btn">Chỉnh sửa</a>
+                </div>
+              </header>
+              <p><strong>Người nhận:</strong> <%= address.full_name %></p>
+              <p><strong>Điện thoại:</strong> <%= address.phone %></p>
+              <p><strong>Địa chỉ:</strong> <%= address.detail_address %>, <%= address.street %>, <%= address.ward %>, <%= address.district %>, <%= address.city %></p>
+              <% if (address.note) { %>
+                <p><strong>Ghi chú:</strong> <%= address.note %></p>
+              <% } %>
+              <form method="POST" action="/profile/addresses/delete/<%= address.id %>">
+                <button type="submit" class="btn btn-danger">Xóa</button>
+              </form>
+            </article>
+          <% }) %>
+        </div>
+      <% } else { %>
+        <p>Chưa có địa chỉ nào. Hãy thêm địa chỉ giao hàng để hoàn tất đặt hàng.</p>
+        <a class="btn" href="/profile/addresses/add">Thêm địa chỉ</a>
+      <% } %>
+    </section>
+  </main>
+</body>
+</html>

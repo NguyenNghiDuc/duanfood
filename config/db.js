@@ -62,11 +62,20 @@ async function initFallbackSqlite(db) {
   )`);
   await exec(`CREATE TABLE IF NOT EXISTS addresses (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER,
     username TEXT NOT NULL,
     label TEXT NOT NULL,
-    address TEXT NOT NULL,
-    phone TEXT,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    full_name TEXT NOT NULL,
+    phone TEXT NOT NULL,
+    city TEXT NOT NULL,
+    district TEXT NOT NULL,
+    ward TEXT NOT NULL,
+    street TEXT NOT NULL,
+    detail_address TEXT NOT NULL,
+    note TEXT,
+    is_default INTEGER NOT NULL DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
   )`);
   await exec(`CREATE TABLE IF NOT EXISTS delivery_companies (
     id INTEGER PRIMARY KEY AUTOINCREMENT,

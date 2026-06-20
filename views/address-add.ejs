@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Thêm địa chỉ giao hàng</title>
+  <title><%= title %></title>
   <link rel="stylesheet" href="/css/style.css" />
 </head>
 <body>
   <main class="container">
     <section class="card">
-      <h1>Thêm địa chỉ giao hàng</h1>
+      <h1><%= title %></h1>
       <nav>
         <a href="/profile">Tài khoản</a>
         <a href="/profile/addresses">Danh sách địa chỉ</a>
@@ -18,14 +18,40 @@
       <% if (error) { %>
         <p class="notice"><%= error %></p>
       <% } %>
-      <form method="POST" action="/profile/addresses/add" class="form-grid">
+      <form method="POST" action="<%= action %>" class="form-grid">
         <label>Tiêu đề</label>
-        <input type="text" name="label" placeholder="Nhà riêng / Cơ quan" />
-        <label>Địa chỉ</label>
-        <textarea name="address" rows="4" placeholder="Địa chỉ giao hàng"></textarea>
+        <input type="text" name="label" value="<%= address.label || '' %>" placeholder="Nhà riêng / Cơ quan" required />
+
+        <label>Người nhận</label>
+        <input type="text" name="full_name" value="<%= address.full_name || '' %>" placeholder="Tên người nhận" required />
+
         <label>Điện thoại</label>
-        <input type="text" name="phone" placeholder="Số điện thoại" />
-        <button type="submit" class="btn">Lưu địa chỉ</button>
+        <input type="text" name="phone" value="<%= address.phone || '' %>" placeholder="Số điện thoại" required />
+
+        <label>Thành phố</label>
+        <input type="text" name="city" value="<%= address.city || '' %>" placeholder="Thành phố" required />
+
+        <label>Quận / Huyện</label>
+        <input type="text" name="district" value="<%= address.district || '' %>" placeholder="Quận / Huyện" required />
+
+        <label>Phường / Xã</label>
+        <input type="text" name="ward" value="<%= address.ward || '' %>" placeholder="Phường / Xã" required />
+
+        <label>Đường / Khu phố</label>
+        <input type="text" name="street" value="<%= address.street || '' %>" placeholder="Đường / Khu phố" required />
+
+        <label>Địa chỉ chi tiết</label>
+        <textarea name="detail_address" rows="3" placeholder="Số nhà, tên tòa nhà, địa điểm cụ thể" required><%= address.detail_address || '' %></textarea>
+
+        <label>Ghi chú</label>
+        <textarea name="note" rows="2" placeholder="Ghi chú cho người giao hàng"><%= address.note || '' %></textarea>
+
+        <label>
+          <input type="checkbox" name="is_default" <%= address.is_default ? 'checked' : '' %> />
+          Đặt là địa chỉ mặc định
+        </label>
+
+        <button type="submit" class="btn"><%= submitLabel %></button>
       </form>
     </section>
   </main>

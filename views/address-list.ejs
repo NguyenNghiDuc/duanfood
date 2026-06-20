@@ -15,13 +15,33 @@
         <a href="/profile/addresses/add">Thêm địa chỉ</a>
         <a href="/logout">Đăng xuất</a>
       </nav>
+
       <% if (addresses && addresses.length) { %>
         <div class="address-grid">
           <% addresses.forEach(address => { %>
             <article class="address-card">
-              <h3><%= address.label %></h3>
-              <p><%= address.address %></p>
+              <header class="address-card-header">
+                <div>
+                  <h3><%= address.label %></h3>
+                  <% if (address.is_default) { %>
+                    <span class="badge">Mặc định</span>
+                  <% } %>
+                </div>
+                <div class="address-actions">
+                  <form method="POST" action="/profile/addresses/default/<%= address.id %>">
+                    <% if (!address.is_default) { %>
+                      <button type="submit" class="btn btn-secondary">Đặt mặc định</button>
+                    <% } %>
+                  </form>
+                  <a href="/profile/addresses/edit/<%= address.id %>" class="btn btn">Chỉnh sửa</a>
+                </div>
+              </header>
+              <p><strong>Người nhận:</strong> <%= address.full_name %></p>
               <p><strong>Điện thoại:</strong> <%= address.phone %></p>
+              <p><strong>Địa chỉ:</strong> <%= address.detail_address %>, <%= address.street %>, <%= address.ward %>, <%= address.district %>, <%= address.city %></p>
+              <% if (address.note) { %>
+                <p><strong>Ghi chú:</strong> <%= address.note %></p>
+              <% } %>
               <form method="POST" action="/profile/addresses/delete/<%= address.id %>">
                 <button type="submit" class="btn btn-danger">Xóa</button>
               </form>
@@ -29,7 +49,8 @@
           <% }) %>
         </div>
       <% } else { %>
-        <p>Chưa có địa chỉ nào.</p>
+        <p>Chưa có địa chỉ nào. Hãy thêm địa chỉ giao hàng để hoàn tất đặt hàng.</p>
+        <a class="btn" href="/profile/addresses/add">Thêm địa chỉ</a>
       <% } %>
     </section>
   </main>

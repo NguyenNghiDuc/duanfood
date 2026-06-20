@@ -3,98 +3,164 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= food.title %></title>
-    <link rel="stylesheet" href="/css/food-detail.css">
+    <title>Danh sách món ăn</title>
+    <link rel="stylesheet" href="/css/foods.css">
 </head>
 <body>
-
-<div class="food-detail-container">
-
-    <div class="detail-nav">
-        <a href="/"> Trang chủ</a>
-        <a href="/foods"> Thực đơn</a>
-    </div>
-    <div class="food-detail-image">
-            <% if(food.image){ %>
-                <img src="<%= food.image %>" alt="<%= food.title %>">
-            <% } else { %>
-                <img src="/images/default-food.jpg" alt="Food">
+<main class="food-page">
+    <h1>Danh sách món ăn</h1>
+    <nav>
+        <a href="/">Trang chủ</a>
+        <a href="/foods">Món ăn</a>
+        <a href="/addresses"> Địa Chỉ </a>
+        <% if(user){ %>
+            <% if(user.role==="admin"){ %>
+                <a href="/admin/foods/add">
+                    Thêm món ăn
+                </a>
+                <a href="/admin/orders">
+                    Quản lý đơn hàng
+                </a>
+                <a href="/admin/categories">
+                    Quản lý danh mục
+                </a>
+                <a href="/admin/stats">
+                    Thống kê doanh thu
+                </a>
+            <% }else{ %>
+                <a href="/cart">
+                    Giỏ hàng
+                </a>
+                <a href="/orders">
+                    Đơn hàng
+                </a>
+                <a href="/wallet">
+                    Ví
+               </a>
+               
             <% } %>
-        </div>
-
-    <% if (food) { %>
-
-    <div class="food-detail-card">
-
-        <div class="food-detail-content">
-            <h1><%= food.title %></h1>
-
-            <span class="category-badge">
-                <%= food.category_name || 'Chưa phân loại' %>
+            <span>
+                Xin chào, <%= user.username %>
             </span>
-
-            <p class="food-description">
+            <a href="/logout">
+                Đăng xuất
+            </a>
+        <% }else{ %>
+            <a href="/login">
+                Đăng nhập
+            </a>
+            <a href="/register">
+                Đăng ký
+            </a>
+        <% } %>
+    </nav>
+    <form method="GET" action="/foods" class="food-filter">
+        <input
+            type="text"
+            name="keyword"
+            value="<%= keyword || '' %>"
+            placeholder="Tìm món ăn..."
+        >
+        <select name="categoryId">
+            <option value="">
+                Tất cả danh mục
+            </option>
+            <% categories.forEach(c=>{ %>
+                <option
+                    value="<%= c.id %>"
+                    <%= String(c.id)===String(categoryId) ? "selected" : "" %>>
+                    <%= c.name %>
+                </option>
+            <% }) %>
+        </select>
+        <button type="submit">
+            Tìm kiếm
+        </button>
+    </form>
+    <% if(foods && foods.length>0){ %>
+    <ul class="food-list">
+        <% foods.forEach(food=>{ %>
+        <li>
+            <div class="food-detail-image">
+                <% if(food.image){ %>
+                    <img
+                        src="<%= food.image %>"
+                        alt="<%= food.title %>"
+                    >
+                <% }else{ %>
+                    <img
+                        src="/images/default-food.jpg"
+                        alt="Food"
+                    >
+                <% } %>
+            </div>
+            <h3>
+                <%= food.title %>
+            </h3>
+            <p>
                 <%= food.description %>
             </p>
+            <p>
+                <strong>Danh mục:</strong>
+                <%= food.category_name || "Chưa phân loại" %>
+            </p>
+            <p>
+                <strong>Giá:</strong>
+                <%= Number(food.price).toLocaleString("vi-VN") %> ₫
+            </p>
+            <p>
+                <a href="/foods/<%= food.id %>">
+                    Xem chi tiết
+                </a>
+            </p>
+            <div class="food-actions">
+                <form
+                    method="POST"
+                    action="/cart/add/<%= food.id %>"
+                >
+                    <button
+                        type="submit"
+                        class="btn"
+                    >
+                        Thêm vào giỏ
+                    </button>
 
-            <div class="food-price">
-                <%= Number(food.price).toLocaleString('vi-VN') %> ₫
+                </form>
+                <% if(user && user.role==="admin"){ %>
+                    <form
+                        method="POST"
+                        action="/admin/foods/delete/<%= food.id %>"
+                        onsubmit="return confirm('Bạn có chắc muốn xóa món này?')"
+                    >
+
+                        <button
+                            type="submit"
+                            class="delete-btn"
+                        >
+                            Xóa món
+                        </button>
+
+                    </form>
+
+                <% } %>
+
             </div>
 
-            <form method="POST" action="/cart/add/<%= food.id %>">
-                <button type="submit" class="add-cart-btn">
-                     Thêm vào giỏ hàng
-                </button>
-            </form>
+        </li>
 
-                        <% if (user) { %>
-                            <form method="POST" action="/foods/<%= food.id %>/review" class="review-form">
-                                <label>Đánh giá</label>
-                                <select name="rating" required>
-                                    <% for (let i = 5; i >= 1; i--) { %>
-                                        <option value="<%= i %>"><%= i %> sao</option>
-                                    <% } %>
-                                </select>
-                                <textarea name="comment" rows="4" placeholder="Viết nhận xét..."></textarea>
-                                <button type="submit" class="btn">Gửi đánh giá</button>
-                            </form>
-                        <% } else { %>
-                            <p><a href="/login">Đăng nhập</a> để đánh giá món ăn.</p>
-                        <% } %>
+        <% }) %>
 
-                        <% if (reviews && reviews.length) { %>
-                            <div class="review-summary">
-                                <strong>Điểm trung bình:</strong> <%= ratingSummary.avgRating.toFixed(1) %> / 5 (
-                                <%= ratingSummary.reviewCount %> đánh giá)
-                            </div>
-                            <div class="review-list">
-                                <% reviews.forEach(review => { %>
-                                    <div class="review-card">
-                                        <p><strong><%= review.username %></strong> - <%= review.rating %> sao</p>
-                                        <p><%= review.comment %></p>
-                                        <p class="small"> <%= new Date(review.created_at).toLocaleString('vi-VN') %></p>
-                                    </div>
-                                <% }) %>
-                            </div>
-                        <% } %>
+    </ul>
 
-            <a href="/foods" class="back-btn">
-                ← Quay lại danh sách món ăn
-            </a>
-        </div>
+    <% }else{ %>
 
-    </div>
-
-    <% } else { %>
-
-    <div class="food-not-found">
-        <h2>Không tìm thấy món ăn</h2>
-        <a href="/foods">Quay lại thực đơn</a>
-    </div>
+        <h2 style="text-align:center;margin-top:50px;">
+            Chưa có món ăn nào
+        </h2>
 
     <% } %>
 
-</div>
+</main>
 
 </body>
 </html>

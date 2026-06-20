@@ -1,57 +1,72 @@
-const db = require("../config/db")
-const postModel = require("./postModel")
+const postModel = require('../models/postModel')
 
-async function index(req, res) {
+async function index(req, res, next) {
   try {
     const posts = await postModel.getAllPosts()
-    res.render("news-list", { posts })
+    res.render('news-list', { posts })
   } catch (error) {
-    console.error(error)
-    res.status(500).send(error.message)
+    next(error)
   }
 }
 
-async function show(req, res) {
+async function show(req, res, next) {
   try {
-    const id = req.params.id
-    const [rows] = await db.query("SELECT * FROM posts WHERE id = ?", [id])
-    if (rows.length === 0) {
-      return res.status(404).send("Không tìm thấy bài viết")
-    }
-    res.render("news-detail", { post: rows[0] })
+    const post = await postModel.getPostById(req.params.id)
+    if (!post) return res.status(404).send('Không tìm thấy bài viết')
+    res.render('news-detail', { post })
   } catch (error) {
-    console.log(error)
-    res.send("Lỗi khi xem chi tiết bài viết")
+    next(error)
   }
 }
 
-async function search(req, res) {
+async function search(req, res, next) {
   try {
-    const keyword = req.query.keyword || ""
-    const [posts] = await db.query(
-      "SELECT * FROM posts WHERE title LIKE ? OR description LIKE ? ORDER BY id DESC",
-      [`%${keyword}%`, `%${keyword}%`]
-    )
-    res.render("news-list", { posts })
+    const keyword = req.query.keyword || ''
+    const posts = await postModel.searchPosts(keyword)
+    res.render('news-list', { posts })
   } catch (error) {
-    console.error(error)
-    res.status(500).send(error.message)
+    next(error)
   }
 }
 
 function create(req, res) {
-  res.render("add-post")
+  res.render('add-post')
 }
 
-async function store(req, res) {
+async function store(req, res, next) {
   try {
-    const title = req.body.title
-    const description = req.body.description
-    await postModel.createPost(title, description)
-    res.redirect("/news")
+    await postModel.createPost({ title: req.body.title, description: req.body.description })
+    res.redirect('/news')
   } catch (error) {
-    console.log(error)
-    res.send("Lỗi khi thêm bài viết")
+    next(error)
+  }
+}
+
+async function edit(req, res, next) {
+  try {
+    const post = await postModel.getPostById(req.params.id)
+    if (!post) return res.status(404).send('Không tìm thấy bài viết')
+    res.render('edit-post', { post })
+  } catch (error) {
+    next(error)
+  }
+}
+
+async function update(req, res, next) {
+  try {
+    await postModel.updatePost({ id: req.params.id, title: req.body.title, description: req.body.description })
+    res.redirect('/news')
+  } catch (error) {
+    next(error)
+  }
+}
+
+async function remove(req, res, next) {
+  try {
+    await postModel.deletePost(req.params.id)
+    res.redirect('/news')
+  } catch (error) {
+    next(error)
   }
 }
 
@@ -60,5 +75,8 @@ module.exports = {
   show,
   search,
   create,
-  store
+  store,
+  edit,
+  update,
+  remove
 }

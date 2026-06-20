@@ -61,3 +61,66 @@
 
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thanh toán</title>
+    <link rel="stylesheet" href="/css/bank.css">
+</head>
+<body class="bank-page">
+
+<div class="container">
+
+    <div class="card">
+        <h1><%= topUpAmount ? 'Nạp tiền qua chuyển khoản' : 'Thanh Toán Đơn Hàng' %></h1>
+
+        <h3>Thông tin chuyển khoản</h3>
+
+        <p><strong>Ngân hàng:</strong> Techcombank</p>
+        <p><strong>Số tài khoản:</strong> 400949785379</p>
+        <p><strong>Chủ tài khoản:</strong> MINI FOOD STORE</p>
+        <p><strong>Nội dung CK:</strong> <%= topUpAmount ? `NAP${orderId || '001'}` : `DH${orderId || '001'}` %></p>
+
+        <hr>
+
+        <h3><%= topUpAmount ? 'Số tiền cần nạp' : 'Số tiền cần thanh toán' %></h3>
+
+        <p class="price">
+            <%= totalPrice ? Number(totalPrice).toLocaleString('vi-VN') : '0' %> ₫
+        </p>
+
+<div class="bank-qr-box" style="text-align:center;margin-top:20px;">
+            <p class="small-note"><%= topUpAmount ? 'Quét mã QR bên dưới, chuyển đúng số tiền rồi bấm xác nhận để tiền vào ví.' : 'Vui lòng quét mã QR bên dưới để hoàn tất chuyển khoản trước khi xác nhận.' %></p>
+            <img
+                src="/images/bank.png"
+                alt="Mã QR chuyển khoản"
+                width="250"
+                height="250"
+            >
+        </div>
+
+        <br>
+
+        <form action="/payment-success" method="POST">
+            <input type="hidden" name="orderId" value="<%= orderId %>">
+            <input type="hidden" name="amount" value="<%= topUpAmount || 0 %>">
+
+            <button type="submit" class="btn">
+                <%= topUpAmount ? 'Tôi đã chuyển khoản' : 'Tôi đã thanh toán' %>
+            </button>
+        </form>
+
+        <br>
+
+        <a href="/cart" class="btn btn-secondary">
+            Quay lại giỏ hàng
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>
