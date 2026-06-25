@@ -65,12 +65,25 @@
             <% } %>
 
             <label>Đơn vị vận chuyển</label>
-            <select name="deliveryCompanyId" required>
+           <div class="shipping-options">
               <% deliveryCompanies.forEach(company => { %>
-                <option value="<%= company.id %>">
-                  <%= company.name %> - <%= Number(company.fee).toLocaleString('vi-VN') %> ₫
-                </option>
-              <% }) %>
+              <label class="shipping-card">
+                 <input
+                type="radio"
+                    name="deliveryCompanyId"
+                 value="<%= company.id %>"
+                required
+             />
+             <div class="shipping-info">
+              <strong><%= company.name %></strong>
+             <span>
+               Phí ship:
+               <%= Number(company.fee).toLocaleString('vi-VN') %> ₫
+             </span>
+             </div>
+            </label>
+            <% }) %>
+             </div>
             </select>
 
             <label>Phương thức thanh toán</label>

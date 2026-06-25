@@ -111,6 +111,10 @@
                         <strong>Giá:</strong>
                         <%= Number(food.price).toLocaleString("vi-VN") %> ₫
                     </p>
+                   <p>
+                        <strong>Định lượng:</strong>
+                        <%= food.gram || 0 %> g
+                     </p>
 
                     <p>
                         <a href="/foods/<%= food.id %>">

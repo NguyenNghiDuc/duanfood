@@ -1,5 +1,3 @@
-
-
 * {
     margin: 0;
     padding: 0;
@@ -18,15 +16,12 @@ body {
     margin: 40px auto;
 }
 
-
-
 .card {
     background: #ffffff;
     border-radius: 20px;
     padding: 35px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
 }
-
 
 .card h1 {
     text-align: center;
@@ -35,8 +30,7 @@ body {
     margin-bottom: 25px;
 }
 
-
-
+/* NAV */
 nav {
     display: flex;
     justify-content: center;
@@ -60,16 +54,14 @@ nav a:hover {
     color: white;
 }
 
-
-
+/* LAYOUT */
 .checkout-layout {
     display: grid;
     grid-template-columns: 2fr 1fr;
     gap: 30px;
 }
 
-
-
+/* LEFT */
 .checkout-box {
     background: #fafafa;
     padding: 30px;
@@ -104,8 +96,93 @@ nav a:hover {
     border-color: #ff5722;
 }
 
+/* ADDRESS */
+.address-select {
+    display: grid;
+    gap: 15px;
+    margin-bottom: 20px;
+}
 
+.address-option {
+    display: flex;
+    gap: 15px;
+    align-items: flex-start;
+    background: white;
+    border: 2px solid #eeeeee;
+    padding: 18px;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: 0.3s;
+}
 
+.address-option:hover {
+    border-color: #ff5722;
+    transform: translateY(-2px);
+}
+
+.address-option input[type="radio"] {
+    margin-top: 4px;
+    accent-color: #ff5722;
+}
+
+.badge {
+    display: inline-block;
+    background: #ff5722;
+    color: white;
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    margin-left: 8px;
+}
+
+/* SHIPPING */
+.shipping-options {
+    display: grid;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.shipping-card {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: white;
+    padding: 18px;
+    border-radius: 15px;
+    border: 2px solid #eeeeee;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.shipping-card:hover {
+    border-color: #ff5722;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(255, 87, 34, 0.12);
+}
+
+.shipping-card input[type="radio"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #ff5722;
+}
+
+.shipping-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.shipping-info strong {
+    font-size: 17px;
+    color: #222;
+}
+
+.shipping-info span {
+    color: #ff5722;
+    font-weight: bold;
+}
+
+/* RIGHT */
 .cart-summary {
     background: white;
     border-radius: 18px;
@@ -140,8 +217,7 @@ nav a:hover {
     line-height: 1.6;
 }
 
-
-
+/* BUTTON */
 .btn {
     display: inline-block;
     width: 100%;
@@ -164,8 +240,7 @@ nav a:hover {
     box-shadow: 0 8px 18px rgba(255, 87, 34, 0.3);
 }
 
-
-
+/* NOTICE */
 .notice {
     background: #fff3cd;
     color: #856404;
@@ -175,10 +250,8 @@ nav a:hover {
     margin-bottom: 20px;
 }
 
-
-
+/* MOBILE */
 @media (max-width: 768px) {
-
     .checkout-layout {
         grid-template-columns: 1fr;
     }
@@ -204,4 +277,3 @@ nav a:hover {
         font-size: 28px;
     }
 }
-
