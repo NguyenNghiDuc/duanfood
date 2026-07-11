@@ -77,10 +77,18 @@
             <strong>
               Giá:
             </strong>
-            <%= Number(food.price).toLocaleString('vi-VN')
-            %>
+            <%= Number(food.price).toLocaleString('vi-VN') %>
             ₫
           </p>
+          <% if (food.gram) { %>
+          <p class="food-detail-weight">
+            <strong>
+              Trọng lượng:
+            </strong>
+            <%= food.gram %>
+            g
+          </p>
+          <% } %>
           <p class="food-detail-description">
             <%= food.description %>
           </p>

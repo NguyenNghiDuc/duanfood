@@ -24,17 +24,19 @@
         </a>
         <a href="/news">
           Món mới
-        </a
-        >
+        </a>
         <a href="/foods">
           Thực đơn
         </a>
-        <% if(user){ %>
-        <a href="/logout"
-          >
+        <% if (user && user.role === 'admin') { %>
+        <a class="btn-add-news" href="/news/add">
+          Thêm tin tức mới
+        </a>
+        <% } %>
+        <% if (user) { %>
+        <a href="/logout">
           Đăng xuất
-        </a
-        >
+        </a>
         <% } else { %>
         <a href="/login">
           Đăng nhập
@@ -63,18 +65,10 @@
             <%= post.description %>
           </p>
           <div class="news-actions">
-            <a class="view-btn" href="/news/<%= post.id %>
-              ">Xem chi tiết
-            </a>
-            <%
-            if (user) { %>
-            <a class="edit-btn" href="/news/<%= post.id %>
-              /edit"
-              >Sửa
-            </a
-            >
-            <form action="/news/<%= post.id %>
-              /delete" method="POST">
+            <a class="view-btn" href="/news/<%= post.id %>">Xem chi tiết</a>
+            <% if (user && user.role === 'admin') { %>
+            <a class="edit-btn" href="/news/<%= post.id %>/edit">Sửa</a>
+            <form action="/news/<%= post.id %>/delete" method="POST">
               <button class="delete-btn" type="submit">
                 Xóa
               </button>

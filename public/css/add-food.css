@@ -83,6 +83,22 @@
     transition: .3s;
 }
 
+.input-with-unit {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 10px;
+    align-items: center;
+}
+
+.input-with-unit .unit-label {
+    padding: 16px 18px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 15px;
+    font-size: 16px;
+    color: #64748b;
+}
+
 .admin-form input:focus,
 .admin-form select:focus,
 .admin-form textarea:focus {

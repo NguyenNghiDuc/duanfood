@@ -23,11 +23,15 @@
           </a>
           <a href="/news">
             Món mới
-          </a
-          >
+          </a>
           <a href="/foods">
             Thực đơn
           </a>
+          <% if (user && user.role === 'admin') { %>
+          <a class="btn-add-news" href="/news/add">
+            Thêm tin tức mới
+          </a>
+          <% } %>
         </nav>
         <% if (posts && posts.length > 0) { %>
         <div class="news-grid">
@@ -39,6 +43,14 @@
             <h2>
               <%= post.title %>
             </h2>
+            <div class="news-meta">
+              <span>
+                <strong><%= post.author || 'Admin' %></strong>
+              </span>
+              <span>
+                • <%= new Date(post.created_at).toLocaleDateString('vi-VN') %>
+              </span>
+            </div>
             <p>
               <%= post.description %>
             </p>

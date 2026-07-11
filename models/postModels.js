@@ -15,8 +15,8 @@ async function searchPosts(keyword) {
   return rows
 }
 
-async function createPost({ title, description }) {
-  const [result] = await db.query('INSERT INTO posts(title, description) VALUES (?, ?)', [title, description])
+async function createPost({ title, description, author }) {
+  const [result] = await db.query('INSERT INTO posts(title, description, author) VALUES (?, ?, ?)', [title, description, author || 'Admin'])
   return result.insertId
 }
 

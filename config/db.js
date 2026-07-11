@@ -58,8 +58,25 @@ async function initFallbackSqlite(db) {
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     title TEXT NOT NULL,
     description TEXT NOT NULL,
+    author TEXT DEFAULT 'Admin',
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
   )`);
+  try {
+    await exec(`ALTER TABLE posts ADD COLUMN author TEXT DEFAULT 'Admin'`)
+  } catch (err) {
+    // Column already exists on older database schema; ignore.
+  }
+  await exec(`CREATE TABLE IF NOT EXISTS promotions (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT NOT NULL,
+    description TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  )`);
+  try {
+    await exec(`ALTER TABLE promotions ADD COLUMN created_at DATETIME DEFAULT CURRENT_TIMESTAMP`)
+  } catch (err) {
+    // Column already exists on older database schema; ignore.
+  }
   await exec(`CREATE TABLE IF NOT EXISTS addresses (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER,
@@ -110,8 +127,14 @@ async function initFallbackSqlite(db) {
     description TEXT,
     price REAL NOT NULL DEFAULT 0,
     category_id INTEGER,
-    image TEXT
+    image TEXT,
+    gram INTEGER NOT NULL DEFAULT 0
   )`);
+  try {
+    await exec(`ALTER TABLE foods ADD COLUMN gram INTEGER NOT NULL DEFAULT 0`)
+  } catch (err) {
+    // Column already exists on older database schema, ignore.
+  }
   await exec(`CREATE TABLE IF NOT EXISTS reviews (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     food_id INTEGER NOT NULL,

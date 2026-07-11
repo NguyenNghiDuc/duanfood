@@ -74,8 +74,8 @@ async function showAddFood(req, res, next) {
 
 async function addFood(req, res, next) {
   try {
-    const { title, description, price, category_id, image } = req.body
-    await foodModel.createFood({ title, description, price: normalizePrice(price), category_id, image })
+    const { title, description, price, category_id, image, gram } = req.body
+    await foodModel.createFood({ title, description, price: normalizePrice(price), category_id, image, gram })
     res.redirect('/foods')
   } catch (error) {
     next(error)
@@ -104,8 +104,8 @@ async function showEditFood(req, res, next) {
 
 async function updateFood(req, res, next) {
   try {
-    const { title, description, price, category_id, image } = req.body
-    await foodModel.updateFood({ id: req.params.id, title, description, price: normalizePrice(price), category_id, image })
+    const { title, description, price, category_id, image, gram } = req.body
+    await foodModel.updateFood({ id: req.params.id, title, description, price: normalizePrice(price), category_id, image, gram })
     res.redirect('/foods')
   } catch (error) {
     next(error)

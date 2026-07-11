@@ -125,6 +125,11 @@
           <p class="food-description">
             <%= food.description %>
           </p>
+          <% if (food.gram) { %>
+          <p class="food-weight">
+            <%= food.gram %> g
+          </p>
+          <% } %>
           <div class="food-price-row">
             <strong class="food-price">
               <%= Number(food.price).toLocaleString('vi-VN') %>

@@ -35,7 +35,8 @@ function create(req, res) {
 
 async function store(req, res, next) {
   try {
-    await postModel.createPost({ title: req.body.title, description: req.body.description })
+    const author = (req.session.user && req.session.user.username) || 'Admin'
+    await postModel.createPost({ title: req.body.title, description: req.body.description, author })
     res.redirect('/news')
   } catch (error) {
     next(error)

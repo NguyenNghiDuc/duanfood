@@ -58,6 +58,88 @@ nav a:hover{
     transform:translateY(-3px);
 }
 
+.admin-panel{
+    margin-bottom:40px;
+    padding:30px;
+    border-radius:25px;
+    background:#fff8f2;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+}
+
+.admin-panel h2{
+    color:#ff6b35;
+    margin-bottom:20px;
+    font-size:32px;
+}
+
+.promo-form{
+    display:grid;
+    gap:20px;
+    margin-bottom:30px;
+}
+
+.form-group{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.form-group label{
+    font-weight:700;
+    color:#444;
+}
+
+.form-group input,
+.form-group textarea{
+    width:100%;
+    padding:14px 16px;
+    border-radius:15px;
+    border:1px solid #ffd3b3;
+    background:#fff;
+    font-size:16px;
+}
+
+.delete-promo-btn{
+    border:none;
+    background:#f44336;
+    color:white;
+    padding:12px 20px;
+    border-radius:15px;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.delete-promo-btn:hover{
+    opacity:.9;
+}
+
+.promo-list{
+    display:grid;
+    gap:15px;
+}
+
+.promo-item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:18px 22px;
+    background:#fff;
+    border-radius:18px;
+    border:1px solid #ffe0cc;
+}
+
+.promo-item h3{
+    margin:0;
+    color:#ff6b35;
+}
+
+.promo-list-placeholder{
+    padding:20px;
+    border-radius:18px;
+    background:#fff;
+    color:#666;
+}
+
 .account-box{
     margin-top:35px;
     padding:30px;

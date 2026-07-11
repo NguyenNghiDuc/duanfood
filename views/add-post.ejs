@@ -6,7 +6,7 @@
     <title>
       Thêm bài viết
     </title>
-    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/add-post.css" />
   </head>
   <body>
     <nav>
@@ -19,7 +19,7 @@
       <% if (user) { %>
       |
       Xin chào,
-      <%= user.username %>
+      <span class="username-highlight"><%= user.username %></span>
       |
       <a href="/logout">
         Đăng xuất

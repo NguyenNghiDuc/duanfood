@@ -103,7 +103,7 @@ function showAbout(req, res) {
 }
 
 function showContact(req, res) {
-  res.render('contact')
+  res.render('contact', { user: req.session.user || null })
 }
 
 function redirectMenu(req, res) {

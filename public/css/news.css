@@ -60,6 +60,19 @@ body{
     position:relative;
 }
 
+.btn-add-news {
+    background:#ff6b35;
+    color:#fff;
+    padding:10px 18px;
+    border-radius:12px;
+    font-size:16px;
+    font-weight:700;
+}
+
+.btn-add-news:hover {
+    opacity:.9;
+}
+
 .news-nav a:hover{
     color:#ff6b35;
 }

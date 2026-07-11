@@ -110,10 +110,10 @@
           </div>
           <div class="hero-users">
             <div class="avatars">
-              <img src="/images/user1.jpg" />
-              <img src="/images/user2.jpg" />
+              <img src="/images/user1.png" />
+              <img src="/images/user2.png" />
               <img
-                src="/images/user3.jpg"
+                src="/images/user3.png"
               />
               <span>
                 +2K
@@ -123,36 +123,37 @@
               Khách hàng hài lòng
             </p>
           </div>
-        </article>
-        <aside class="banner-stack">
           <div class="discount-box">
             <small>
               Giảm đến
             </small>
             <strong>
               50%
-            </strong
-            >
+            </strong>
             <span>
               Cho đơn đầu tiên
             </span>
           </div>
+        </article>
+        <aside class="banner-stack">
           <div class="hero-image">
             <img src="/images/anhfood.png" alt="Food" />
           </div>
-          <div class="mini-banner">
-            🍔 BURGER
-          </div>
-          <div class="mini-banner">
-            🍕 PIZZA
-          </div>
-          <div class="mini-banner">
-            🍗 GÀ RÁN
+          <div class="mini-banner-group">
+            <div class="mini-banner">
+              🍔 BURGER
+            </div>
+            <div class="mini-banner">
+              🍕 PIZZA
+            </div>
+            <div class="mini-banner">
+              🍗 GÀ RÁN
+            </div>
           </div>
         </aside>
       </section>
       <section class="feature-grid">
-        <div class="feature-card">
+        <a class="feature-card" href="/foods">
           <div class="feature-icon">
             🚚
           </div>
@@ -164,8 +165,8 @@
               Giao tận nơi trong 30 phút
             </p>
           </div>
-        </div>
-        <div class="feature-card">
+        </a>
+        <a class="feature-card" href="/categories">
           <div class="feature-icon">
             🥬
           </div>
@@ -177,8 +178,8 @@
               100% nguyên liệu sạch
             </p>
           </div>
-        </div>
-        <div class="feature-card">
+        </a>
+        <a class="feature-card" href="/wallet/top-up">
           <div class="feature-icon">
             💳
           </div>
@@ -187,28 +188,28 @@
               Thanh toán tiện lợi
             </h3>
             <p>
-              Hỗ trợ nhiều hình thức
+              Nạp tiền vào ví để thanh toán nhanh.
             </p>
           </div>
-        </div>
-        <div class="feature-card">
+        </a>
+        <a class="feature-card" href="/promotion">
           <div class="feature-icon">
-            🎁
+            🔥
           </div>
           <div>
             <h3>
-              Ưu đãi mỗi ngày
+              Ưu đãi hấp dẫn
             </h3>
             <p>
-              Hàng trăm voucher hấp dẫn
+              Nhiều khuyến mãi mỗi ngày
             </p>
           </div>
-        </div>
+        </a>
       </section>
-      <section class="card">
+      <section class="section-title-row">
         <div class="section-title">
           <h2>
-            🔥 Danh mục món ăn
+            🍽️ Khám phá theo danh mục
           </h2>
           <a href="/foods">
             Xem tất cả →
@@ -216,28 +217,77 @@
         </div>
         <div class="categories-row">
           <% if (categories && categories.length) { %>
-          <%
-          categories.forEach(category => { %>
-          <a
-            class="category-item"
-            href="/foods?categoryId=<%= category.id %>
-            "
-            >
-            <div class="category-icon">
-              <% const name = category.name.toLowerCase(); %>
-              <%=
-              name.includes("burger") ? "🍔" : name.includes("pizza") ? "🍕" :
-              name.includes("gà") || name.includes("ga") ? "🍗" :
-              name.includes("mì") ? "🍜" : name.includes("salad") ? "🥗" :
-              name.includes("đồ uống") ? "🥤" : "🍽️" %>
-            </div>
-            <strong>
-              <%= category.name %>
-            </strong>
-          </a
-          >
-          <% }) %>
+            <% categories.forEach(category => { %>
+              <a
+                class="category-item"
+                href="/foods?categoryId=<%= category.id %>"
+              >
+                <div class="category-icon">
+                  <% const name = category.name.toLowerCase(); %>
+                  <%= name.includes("burger") ? "🍔" : name.includes("pizza") ? "🍕" :
+                      name.includes("gà") || name.includes("ga") ? "🍗" :
+                      name.includes("mì") ? "🍜" : name.includes("salad") ? "🥗" :
+                      name.includes("đồ uống") ? "🥤" : "🍽️" %>
+                </div>
+                <strong>
+                  <%= category.name %>
+                </strong>
+              </a>
+            <% }) %>
           <% } %>
+        </div>
+      </section>
+      <section class="card">
+        <div class="section-title">
+          <h2>
+            🌐 Các trang chính
+          </h2>
+        </div>
+        <div class="feature-grid">
+          <a class="feature-card" href="/foods">
+            <div class="feature-icon">🍽️</div>
+            <div>
+              <h3>
+                Món ăn
+              </h3>
+              <p>
+                Xem tất cả món ngon có sẵn.
+              </p>
+            </div>
+          </a>
+          <a class="feature-card" href="/promotion">
+            <div class="feature-icon">🎉</div>
+            <div>
+              <h3>
+                Khuyến mãi
+              </h3>
+              <p>
+                Kiểm tra chương trình ưu đãi mới.
+              </p>
+            </div>
+          </a>
+          <a class="feature-card" href="/news">
+            <div class="feature-icon">📰</div>
+            <div>
+              <h3>
+                Tin tức
+              </h3>
+              <p>
+                Đọc tin tức và cập nhật mới.
+              </p>
+            </div>
+          </a>
+          <a class="feature-card" href="/contact">
+            <div class="feature-icon">📞</div>
+            <div>
+              <h3>
+                Liên hệ
+              </h3>
+              <p>
+                Gửi yêu cầu hoặc góp ý.
+              </p>
+            </div>
+          </a>
         </div>
       </section>
       <section class="card">
@@ -290,12 +340,10 @@
                 </span>
               </div>
               <div class="food-actions">
-                <a href="/foods/<%= food.id %>
-                  " class="detail-btn">
+                <a href="/foods/<%= food.id %>" class="detail-btn">
                   Xem chi tiết
                 </a>
-                <form action="/cart/add/<%= food.id %>
-                  " method="POST">
+                <form action="/cart/add/<%= food.id %>" method="POST">
                   <button class="cart-add-btn">
                     <i class="fa-solid fa-cart-plus">
                     </i>
@@ -337,7 +385,7 @@
         <div class="promo-box">
           <div>
             <h2>
-              💳 Hoàn tiền
+              💳 Hoàn tiền nếu sản           phẩm bị hư hoặc lỗi
             </h2>
             <p>
               Thanh toán Online.
@@ -358,34 +406,14 @@
           <% if(posts && posts.length){ %>
           <% posts.slice(0,3).forEach(post=>{ %>
           <article class="news-card">
-            <% if(post.image){ %>
-            <img
-              src="<%= post.image %>
-            "
-              alt="
-            <%= post.title %>
-            "
-            />
-            <% }else{ %>
-            <img src="/images/news.jpg" alt="News" />
-            <% } %>
-            <div class="news-content">
-              <span class="news-date">
-                🗓️
-                <%= new Date(post.created_at).toLocaleDateString("vi-VN")
-                %>
-              </span
-              >
-              <h3>
-                <%= post.title %>
-              </h3>
-              <p>
-                <%= post.content.substring(0,120) %>
-                ...
-              </p>
-              <a href="/news/<%= post.id %>
-                " class="read-more"> Đọc tiếp →
-              </a>
+            <div class="news-thumb">
+              <img src="<%= post.image || '/images/news.png' %>" alt="<%= post.title %>" />
+            </div>
+            <div class="news-body">
+              <span class="news-date">🗓️ <%= new Date(post.created_at).toLocaleDateString('vi-VN') %></span>
+              <h3><%= post.title %></h3>
+              <p><%= (post.description || '').substring(0,120) %>...</p>
+              <a href="/news/<%= post.id %>" class="read-more">Đọc tiếp →</a>
             </div>
           </article>
           <% }) %>
@@ -404,7 +432,7 @@
         </div>
         <div class="review-grid">
           <div class="review-card">
-            <img src="/images/user1.jpg" alt="" />
+            <img src="/images/user1.png" alt="" />
             <h3>
               Nguyễn Văn A
             </h3>
@@ -416,7 +444,7 @@
             </p>
           </div>
           <div class="review-card">
-            <img src="/images/user2.jpg" alt="" />
+            <img src="/images/user2.png" alt="" />
             <h3>
               Trần Thị B
             </h3>
@@ -428,7 +456,7 @@
             </p>
           </div>
           <div class="review-card">
-            <img src="/images/user3.jpg" alt="" />
+            <img src="/images/user3.png" alt="" />
             <h3>
               Lê Văn C
             </h3>

@@ -54,8 +54,7 @@
           <label>
             Tiêu đề món ăn
             <input type="text" name="title" required />
-          </label
-          >
+          </label>
           <label>
             Giá bán (₫)
             <input
@@ -70,19 +69,20 @@
             <small>
               Nhập số và hệ thống sẽ tự thêm dấu chấm cho hàng nghìn.
             </small>
-          </label
-          >
+          </label>
           <label>
             Định lượng (gram)
-          </label
-          >
-          <input
-            type="number"
-            name="gram"
-            min="1"
-            placeholder="Ví dụ: 300"
-            required
-          />
+            <div class="input-with-unit">
+              <input
+                type="number"
+                name="gram"
+                min="1"
+                placeholder="Ví dụ: 300"
+                required
+              />
+              <span class="unit-label">g</span>
+            </div>
+          </label>
           <label>
             Danh mục
             <select name="category_id" required>

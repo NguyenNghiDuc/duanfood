@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
-      Khuyến mãi - Food
+      Liên hệ - Food
     </title>
     <link rel="stylesheet" href="/css/contact.css" />
   </head>
@@ -12,12 +12,10 @@
     <main class="container">
       <section class="card">
         <h1>
-          Chương Trình Khuyến Mãi Tại Food
+          Liên hệ với Food
         </h1>
         <p class="subtext">
-          Chào mừng bạn đến với trang khuyến mãi của Food. Chúng tôi luôn mang
-          đến những ưu đãi hấp dẫn nhằm giúp khách hàng thưởng thức các món ăn
-          yêu thích với mức giá tiết kiệm nhất.
+          Mọi thắc mắc về đơn hàng, khuyến mãi hoặc hợp tác, bạn có thể liên hệ với chúng tôi ngay.
         </p>
         <nav>
           <a href="/">
@@ -25,26 +23,59 @@
           </a>
           <a href="/foods">
             Món ăn
-          </a
-          >
+          </a>
           <a href="/categories">
             Danh mục
           </a>
+          <% if (user && user.role === 'admin') { %>
+          <a href="/admin/stats" class="admin-link">
+            Admin
+          </a>
+          <% } %>
           <% if (user) { %>
-          <a href="/logout"
-            >
+          <a href="/logout">
             Đăng xuất
-          </a
-          >
+          </a>
           <% } else { %>
           <a href="/login">
             Đăng nhập
           </a>
           <% } %>
         </nav>
+        <% if (user) { %>
+        <div class="user-greeting">
+          <p>
+            Xin chào,
+            <span class="user-name"><%= user.fullname || user.username %></span>
+          </p>
+          <a href="/profile/edit" class="profile-link">Chỉnh sửa thông tin</a>
+        </div>
+        <% } %>
         <hr />
+        <% if (user && user.role === 'admin') { %>
+        <section class="admin-contact">
+          <div class="admin-contact-header">
+            <div class="admin-badge">
+              <span>Admin</span>
+            </div>
+            <div>
+              <h2>
+                Liên hệ Admin
+              </h2>
+              <p class="admin-note">
+                Truy cập nhanh bảng điều khiển để quản lý chương trình, kiểm soát dữ liệu và cập nhật nội dung.
+              </p>
+            </div>
+          </div>
+          <div class="admin-actions">
+            <a href="/admin/stats" class="admin-btn">Đi đến bảng điều khiển admin</a>
+            <a href="/profile/edit" class="admin-secondary-btn">Chỉnh sửa người dùng</a>
+          </div>
+        </section>
+        <hr />
+        <% } %>
         <h2>
-          Ưu Đãi Nổi Bật Hôm Nay
+          Thông tin giảm giá sản phẩm
         </h2>
         <div class="promo-grid">
           <div class="promo-card">
@@ -101,6 +132,44 @@
             </h3>
             <p>
               Tặng voucher giảm giá 30.000đ khi đăng ký tài khoản lần đầu.
+            </p>
+          </div>
+        </div>
+        <hr />
+        <h2>
+          Sản phẩm nổi bật
+        </h2>
+        <div class="product-grid">
+          <div class="product-card">
+            <h3>
+              Pizza Hải Sản
+            </h3>
+            <p>
+              Combo pizza hải sản phô mai tan chảy, đầy đủ topping và giá ưu đãi.
+            </p>
+          </div>
+          <div class="product-card">
+            <h3>
+              Gà Rán Giòn Rụm
+            </h3>
+            <p>
+              Suất gà rán đặc biệt với sốt cay ngọt, ăn kèm khoai tây và nước.
+            </p>
+          </div>
+          <div class="product-card">
+            <h3>
+              Salad Tươi Mát
+            </h3>
+            <p>
+              Salad rau củ tươi ngon, phù hợp cho bữa ăn nhẹ thanh đạm và dinh dưỡng.
+            </p>
+          </div>
+          <div class="product-card">
+            <h3>
+              Trà Sữa Kem Tươi
+            </h3>
+            <p>
+              Thức uống giải khát mát lạnh, topping trân châu mềm dẻo và béo ngậy.
             </p>
           </div>
         </div>

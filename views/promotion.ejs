@@ -25,17 +25,19 @@
           </a>
           <a href="/foods">
             Món ăn
-          </a
-          >
+          </a>
           <a href="/categories">
             Danh mục
           </a>
+          <% if (user && user.role === 'admin') { %>
+          <a href="/admin/stats" class="admin-link">
+            Admin
+          </a>
+          <% } %>
           <% if (user) { %>
-          <a href="/logout"
-            >
+          <a href="/logout">
             Đăng xuất
-          </a
-          >
+          </a>
           <% } else { %>
           <a href="/login">
             Đăng nhập
@@ -46,6 +48,43 @@
         <h2>
           Ưu Đãi Nổi Bật Hôm Nay
         </h2>
+        <% if (user && user.role === 'admin') { %>
+        <section class="admin-panel">
+          <h2>
+            Quản lý chương trình khuyến mãi
+          </h2>
+          <form class="promo-form" method="POST" action="/promotion/add">
+            <div class="form-group">
+              <label for="promo-title">Tiêu đề khuyến mãi</label>
+              <input id="promo-title" name="title" type="text" required />
+            </div>
+            <div class="form-group">
+              <label for="promo-description">Nội dung</label>
+              <textarea id="promo-description" name="description" rows="4" required></textarea>
+            </div>
+            <button type="submit" class="btn">Thêm khuyến mãi</button>
+          </form>
+          <% if (adminPromotions && adminPromotions.length > 0) { %>
+          <div class="promo-list">
+            <% adminPromotions.forEach((promo) => { %>
+            <div class="promo-item">
+              <div>
+                <h3><%= promo.title %></h3>
+                <p><%= promo.description %></p>
+              </div>
+              <form method="POST" action="/promotion/<%= promo.id %>/delete">
+                <button type="submit" class="delete-promo-btn">Xóa</button>
+              </form>
+            </div>
+            <% }) %>
+          </div>
+          <% } else { %>
+          <div class="promo-list-placeholder">
+            Chưa có chương trình khuyến mãi do admin tạo.
+          </div>
+          <% } %>
+        </section>
+        <% } %>
         <div class="promo-grid">
           <div class="promo-card">
             <h3>

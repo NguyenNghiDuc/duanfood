@@ -55,13 +55,13 @@ async function getFoodById(id) {
   return rows[0] || null
 }
 
-async function createFood({ title, description, price, category_id, image }) {
-  const [result] = await db.query(`INSERT INTO foods (title, description, price, category_id, image) VALUES (?, ?, ?, ?, ?)`, [title, description, price, category_id || null, image || ''])
+async function createFood({ title, description, price, category_id, image, gram }) {
+  const [result] = await db.query(`INSERT INTO foods (title, description, price, category_id, image, gram) VALUES (?, ?, ?, ?, ?, ?)`, [title, description, price, category_id || null, image || '', gram || 0])
   return result.insertId
 }
 
-async function updateFood({ id, title, description, price, category_id, image }) {
-  await db.query('UPDATE foods SET title = ?, description = ?, price = ?, category_id = ?, image = ? WHERE id = ?', [title, description, price, category_id || null, image || '', id])
+async function updateFood({ id, title, description, price, category_id, image, gram }) {
+  await db.query('UPDATE foods SET title = ?, description = ?, price = ?, category_id = ?, image = ?, gram = ? WHERE id = ?', [title, description, price, category_id || null, image || '', gram || 0, id])
 }
 
 async function deleteFood(id) {
