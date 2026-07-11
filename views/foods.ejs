@@ -10,14 +10,21 @@
 
 <main class="food-page">
     <% if (user && user.role === 'admin') { %>
-        <div class="admin-nav">
-            <a href="/admin" class="admin-nav-link">Trang chủ</a>
-            <a href="/foods" class="admin-nav-link active">Món ăn</a>
-            <a href="/admin/foods/add" class="admin-nav-link">Thêm món ăn</a>
-            <a href="/admin/orders" class="admin-nav-link">Quản lý đơn hàng</a>
-            <a href="/admin/categories" class="admin-nav-link">Quản lý danh mục</a>
-            <a href="/admin/stats" class="admin-nav-link">Thống kê doanh thu</a>
-            <span class="admin-greeting">Xin chào, <strong><%= user.username %></strong></span>
+        <div class="admin-toolbar">
+            <div class="admin-brand">
+                <a href="/admin" class="admin-brand-link">Mini Food</a>
+            </div>
+            <nav class="admin-navigation">
+                <a href="/admin" class="admin-nav-link">Trang chủ</a>
+                <a href="/foods" class="admin-nav-link active">Món ăn</a>
+                <a href="/admin/foods/add" class="admin-nav-link">Thêm món ăn</a>
+                <a href="/admin/orders" class="admin-nav-link">Quản lý đơn hàng</a>
+                <a href="/admin/categories" class="admin-nav-link">Quản lý danh mục</a>
+                <a href="/admin/stats" class="admin-nav-link">Thống kê doanh thu</a>
+            </nav>
+            <div class="admin-actions">
+                <span class="admin-greeting">Xin chào, <strong><%= user.username %></strong></span>
+            </div>
         </div>
     <% } %>
 
