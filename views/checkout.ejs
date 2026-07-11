@@ -57,10 +57,7 @@
               <div class="address-select">
                 <% addresses.forEach(address => { %>
                 <label class="address-option">
-                  <input type="radio" name="addressId" value="<%= address.id %>
-                  "
-                  <%= String(address.id) === String(selectedAddressId) ? 'checked' : '' %>
-                  required />
+                  <input type="radio" name="addressId" value="<%= address.id %>" <%= String(address.id) === String(selectedAddressId) ? 'checked' : '' %> required />
                   <div>
                     <strong>
                       <%= address.label %>
@@ -110,8 +107,7 @@
               <div class="shipping-options">
                 <% deliveryCompanies.forEach(company => { %>
                 <label class="shipping-card">
-                  <input type="radio" name="deliveryCompanyId" value="<%= company.id %>
-                  " required />
+                  <input type="radio" name="deliveryCompanyId" value="<%= company.id %>" required />
                   <div class="shipping-info">
                     <strong>
                       <%= company.name %>
@@ -125,7 +121,6 @@
                 </label>
                 <% }) %>
               </div>
-            </select>
             <label>
               Phương thức thanh toán
             </label>
