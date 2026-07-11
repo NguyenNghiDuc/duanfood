@@ -1,25 +1,107 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tài khoản</title>
-  <link rel="stylesheet" href="/css/profile.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tài khoản của tôi</title>
+    <link rel="stylesheet" href="/css/profile.css">
 </head>
 <body>
-  <main>
-    <section class="card">
-      <h1>Tài khoản</h1>
-      <p class="subtext">Xin chào, <strong><%= user.username %></strong>.</p>
-      <p>Số dư ví: <strong><%= Number(user.balance || 0).toLocaleString('vi-VN') %> ₫</strong></p>
-      <p><a href="/wallet/top-up">Nạp tiền vào ví</a></p>
-      <nav>
-        <a href="/">Trang chủ</a>
-        <a href="/orders">Đơn hàng</a>
-        <a href="/cart">Giỏ hàng</a>
-        <a href="/logout">Đăng xuất</a>
-      </nav>
+
+<div class="profile-container">
+
+    <aside class="sidebar">
+
+        <div class="avatar">
+            <div class="avatar-circle">
+                <%= (fullname || user.username).charAt(0).toUpperCase() %>
+            </div>
+
+            <h2><%= fullname || user.username %></h2>
+
+            <p><%= user.username %></p>
+        </div>
+
+        <div class="menu">
+            <a class="active">Thông tin cá nhân</a>
+            <a href="/">Trang chủ</a>
+            <a href="/orders">Đơn hàng của tôi</a>
+            <a href="/profile/addresses">Địa chỉ giao hàng</a>
+            <a href="/wallet/top-up">Ví điện tử</a>
+            <a href="/logout">Đăng xuất</a>
+        </div>
+
+    </aside>
+
+    <section class="content">
+
+        <div class="card">
+
+            <h2>Thông tin cá nhân</h2>
+
+            <div class="grid">
+
+                <div class="form-group">
+                    <label>Họ và tên</label>
+                    <input value="<%= fullname || '' %>" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label>Tài khoản</label>
+                    <input value="<%= user.username %>" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label>Vai trò</label>
+                    <input value="<%= user.role=='admin'?'Quản trị viên':'Khách hàng' %>" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label>Số dư ví</label>
+                    <input value="<%= Number(user.balance||0).toLocaleString('vi-VN') %> ₫" readonly>
+                </div>
+
+            </div>
+
+            <a href="/profile/edit" class="btn">
+                Chỉnh sửa thông tin
+            </a>
+
+        </div>
+
+        <div class="card">
+
+            <h2>Địa chỉ mặc định</h2>
+
+            <% if(defaultAddress){ %>
+
+                <h4><%= defaultAddress.label %></h4>
+
+                <p>
+
+                    <%= defaultAddress.detail_address %>,
+                    <%= defaultAddress.street %>,
+                    <%= defaultAddress.ward %>,
+                    <%= defaultAddress.district %>,
+                    <%= defaultAddress.city %>
+
+                </p>
+
+            <% }else{ %>
+
+                <p>Bạn chưa có địa chỉ mặc định.</p>
+
+            <% } %>
+
+            <a href="/profile/addresses" class="btn">
+                Quản lý địa chỉ
+            </a>
+
+        </div>
+
     </section>
-  </main>
+
+</div>
+
 </body>
 </html>

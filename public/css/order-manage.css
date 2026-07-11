@@ -2,163 +2,210 @@
     margin:0;
     padding:0;
     box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
 }
 
 body{
-    font-family:"Segoe UI",sans-serif;
-    background:#f5f7fb;
+    background:#f5f7f9;
     color:#333;
 }
 
 .container{
-    max-width:1400px;
+    max-width:1300px;
     margin:40px auto;
-    padding:20px;
+    padding:0 20px;
 }
 
 .card{
     background:#fff;
     border-radius:20px;
     padding:35px;
-    box-shadow:0 8px 25px rgba(0,0,0,.08);
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
 }
 
-.card h1{
+h1{
     text-align:center;
-    font-size:42px;
-    color:#ff6b35;
-    margin-bottom:30px;
+    font-size:40px;
+    color:#1f8f3a;
+    margin-bottom:35px;
 }
 
 nav{
     display:flex;
     justify-content:center;
     flex-wrap:wrap;
-    gap:15px;
-    margin-bottom:35px;
+    gap:18px;
+    margin-bottom:40px;
 }
 
 nav a{
     text-decoration:none;
     color:#444;
-    background:#fff;
-    padding:12px 22px;
-    border-radius:30px;
-    font-weight:bold;
-    box-shadow:0 4px 12px rgba(0,0,0,.08);
+    background:#eef9f0;
+    padding:12px 24px;
+    border-radius:10px;
+    font-weight:600;
     transition:.3s;
 }
 
 nav a:hover{
-    background:#ff6b35;
+    background:#1f8f3a;
     color:#fff;
 }
 
-.order-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(360px,1fr));
-    gap:25px;
-}
-
-.order-card{
+.account-box{
     background:#fff;
-    border-radius:18px;
-    padding:22px;
-    border:1px solid #eee;
-    box-shadow:0 5px 18px rgba(0,0,0,.08);
+    border:1px solid #e4e4e4;
+    border-left:6px solid #1f8f3a;
+    border-radius:15px;
+    padding:25px;
+    margin-bottom:25px;
     transition:.3s;
 }
 
-.order-card:hover{
-    transform:translateY(-5px);
-    box-shadow:0 10px 25px rgba(0,0,0,.12);
+.account-box:hover{
+    transform:translateY(-6px);
+    box-shadow:0 15px 35px rgba(0,0,0,.12);
 }
 
-.order-card h3{
-    color:#ff6b35;
-    font-size:26px;
+.account-box::before{
+    content:"🛒 Đơn hàng";
+    display:inline-block;
+    background:#1f8f3a;
+    color:#fff;
+    padding:6px 15px;
+    border-radius:20px;
     margin-bottom:18px;
+    font-size:14px;
+    font-weight:bold;
 }
 
-.order-card p{
+.account-box h3{
+    color:#1f8f3a;
+    margin-bottom:18px;
+    font-size:28px;
+}
+
+.account-box p{
     margin:10px 0;
-    font-size:16px;
+    font-size:17px;
     color:#555;
     line-height:1.6;
 }
 
-.order-card strong{
+.account-box strong{
     color:#222;
 }
 
-.order-card form{
-    margin-top:18px;
+.status{
+    display:inline-block;
+    padding:6px 14px;
+    border-radius:20px;
+    color:#fff;
+    font-size:14px;
+    font-weight:bold;
 }
 
-.order-card select{
-    width:100%;
-    padding:12px;
-    border:1px solid #ddd;
-    border-radius:10px;
-    outline:none;
-    font-size:15px;
-    margin-bottom:15px;
-    transition:.3s;
+.status.wait{
+    background:#f39c12;
 }
 
-.order-card select:focus{
-    border-color:#ff6b35;
+.status.ship{
+    background:#3498db;
+}
+
+.status.done{
+    background:#27ae60;
+}
+
+.status.cancel{
+    background:#e74c3c;
 }
 
 .btn{
-    width:100%;
-    padding:13px;
-    border:none;
-    border-radius:10px;
-    background:#ff6b35;
+    display:inline-block;
+    margin-top:18px;
+    background:#1f8f3a;
     color:#fff;
-    font-size:16px;
-    font-weight:bold;
+    border:none;
+    padding:12px 24px;
+    border-radius:8px;
     cursor:pointer;
+    font-size:16px;
     transition:.3s;
 }
 
 .btn:hover{
-    background:#e95b24;
+    background:#166b2b;
 }
 
 .empty-order{
     text-align:center;
-    padding:70px 20px;
-}
-
-.empty-order h2{
-    color:#ff6b35;
-    font-size:34px;
-    margin-bottom:15px;
-}
-
-.empty-order p{
+    padding:80px 20px;
     color:#777;
-    font-size:18px;
+    font-size:22px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:20px;
+}
+
+table th{
+    background:#1f8f3a;
+    color:#fff;
+    padding:15px;
+}
+
+table td{
+    padding:15px;
+    border-bottom:1px solid #eee;
+}
+
+table tr:hover{
+    background:#f9fff9;
+}
+
+select{
+    width:100%;
+    padding:10px;
+    margin-top:12px;
+    border:1px solid #ccc;
+    border-radius:8px;
+    outline:none;
+    font-size:15px;
+}
+
+button{
+    width:100%;
+    margin-top:15px;
+    padding:12px;
+    background:#1f8f3a;
+    color:#fff;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:16px;
+    transition:.3s;
+}
+
+button:hover{
+    background:#166b2b;
 }
 
 @media(max-width:768px){
 
     .container{
-        padding:15px;
+        margin:20px auto;
     }
 
     .card{
         padding:20px;
     }
 
-    .card h1{
-        font-size:32px;
-    }
-
-    .order-grid{
-        grid-template-columns:1fr;
+    h1{
+        font-size:30px;
     }
 
     nav{
@@ -166,7 +213,12 @@ nav a:hover{
     }
 
     nav a{
+        width:100%;
         text-align:center;
+    }
+
+    .account-box{
+        padding:18px;
     }
 
 }

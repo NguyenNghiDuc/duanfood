@@ -86,6 +86,24 @@ async function initFallbackSqlite(db) {
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL
   )`);
+  const [existingCategories] = await sqliteQuery(db, 'SELECT COUNT(*) AS total FROM categories', []);
+  if (existingCategories[0].total === 0) {
+    await exec(`INSERT INTO categories (name) VALUES
+      ('Đồ tươi sống'),
+      ('Rau củ'),
+      ('Trái cây'),
+      ('Hải sản'),
+      ('Gạo - Mì'),
+      ('Sữa và sản phẩm từ sữa'),
+      ('Thực phẩm đông lạnh'),
+      ('Thực phẩm khô'),
+      ('Gia vị'),
+      ('Đồ uống'),
+      ('Bánh kẹo'),
+      ('Bánh mì'),
+      ('Đồ gia dụng')
+    `);
+  }
   await exec(`CREATE TABLE IF NOT EXISTS foods (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     title TEXT NOT NULL,

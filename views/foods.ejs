@@ -9,35 +9,31 @@
 <body>
 
 <main class="food-page">
-    <h1>Danh sách món ăn</h1>
+    <% if (user && user.role === 'admin') { %>
+        <div class="admin-nav">
+            <a href="/admin" class="admin-nav-link">Trang chủ</a>
+            <a href="/foods" class="admin-nav-link active">Món ăn</a>
+            <a href="/admin/foods/add" class="admin-nav-link">Thêm món ăn</a>
+            <a href="/admin/orders" class="admin-nav-link">Quản lý đơn hàng</a>
+            <a href="/admin/categories" class="admin-nav-link">Quản lý danh mục</a>
+            <a href="/admin/stats" class="admin-nav-link">Thống kê doanh thu</a>
+            <span class="admin-greeting">Xin chào, <strong><%= user.username %></strong></span>
+        </div>
+    <% } %>
 
-    <nav>
-        <a href="/">Trang chủ</a>
-        <a href="/foods">Món ăn</a>
-        <a href="/addresses">Địa Chỉ</a>
+    <header class="food-header">
+        <div>
+            <h1>Danh sách món ăn</h1>
+            <p>Tìm món, lọc theo danh mục và sắp xếp để đặt hàng nhanh chóng.</p>
+        </div>
 
-        <% if(user){ %>
-            <% if(user.role==="admin"){ %>
-                <a href="/admin/foods/add">Thêm món ăn</a>
-                <a href="/admin/orders">Quản lý đơn hàng</a>
-                <a href="/admin/categories">Quản lý danh mục</a>
-                <a href="/admin/stats">Thống kê doanh thu</a>
-            <% }else{ %>
-                <a href="/cart">Giỏ hàng</a>
-                <a href="/orders">Đơn hàng</a>
-                <a href="/wallet">Ví</a>
-            <% } %>
-
-            <span>
-                Xin chào, <%= user.username %>
-            </span>
-
-            <a href="/logout">Đăng xuất</a>
-        <% }else{ %>
-            <a href="/login">Đăng nhập</a>
-            <a href="/register">Đăng ký</a>
-        <% } %>
-    </nav>
+        <div class="food-header-actions">
+            <a href="/foods?categoryId=&keyword=<%= encodeURIComponent(keyword || '') %>&sort=<%= sort || 'new' %>" class="tab <%= !categoryId ? 'active' : '' %>">Tất cả</a>
+            <% categories.slice(0, 4).forEach(category => { %>
+                <a href="/foods?categoryId=<%= category.id %>&keyword=<%= encodeURIComponent(keyword || '') %>&sort=<%= sort || 'new' %>" class="tab <%= String(categoryId) === String(category.id) ? 'active' : '' %>"><%= category.name %></a>
+            <% }) %>
+        </div>
+    </header>
 
     <form method="GET" action="/foods" class="food-filter">
         <input
@@ -50,111 +46,78 @@
         <select name="categoryId">
             <option value="">Tất cả danh mục</option>
 
-            <option value="1" <%= String(categoryId)==="1" ? "selected" : "" %>>
-                Đồ ăn
-            </option>
-
-            <option value="2" <%= String(categoryId)==="2" ? "selected" : "" %>>
-                Đồ uống
-            </option>
-
-            <option value="3" <%= String(categoryId)==="3" ? "selected" : "" %>>
-                Tráng miệng
-            </option>
-
-            <option value="4" <%= String(categoryId)==="4" ? "selected" : "" %>>
-                Đồ dùng trong nhà
-            </option>
-
-            <option value="5" <%= String(categoryId)==="5" ? "selected" : "" %>>
-                Đồ dùng nấu ăn
-            </option>
+            <% categories.forEach(category => { %>
+                <option
+                    value="<%= category.id %>"
+                    <%= String(categoryId) === String(category.id) ? "selected" : "" %>
+                >
+                    <%= category.name %>
+                </option>
+            <% }) %>
         </select>
 
-        <button type="submit">
+        <select name="sort">
+            <option value="new" <%= sort === 'new' ? 'selected' : '' %>>Mới nhất</option>
+            <option value="priceLow" <%= sort === 'priceLow' ? 'selected' : '' %>>Giá thấp - cao</option>
+            <option value="priceHigh" <%= sort === 'priceHigh' ? 'selected' : '' %>>Giá cao - thấp</option>
+        </select>
+
+        <button type="submit" class="btn btn-primary">
             Tìm kiếm
         </button>
     </form>
 
+  
     <% if(foods && foods.length > 0){ %>
         <ul class="food-list">
             <% foods.forEach(food => { %>
                 <li>
                     <div class="food-detail-image">
                         <% if(food.image){ %>
-                            <img
-                                src="<%= food.image %>"
-                                alt="<%= food.title %>"
-                            >
-                        <% }else{ %>
-                            <img
-                                src="/images/default-food.jpg"
-                                alt="Food"
-                            >
+                            <img src="<%= food.image %>" alt="<%= food.title %>">
+                        <% } else { %>
+                            <img src="/images/default-food.jpg" alt="<%= food.title %>">
                         <% } %>
+                        <span class="food-tag"><%= food.category_name || 'Món mới' %></span>
                     </div>
 
-                    <h3>
-                        <%= food.title %>
-                    </h3>
-
-                    <p>
-                        <%= food.description %>
-                    </p>
-
-                    <p>
-                        <strong>Danh mục:</strong>
-                        <%= food.category_name || "Chưa phân loại" %>
-                    </p>
-
-                    <p>
-                        <strong>Giá:</strong>
-                        <%= Number(food.price).toLocaleString("vi-VN") %> ₫
-                    </p>
-                   <p>
-                        <strong>Định lượng:</strong>
-                        <%= food.gram || 0 %> g
-                     </p>
-
-                    <p>
-                        <a href="/foods/<%= food.id %>">
-                            Xem chi tiết
-                        </a>
-                    </p>
-
-                    <div class="food-actions">
-                        <form
-                            method="POST"
-                            action="/cart/add/<%= food.id %>"
-                        >
-                            <button
-                                type="submit"
-                                class="btn"
-                            >
-                                Thêm vào giỏ
-                            </button>
-                        </form>
-
-                        <% if(user && user.role==="admin"){ %>
-                            <form
-                                method="POST"
-                                action="/admin/foods/delete/<%= food.id %>"
-                                onsubmit="return confirm('Bạn có chắc muốn xóa món này?')"
-                            >
-                                <button
-                                    type="submit"
-                                    class="delete-btn"
-                                >
-                                    Xóa món
+                    <div class="food-card-body">
+                        <h3><%= food.title %></h3>
+                        <p class="food-description"><%= food.description %></p>
+                        <div class="food-price-row">
+                            <strong class="food-price"><%= Number(food.price).toLocaleString('vi-VN') %> ₫</strong>
+                            <span class="food-rating">⭐ 4.8</span>
+                        </div>
+                        <div class="food-actions">
+                            <form method="POST" action="/cart/add/<%= food.id %>">
+                                <button type="submit" class="btn btn-primary">
+                                    + Thêm vào giỏ
                                 </button>
                             </form>
-                        <% } %>
+
+                            <% if(user && user.role === "admin"){ %>
+                                <div class="admin-food-actions">
+                                    <a href="/admin/foods/edit/<%= food.id %>" class="btn btn-secondary">
+                                        Chỉnh sửa
+                                    </a>
+                                    <form
+                                        method="POST"
+                                        action="/admin/foods/delete/<%= food.id %>"
+                                        onsubmit="return confirm('Bạn có chắc muốn xóa món này?')"
+                                    >
+                                        <button type="submit" class="delete-btn">
+                                            Xóa
+                                        </button>
+                                    </form>
+                                </div>
+                            <% } %>
+                        </div>
                     </div>
                 </li>
             <% }) %>
         </ul>
-    <% }else{ %>
-        <h2 style="text-align:center;margin-top:50px;">
+    <% } else { %>
+        <h2 style="text-align:center; margin-top:50px;">
             Chưa có món ăn nào
         </h2>
     <% } %>

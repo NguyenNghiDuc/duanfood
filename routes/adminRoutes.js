@@ -5,6 +5,8 @@ const { requireLogin } = require('../middleware/auth')
 const { requireAdmin } = require('../middleware/admin')
 
 router.get('/orders', requireLogin, requireAdmin, adminController.listOrders)
+router.get('/orders/update/:id', requireLogin, requireAdmin, (req, res) => res.redirect('/admin/orders'))
+router.post('/orders/update/:id', requireLogin, requireAdmin, adminController.updateOrderStatus)
 router.get('/categories', requireLogin, requireAdmin, adminController.showCategories)
 router.post('/categories/add', requireLogin, requireAdmin, adminController.addCategory)
 router.post('/categories/delete/:id', requireLogin, requireAdmin, adminController.deleteCategory)

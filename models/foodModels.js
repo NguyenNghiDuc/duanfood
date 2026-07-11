@@ -3,7 +3,7 @@ const db = require('../config/db')
 async function initFoodSchema() {
   const [existingCategories] = await db.query('SELECT COUNT(*) AS total FROM categories')
   if (existingCategories[0].total === 0) {
-    await db.query("INSERT INTO categories (name) VALUES ('Đồ ăn'), ('Đồ uống'), ('Tráng miệng')")
+    await db.query("INSERT INTO categories (name) VALUES ('Đồ tươi sống'), ('Rau củ'), ('Trái cây'), ('Hải sản'), ('Gạo - Mì'), ('Sữa và sản phẩm từ sữa'), ('Thực phẩm đông lạnh'), ('Thực phẩm khô'), ('Gia vị'), ('Đồ uống'), ('Bánh kẹo'), ('Bánh mì'), ('Đồ gia dụng')")
   }
 
   const [existingDelivery] = await db.query('SELECT COUNT(*) AS total FROM delivery_companies')
@@ -21,7 +21,7 @@ async function getAllCategories() {
   return rows
 }
 
-async function getFoods({ keyword = '', categoryId = '' } = {}) {
+async function getFoods({ keyword = '', categoryId = '', sort = 'new' } = {}) {
   let sql = `SELECT f.*, c.name AS category_name FROM foods f LEFT JOIN categories c ON c.id = f.category_id WHERE 1=1`
   const params = []
 
@@ -35,7 +35,17 @@ async function getFoods({ keyword = '', categoryId = '' } = {}) {
     params.push(categoryId)
   }
 
-  sql += ' ORDER BY f.id DESC'
+  switch (sort) {
+    case 'priceLow':
+      sql += ' ORDER BY f.price ASC'
+      break
+    case 'priceHigh':
+      sql += ' ORDER BY f.price DESC'
+      break
+    default:
+      sql += ' ORDER BY f.id DESC'
+  }
+
   const [rows] = await db.query(sql, params)
   return rows
 }

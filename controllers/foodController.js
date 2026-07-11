@@ -1,13 +1,16 @@
 const foodModel = require('../models/foodModels')
+const postModel = require('../models/postModels')
 
 async function showHome(req, res, next) {
   try {
     const foods = await foodModel.getFoods({})
     const categories = await foodModel.getAllCategories()
+    const posts = await postModel.getAllPosts()
 
     res.render('home', {
       foods: (foods || []).slice(0, 6),
-      categories: categories || []
+      categories: categories || [],
+      posts: posts || []
     })
   } catch (error) {
     next(error)
@@ -18,19 +21,22 @@ async function showFoods(req, res, next) {
   try {
     const keyword = req.query.keyword || ''
     const categoryId = req.query.categoryId || ''
+    const sort = req.query.sort || 'new'
 
     const categories = await foodModel.getAllCategories()
 
     const foods = await foodModel.getFoods({
       keyword,
-      categoryId
+      categoryId,
+      sort
     })
 
     res.render('foods', {
       foods,
       categories,
       keyword,
-      categoryId
+      categoryId,
+      sort
     })
   } catch (error) {
     next(error)

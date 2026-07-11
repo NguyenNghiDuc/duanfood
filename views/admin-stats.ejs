@@ -3,45 +3,113 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Thống kê admin</title>
+  <title>Dashboard - Quản trị</title>
   <link rel="stylesheet" href="/css/admin-stats.css" />
 </head>
 <body>
-  <main class="container">
-    <section class="card">
-      <h1>Thống kê doanh thu</h1>
-      <nav>
-        <a href="/">Trang chủ</a>
-        <a href="/admin/orders">Đơn hàng</a>
-        <a href="/admin/categories">Danh mục</a>
-        <a href="/logout">Đăng xuất</a>
-      </nav>
-      <div class="stats-grid">
-        <article class="stat-card">
-          <h2>Tổng đơn</h2>
-          <p><%= totalOrders %></p>
-        </article>
-        <article class="stat-card">
-          <h2>Doanh thu</h2>
-          <p><%= Number(totalRevenue).toLocaleString('vi-VN') %> ₫</p>
-        </article>
-      </div>
-      <h2>Đơn hàng mới</h2>
-      <% if (recentOrders && recentOrders.length) { %>
-        <div class="order-grid">
-          <% recentOrders.forEach(order => { %>
-            <article class="order-card">
-              <h3>Đơn #<%= order.id %></h3>
-              <p><strong>Khách:</strong> <%= order.username %></p>
-              <p><strong>Tổng:</strong> <%= Number(order.total + order.shipping_fee).toLocaleString('vi-VN') %> ₫</p>
-              <p><strong>Trạng thái:</strong> <%= order.status %></p>
-            </article>
-          <% }) %>
+  <div class="admin-dashboard">
+    <aside class="sidebar">
+      <div class="brand">
+        <span class="brand-logo">F</span>
+        <div>
+          <h1>Food Admin</h1>
+          <p>Quản trị hệ thống</p>
         </div>
-      <% } else { %>
-        <p>Chưa có đơn mới.</p>
-      <% } %>
-    </section>
-  </main>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a class="active" href="/admin/stats">Dashboard</a>
+        <a href="/admin/orders">Quản lý đơn hàng</a>
+        <a href="/admin/categories">Quản lý danh mục</a>
+        <a href="/foods">Quản lý sản phẩm</a>
+        <a href="/">Trang chủ</a>
+        <a href="/logout" class="logout-link">Đăng xuất</a>
+      </nav>
+    </aside>
+
+    <main class="dashboard-content">
+      <header class="dashboard-header">
+        <div>
+          <p class="subtitle">Bảng điều khiển</p>
+          <h1>Quản lý hệ thống</h1>
+        </div>
+      </header>
+
+      <section class="summary-grid">
+        <article class="summary-card">
+          <p class="summary-label">Đơn hàng</p>
+          <h2><%= totalOrders %></h2>
+          <span>Đơn mới và đang xử lý</span>
+        </article>
+
+        <article class="summary-card highlight">
+          <p class="summary-label">Doanh thu</p>
+          <h2><%= Number(totalRevenue).toLocaleString('vi-VN') %> ₫</h2>
+          <span>Tổng doanh thu hệ thống</span>
+        </article>
+
+        <article class="summary-card">
+          <p class="summary-label">Đơn mới</p>
+          <h2><%= recentOrders ? recentOrders.length : 0 %></h2>
+          <span>Đơn hàng gần đây</span>
+        </article>
+
+        <article class="summary-card">
+          <p class="summary-label">Khách hàng</p>
+          <h2>3</h2>
+          <span>Khách mới tuần này</span>
+        </article>
+      </section>
+
+      <section class="dashboard-panels">
+        <div class="panel chart-panel">
+          <div class="panel-header">
+            <h2>Biểu đồ doanh thu</h2>
+            <span>1 tuần gần nhất</span>
+          </div>
+          <div class="chart-placeholder">
+            <span>Biểu đồ doanh thu sẽ hiển thị tại đây</span>
+          </div>
+        </div>
+
+        <div class="panel best-panel">
+          <div class="panel-header">
+            <h2>Danh mục bán chạy</h2>
+          </div>
+          <ul class="best-list">
+            <li>Đồ tươi sống</li>
+            <li>Rau củ</li>
+            <li>Trái cây</li>
+            <li>Đồ uống</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="recent-section">
+        <div class="section-header">
+          <h2>Đơn hàng mới</h2>
+          <a href="/admin/orders">Xem tất cả</a>
+        </div>
+
+        <% if (recentOrders && recentOrders.length) { %>
+          <div class="order-grid">
+            <% recentOrders.forEach(order => { %>
+              <article class="order-card">
+                <div class="order-head">
+                  <h3>Đơn #<%= order.id %></h3>
+                  <span class="status"><%= order.status %></span>
+                </div>
+                <p><strong>Khách hàng:</strong> <%= order.username %></p>
+                <p><strong>Thanh toán:</strong> <%= order.payment_method %></p>
+                <p><strong>Tổng:</strong> <%= Number(order.total + order.shipping_fee).toLocaleString('vi-VN') %> ₫</p>
+              </article>
+            <% }) %>
+          </div>
+        <% } else { %>
+          <p class="empty-state">Chưa có đơn mới.</p>
+        <% } %>
+      </section>
+    </main>
+  </div>
 </body>
 </html>

@@ -2,38 +2,38 @@ const db = require('../config/db')
 
 const foods = [
   {
-    title: 'Thịt Heo',
-    description: 'Thịt heo ngon, đậm đà',
+    title: 'Thịt heo tươi',
+    description: 'Thịt heo tươi ngon, đậm vị',
     price: 80000,
-    category: 'Đồ ăn',
+    category: 'Đồ tươi sống',
     image: '/images/thitheo.png'
   },
   {
-    title: 'Trà Sữa',
+    title: 'Trà sữa',
     description: 'Trà sữa thơm ngon',
     price: 30000,
     category: 'Đồ uống',
     image: '/images/trasua.png'
   },
   {
-    title: 'Bánh Kem',
+    title: 'Bánh kem',
     description: 'Bánh kem ngọt mềm',
     price: 120000,
-    category: 'Tráng miệng',
+    category: 'Bánh kẹo',
     image: '/images/banhkem.png'
   },
   {
-    title: 'Bát Ăn',
+    title: 'Bát ăn',
     description: 'Bát sứ cao cấp',
     price: 50000,
-    category: 'Đồ dùng trong nhà',
+    category: 'Đồ gia dụng',
     image: '/images/bat.png'
   },
   {
-    title: 'Nồi Chiên',
+    title: 'Nồi chiên không dầu',
     description: 'Nồi chiên tiện lợi',
     price: 350000,
-    category: 'Đồ dùng nấu ăn',
+    category: 'Đồ gia dụng',
     image: '/images/noichien.png'
   }
 ]

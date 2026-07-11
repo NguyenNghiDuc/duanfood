@@ -1,5 +1,5 @@
 const db = require('../config/db')
-const foodModel = require('../models/foodModel')
+const foodModel = require('../models/foodModels')
 const bcrypt = require('bcrypt')
 
 async function init() {
@@ -63,11 +63,19 @@ async function init() {
     await db.query(`
       INSERT IGNORE INTO categories (name)
       VALUES
-        ('Đồ ăn'),
+        ('Đồ tươi sống'),
+        ('Rau củ'),
+        ('Trái cây'),
+        ('Hải sản'),
+        ('Gạo - Mì'),
+        ('Sữa và sản phẩm từ sữa'),
+        ('Thực phẩm đông lạnh'),
+        ('Thực phẩm khô'),
+        ('Gia vị'),
         ('Đồ uống'),
-        ('Tráng miệng'),
-        ('Đồ dùng trong nhà'),
-        ('Đồ dùng nấu ăn')
+        ('Bánh kẹo'),
+        ('Bánh mì'),
+        ('Đồ gia dụng')
     `)
 
     await foodModel.initFoodSchema()

@@ -8,11 +8,14 @@
 </head>
 <body>
 
-<div class="container">
-    <div class="card login-card">
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <span class="auth-icon">🍃</span>
+            <h1>Đăng nhập</h1>
+        </div>
 
-        <h1> Đăng nhập</h1>
-        <p class="subtext">Chào mừng bạn quay trở lại với Food</p>
+        <p class="auth-subtitle">Đăng nhập để tiếp tục trải nghiệm mua hàng và ưu đãi từ Food.</p>
 
         <% if (error) { %>
             <div class="error-box">
@@ -20,13 +23,13 @@
             </div>
         <% } %>
 
-        <form method="POST" action="/login" class="login-form">
+        <form method="POST" action="/login" class="auth-form login-form">
 
-            <label>Tên đăng nhập</label>
+            <label>Email hoặc tên đăng nhập</label>
             <input
                 type="text"
                 name="username"
-                placeholder="Nhập username..."
+                placeholder="Nhập email hoặc username"
                 required
             >
 
@@ -34,20 +37,25 @@
             <input
                 type="password"
                 name="password"
-                placeholder="Nhập mật khẩu..."
+                placeholder="Nhập mật khẩu"
                 required
             >
 
-            <button type="submit" class="btn">
+            <label class="checkbox-row">
+                <input type="checkbox" name="remember">
+                Ghi nhớ đăng nhập
+            </label>
+
+            <button type="submit" class="btn btn-primary">
                 Đăng nhập
             </button>
 
         </form>
 
-        <p class="register-link">
-            Chưa có tài khoản?
+        <div class="auth-footer">
+            <span>Chưa có tài khoản?</span>
             <a href="/register">Đăng ký ngay</a>
-        </p>
+        </div>
 
         <div class="back-home">
             <a href="/">← Quay về Trang chủ</a>
