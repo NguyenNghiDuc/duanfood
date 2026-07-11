@@ -12,13 +12,11 @@ body {
   color: #333;
 }
 
-
 .container {
   max-width: 1000px;
   margin: 40px auto;
   padding: 20px;
 }
-
 
 .card {
   background: #fff;
@@ -32,7 +30,6 @@ body {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
-
 
 h1 {
   font-size: 28px;
@@ -62,7 +59,6 @@ nav a:hover {
   color: #fff;
 }
 
-
 .notice {
   background: #e7f9ed;
   color: #1a7f37;
@@ -72,13 +68,11 @@ nav a:hover {
   margin-bottom: 15px;
 }
 
-
 .address-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 20px;
 }
-
 
 .address-card {
   background: #ffffff;
@@ -94,7 +88,6 @@ nav a:hover {
   box-shadow: 0 12px 25px rgba(0,0,0,0.08);
 }
 
-
 .address-card-header {
   display: flex;
   justify-content: space-between;
@@ -108,7 +101,6 @@ nav a:hover {
   color: #1f3c88;
 }
 
-
 .badge {
   display: inline-block;
   margin-top: 5px;
@@ -119,20 +111,17 @@ nav a:hover {
   border-radius: 20px;
 }
 
-
 .address-actions {
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
 
-
 .address-card p {
   font-size: 14px;
   margin: 4px 0;
   color: #555;
 }
-
 
 .btn {
   display: inline-block;
@@ -149,7 +138,6 @@ nav a:hover {
 .btn:hover {
   transform: scale(1.03);
 }
-
 
 .btn-secondary {
   background: #eef3ff;
@@ -173,7 +161,6 @@ nav a:hover {
   background: #d93025;
   color: #fff;
 }
-
 
 .btn:not(.btn-secondary):not(.btn-danger) {
   background: #1f3c88;

@@ -12,14 +12,12 @@ body{
     min-height:100vh;
 }
 
-
 .container,
 .news-wrapper{
     width:90%;
     max-width:1200px;
     margin:40px auto;
 }
-
 
 .news-header{
     text-align:center;
@@ -37,7 +35,6 @@ body{
     color:#777;
     font-size:18px;
 }
-
 
 .news-nav{
     background:#fff;
@@ -102,13 +99,11 @@ body{
     box-shadow:0 5px 15px rgba(0,0,0,.05);
 }
 
-
 .news-grid{
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(330px,1fr));
     gap:30px;
 }
-
 
 .news-card{
     background:white;
@@ -156,7 +151,6 @@ body{
     line-height:1.8;
     color:#666;
 }
-
 
 .news-actions{
     margin-top:25px;
@@ -207,7 +201,6 @@ body{
     opacity:.9;
 }
 
-
 .empty-news{
     background:white;
     padding:70px;
@@ -218,7 +211,6 @@ body{
     box-shadow:0 10px 25px rgba(0,0,0,.08);
 }
 
-
 .card{
     background:white;
     border-radius:25px;
@@ -226,7 +218,6 @@ body{
     box-shadow:0 10px 25px rgba(0,0,0,.08);
     margin-bottom:30px;
 }
-
 
 input,
 select,
@@ -247,7 +238,6 @@ textarea:focus{
     border-color:#ff6b35;
 }
 
-
 .auth-box{
     max-width:500px;
     margin:60px auto;
@@ -262,7 +252,6 @@ textarea:focus{
     color:#ff6b35;
     margin-bottom:25px;
 }
-
 
 .food-list{
     display:grid;
@@ -292,14 +281,12 @@ textarea:focus{
     margin-bottom:15px;
 }
 
-
 footer{
     margin-top:50px;
     text-align:center;
     padding:30px;
     color:#666;
 }
-
 
 @media(max-width:768px){
 

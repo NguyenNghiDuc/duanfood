@@ -743,7 +743,6 @@ img{
 
 .mini-banner:hover{transform:translateY(-6px) scale(1.02)}
 
-
 .card h2{
     font-size:38px;
     font-weight:800;
@@ -762,8 +761,6 @@ img{
     border-radius:20px;
     background:linear-gradient(90deg,#ff6b35,#ffb347);
 }
-
-
 
 .promo-grid{
     display:grid;
