@@ -3,7 +3,7 @@ const express = require("express")
 const path = require("path")
 const db = require("./config/db")
 const session = require("express-session")
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcryptjs')
 const app = express()
 const port = process.env.PORT || 5000
 app.set("view engine", "ejs")
@@ -36,6 +36,28 @@ app.use(notFoundHandler)
 app.use(errorHandler)
 
 const host = process.env.HOST || 'localhost'
-app.listen(port, host, () => {
+const server = app.listen(port, host, () => {
   console.log(`Server is running at http://${host}:${port}`)
 })
+
+let isShuttingDown = false
+
+function gracefulShutdown(signal) {
+  if (isShuttingDown) return
+  isShuttingDown = true
+
+  console.log(`Received ${signal}, shutting down server...`)
+
+  server.close((err) => {
+    if (err) {
+      console.error('Server close failed:', err.message)
+      process.exit(1)
+    }
+
+    console.log('Server stopped cleanly')
+    process.exit(0)
+  })
+}
+
+process.on('SIGINT', () => gracefulShutdown('SIGINT'))
+process.on('SIGTERM', () => gracefulShutdown('SIGTERM'))

@@ -143,6 +143,8 @@ async function initFallbackSqlite(db) {
 
 let mysqlPool = null;
 let sqliteDb = null;
+let initPromise = null;
+let isClosing = false;
 
 const dbInterface = {
   query: async (sql, params) => {
@@ -168,12 +170,39 @@ const dbInterface = {
         }
       }, 100);
     });
+  },
+  close: async () => {
+    if (isClosing) return;
+    isClosing = true;
+
+    if (initPromise) {
+      try {
+        await initPromise;
+      } catch (error) {
+        // Initialization may fail during a forced shutdown; continue with close.
+      }
+    }
+
+    if (mysqlPool) {
+      await mysqlPool.end();
+      mysqlPool = null;
+    }
+
+    if (sqliteDb) {
+      await new Promise((resolve, reject) => {
+        sqliteDb.close((err) => {
+          if (err) return reject(err);
+          resolve();
+        });
+      });
+      sqliteDb = null;
+    }
   }
 };
 
 module.exports = dbInterface;
 
-(async function init() {
+initPromise = (async function init() {
 
   const useMySQL = process.env.USE_MYSQL === '1';
 
@@ -192,7 +221,7 @@ module.exports = dbInterface;
     await initFallbackSqlite(sqliteDb);
     console.log('Database engine: SQLite (fallback)');
     
-    const bcrypt = require('bcrypt');
+    const bcrypt = require('bcryptjs');
     const adminHash = await bcrypt.hash('27032006', 10);
     const [existingAdmins] = await sqliteQuery(sqliteDb, 'SELECT id FROM users WHERE username = ?', ['admin']);
     if (existingAdmins && existingAdmins.length > 0) {

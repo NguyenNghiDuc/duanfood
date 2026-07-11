@@ -1,6 +1,6 @@
 const db = require('../config/db')
 const foodModel = require('../models/foodModels')
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcryptjs')
 
 async function init() {
   try {

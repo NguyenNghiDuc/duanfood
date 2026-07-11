@@ -1,128 +1,125 @@
 <!DOCTYPE html>
 <html lang="vi">
-<head>
+  <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản lý đơn hàng</title>
+    <title>
+      Quản lý đơn hàng
+    </title>
     <link rel="stylesheet" href="/css/order-manage.css">
-</head>
-
-<body>
-
-<div class="container">
-
-    <div class="card">
-
-        <h1>Quản lý đơn hàng</h1>
-
+  </head>
+  <body>
+    <div class="container">
+      <div class="card">
+        <h1>
+          Quản lý đơn hàng
+        </h1>
         <nav>
-            <a href="/"> Trang chủ</a>
-            <a href="/admin/stats">Thống kê</a>
-            <a href="/admin/categories">Danh mục</a>
-            <a href="/foods">Món ăn</a>
-            <a href="/logout">Đăng xuất</a>
+          <a href="/">
+            Trang chủ
+          </a>
+          <a href="/admin/stats">
+            Thống kê
+          </a>
+          <a href="/admin/categories">
+            Danh mục
+          </a>
+          <a href="/foods">
+            Món ăn
+          </a>
+          <a href="/logout">
+            Đăng xuất
+          </a>
         </nav>
-
         <% if (orders && orders.length > 0) { %>
-
         <div class="order-grid">
-
-            <% orders.forEach(order => { %>
-
-            <div class="order-card">
-
-                <h3>Đơn hàng #<%= order.id %></h3>
-
-                <p>
-                    <strong>Khách hàng:</strong>
-                    <%= order.username %>
-                </p>
-
-                <p>
-                    <strong>Phương thức thanh toán:</strong>
-                    <%= order.payment_method %>
-                </p>
-
-                <p>
-                    <strong>Địa chỉ:</strong>
-                    <%= order.delivery_address || "Chưa có" %>
-                </p>
-
-                <p>
-                    <strong>Đơn vị vận chuyển:</strong>
-                    <%= order.delivery_company || "Chưa có" %>
-                </p>
-
-                <p>
-                    <strong>Phí vận chuyển:</strong>
-                    <%= Number(order.shipping_fee || 0).toLocaleString("vi-VN") %> ₫
-                </p>
-
-                <p>
-                    <strong>Tổng tiền:</strong>
-                    <%= Number((order.total || 0) + (order.shipping_fee || 0)).toLocaleString("vi-VN") %> ₫
-                </p>
-
-                <p>
-                    <strong>Trạng thái:</strong>
-                    <%= order.status %>
-                </p>
-
-                <form method="POST" action="/admin/orders/update/<%= order.id %>">
-
-                    <select name="status">
-
-                        <option value="Chờ xác nhận"
-                            <%= order.status === "Chờ xác nhận" ? "selected" : "" %>>
-                            Chờ xác nhận
-                        </option>
-
-                        <option value="Đã xác nhận"
-                            <%= order.status === "Đã xác nhận" ? "selected" : "" %>>
-                            Đã xác nhận
-                        </option>
-
-                        <option value="Đang giao"
-                            <%= order.status === "Đang giao" ? "selected" : "" %>>
-                            Đang giao
-                        </option>
-
-                        <option value="Hoàn thành"
-                            <%= order.status === "Hoàn thành" ? "selected" : "" %>>
-                            Hoàn thành
-                        </option>
-
-                        <option value="Đã hủy"
-                            <%= order.status === "Đã hủy" ? "selected" : "" %>>
-                            Đã hủy
-                        </option>
-
-                    </select>
-
-                    <button class="btn" type="submit">
-                        Cập nhật trạng thái
-                    </button>
-
-                </form>
-
-            </div>
-
-            <% }) %>
-
+          <% orders.forEach(order => { %>
+          <div class="order-card">
+            <h3>
+              Đơn hàng #
+              <%= order.id %>
+            </h3>
+            <p>
+              <strong>
+                Khách hàng:
+              </strong>
+              <%= order.username %>
+            </p>
+            <p>
+              <strong>
+                Phương thức thanh toán:
+              </strong>
+              <%= order.payment_method %>
+            </p>
+            <p>
+              <strong>
+                Địa chỉ:
+              </strong>
+              <%= order.delivery_address || "Chưa có" %>
+            </p>
+            <p>
+              <strong>
+                Đơn vị vận chuyển:
+              </strong>
+              <%= order.delivery_company || "Chưa có" %>
+            </p>
+            <p>
+              <strong>
+                Phí vận chuyển:
+              </strong>
+              <%= Number(order.shipping_fee || 0).toLocaleString("vi-VN") %>
+              ₫
+            </p>
+            <p>
+              <strong>
+                Tổng tiền:
+              </strong>
+              <%= Number((order.total || 0) + (order.shipping_fee || 0)).toLocaleString("vi-VN") %>
+              ₫
+            </p>
+            <p>
+              <strong>
+                Trạng thái:
+              </strong>
+              <%= order.status %>
+            </p>
+            <form method="POST" action="/admin/orders/update/<%= order.id %>
+              ">
+              <select name="status">
+                <option value="Chờ xác nhận" <%= order.status === "Chờ xác nhận" ? "selected" : "" %>
+                  > Chờ xác nhận
+                </option>
+                <option value="Đã xác nhận" <%= order.status === "Đã xác nhận" ? "selected" : "" %>
+                  > Đã xác nhận
+                </option>
+                <option value="Đang giao" <%= order.status === "Đang giao" ? "selected" : "" %>
+                  > Đang giao
+                </option>
+                <option value="Hoàn thành" <%= order.status === "Hoàn thành" ? "selected" : "" %>
+                  > Hoàn thành
+                </option>
+                <option value="Đã hủy" <%= order.status === "Đã hủy" ? "selected" : "" %>
+                  > Đã hủy
+                </option>
+              </select>
+              <button class="btn" type="submit">
+                Cập nhật trạng thái
+              </button>
+            </form>
+          </div>
+          <% }) %>
         </div>
-
         <% } else { %>
-
         <div class="empty-order">
-            <h2>Chưa có đơn hàng nào</h2>
-            <p>Hiện tại chưa có đơn hàng trong hệ thống.</p>
+          <h2>
+            Chưa có đơn hàng nào
+          </h2>
+          <p>
+            Hiện tại chưa có đơn hàng trong hệ thống.
+          </p>
         </div>
-
         <% } %>
-
+      </div>
     </div>
-
-</div>
-
-</body>
+  </body>
 </html>

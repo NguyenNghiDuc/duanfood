@@ -1,28 +1,44 @@
 <!DOCTYPE html>
 <html lang="vi">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Danh mục</title>
-  <link rel="stylesheet" href="/css/style.css" />
-</head>
-<body>
-  <main class="container">
-    <section class="card">
-      <h1>Danh mục sản phẩm</h1>
-      <p class="subtext">Chọn danh mục để hiển thị sản phẩm phù hợp hoặc tìm kiếm nhanh hơn.</p>
-      <div class="category-grid">
-        <% if (categories && categories.length) { %>
-          <% categories.forEach(category => { %>
-            <a class="category-card" href="/foods?categoryId=<%= category.id %>">
-              <strong><%= category.name %></strong>
-            </a>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      Danh mục
+    </title>
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body>
+    <main class="container">
+      <section class="card">
+        <h1>
+          Danh mục sản phẩm
+        </h1>
+        <p class="subtext">
+          Chọn danh mục để hiển thị sản phẩm phù hợp hoặc tìm kiếm nhanh hơn.
+        </p>
+        <div class="category-grid">
+          <% if (categories && categories.length) { %>
+          <%
+          categories.forEach(category => { %>
+          <a
+            class="category-card"
+            href="/foods?categoryId=<%= category.id %>
+            "
+            >
+            <strong>
+              <%= category.name %>
+            </strong>
+          </a
+          >
           <% }) %>
-        <% } else { %>
-          <p>Không có danh mục nào.</p>
-        <% } %>
-      </div>
-    </section>
-  </main>
-</body>
+          <% } else { %>
+          <p>
+            Không có danh mục nào.
+          </p>
+          <% } %>
+        </div>
+      </section>
+    </main>
+  </body>
 </html>

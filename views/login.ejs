@@ -1,68 +1,77 @@
 <!DOCTYPE html>
 <html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đăng nhập - Food</title>
-    <link rel="stylesheet" href="/css/login.css">
-</head>
-<body>
-
-<div class="auth-container">
-    <div class="auth-card">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      Đăng nhập - Food
+    </title>
+    <link rel="stylesheet" href="/css/login.css" />
+  </head>
+  <body>
+    <div class="auth-container">
+      <div class="auth-card">
         <div class="auth-header">
-            <span class="auth-icon">🍃</span>
-            <h1>Đăng nhập</h1>
+          <span class="auth-icon">
+            🍃
+          </span>
+          <h1>
+            Đăng nhập
+          </h1>
         </div>
-
-        <p class="auth-subtitle">Đăng nhập để tiếp tục trải nghiệm mua hàng và ưu đãi từ Food.</p>
-
+        <p class="auth-subtitle">
+          Đăng nhập để tiếp tục trải nghiệm mua hàng và ưu đãi từ Food.
+        </p>
         <% if (error) { %>
-            <div class="error-box">
-                <%= error %>
-            </div>
+        <div class="error-box">
+          <%= error %>
+        </div>
         <% } %>
-
         <form method="POST" action="/login" class="auth-form login-form">
-
-            <label>Email hoặc tên đăng nhập</label>
-            <input
-                type="text"
-                name="username"
-                placeholder="Nhập email hoặc username"
-                required
+          <label>
+            Email hoặc tên đăng nhập
+          </label
+          >
+          <input
+            type="text"
+            name="username"
+            placeholder="Nhập email hoặc username"
+            required
+          />
+          <label>
+            Mật khẩu
+          </label
+          >
+          <input
+            type="password"
+            name="password"
+            placeholder="Nhập mật khẩu"
+            required
+          />
+          <label class="checkbox-row"
             >
-
-            <label>Mật khẩu</label>
-            <input
-                type="password"
-                name="password"
-                placeholder="Nhập mật khẩu"
-                required
-            >
-
-            <label class="checkbox-row">
-                <input type="checkbox" name="remember">
-                Ghi nhớ đăng nhập
-            </label>
-
-            <button type="submit" class="btn btn-primary">
-                Đăng nhập
-            </button>
-
+            <input type="checkbox" name="remember" />
+            Ghi nhớ đăng nhập
+          </label
+          >
+          <button type="submit" class="btn btn-primary">
+            Đăng nhập
+          </button>
         </form>
-
         <div class="auth-footer">
-            <span>Chưa có tài khoản?</span>
-            <a href="/register">Đăng ký ngay</a>
+          <span>
+            Chưa có tài khoản?
+          </span>
+          <a href="/register">
+            Đăng ký ngay
+          </a>
         </div>
-
         <div class="back-home">
-            <a href="/">← Quay về Trang chủ</a>
+          <a href="/">
+            ← Quay về Trang chủ
+          </a>
         </div>
-
+      </div>
     </div>
-</div>
-
-</body>
+  </body>
 </html>
