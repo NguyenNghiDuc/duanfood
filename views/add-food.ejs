@@ -87,14 +87,10 @@
             Danh mục
             <select name="category_id" required>
               <% categories.forEach(category => { %>
-              <option value="<%= category.id %>
-                ">
-                <%= category.name %>
-              </option>
+              <option value="<%= category.id %>"><%= category.name %></option>
               <% }) %>
             </select>
-          </label
-          >
+          </label>
           <label>
             URL ảnh món ăn
             <input type="text" name="image" placeholder="https://..." />
@@ -102,14 +98,11 @@
               Không cần upload, dùng link ảnh trực tiếp hoặc đường dẫn local như
               /images/tenfile.png
             </small>
-          </label
-          >
+          </label>
           <label>
             Mô tả món ăn
-            <textarea name="description" rows="5" required>
-            </textarea>
-          </label
-          >
+            <textarea name="description" rows="5" required></textarea>
+          </label>
           <button type="submit" class="btn">
             Lưu món ăn
           </button>
@@ -117,7 +110,21 @@
       </section>
     </main>
     <script>
-      const priceInput = document.getElementById('price-input') const addFoodForm = document.getElementById('add-food-form') function formatPrice(value) { const digits = String(value || '').replace(/\D/g, '') return digits.replace(/\B(?=(\d{3})+(?!\d))/g, '.') } priceInput.addEventListener('input', () => { priceInput.value = formatPrice(priceInput.value) }) addFoodForm.addEventListener('submit', () => { priceInput.value = priceInput.value.replace(/\./g, '') })
+      const priceInput = document.getElementById('price-input')
+      const addFoodForm = document.getElementById('add-food-form')
+
+      function formatPrice(value) {
+        const digits = String(value || '').replace(/\D/g, '')
+        return digits.replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+      }
+
+      priceInput.addEventListener('input', () => {
+        priceInput.value = formatPrice(priceInput.value)
+      })
+
+      addFoodForm.addEventListener('submit', () => {
+        priceInput.value = priceInput.value.replace(/\./g, '')
+      })
     </script>
   </body>
 </html>
