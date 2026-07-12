@@ -1,224 +1,549 @@
+/* ===========================
+        RESET
+=========================== */
+
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:'Segoe UI',sans-serif;
+    font-family:"Segoe UI",sans-serif;
 }
+
+:root{
+
+    --primary:#ff6b35;
+    --secondary:#ff9f43;
+    --success:#22c55e;
+    --warning:#f59e0b;
+    --danger:#ef4444;
+    --info:#3b82f6;
+
+    --text:#334155;
+    --muted:#64748b;
+
+    --white:#ffffff;
+
+    --shadow:
+    0 20px 45px rgba(0,0,0,.08);
+
+}
+
+/* ===========================
+        BODY
+=========================== */
 
 body{
-    background:#f5f7f9;
-    color:#333;
+
+    background:
+
+    radial-gradient(circle at top left,#fff0e5,transparent 40%),
+
+    linear-gradient(135deg,#fffaf6,#f8fafc);
+
+    color:var(--text);
+
 }
+
+
+/* ===========================
+      CONTAINER
+=========================== */
 
 .container{
-    max-width:1300px;
-    margin:40px auto;
+
+    max-width:1280px;
+
+    margin:50px auto;
+
     padding:0 20px;
+
 }
+
+
+/* ===========================
+        CARD
+=========================== */
 
 .card{
-    background:#fff;
-    border-radius:20px;
-    padding:35px;
-    box-shadow:0 10px 30px rgba(0,0,0,.08);
+
+    background:
+    rgba(255,255,255,.9);
+
+    backdrop-filter:blur(12px);
+
+    border-radius:28px;
+
+    padding:40px;
+
+    box-shadow:var(--shadow);
+
 }
+
+
+/* ===========================
+        TITLE
+=========================== */
 
 h1{
+
     text-align:center;
-    font-size:40px;
-    color:#1f8f3a;
+
+    font-size:42px;
+
     margin-bottom:35px;
+
+    font-weight:800;
+
+    background:
+
+    linear-gradient(
+    135deg,
+    #ff6b35,
+    #ff9f43
+    );
+
+    -webkit-background-clip:text;
+
+    color:transparent;
+
 }
 
+
+/* ===========================
+        NAVBAR
+=========================== */
+
 nav{
+
     display:flex;
+
     justify-content:center;
+
     flex-wrap:wrap;
-    gap:18px;
+
+    gap:16px;
+
     margin-bottom:40px;
+
 }
 
 nav a{
+
     text-decoration:none;
-    color:#444;
-    background:#eef9f0;
-    padding:12px 24px;
-    border-radius:10px;
-    font-weight:600;
-    transition:.3s;
+
+    padding:14px 24px;
+
+    border-radius:999px;
+
+    background:#fff4ed;
+
+    color:var(--primary);
+
+    font-weight:700;
+
+    transition:.35s;
+
 }
 
 nav a:hover{
-    background:#1f8f3a;
-    color:#fff;
+
+    background:
+
+    linear-gradient(
+    135deg,
+    #ff6b35,
+    #ff9f43);
+
+    color:white;
+
+    transform:translateY(-3px);
+
+    box-shadow:0 12px 25px rgba(255,107,53,.25);
+
 }
 
+
+/* ===========================
+      ORDER CARD
+=========================== */
+
 .account-box{
-    background:#fff;
-    border:1px solid #e4e4e4;
-    border-left:6px solid #1f8f3a;
-    border-radius:15px;
-    padding:25px;
-    margin-bottom:25px;
-    transition:.3s;
+
+    background:white;
+
+    border-radius:22px;
+
+    padding:30px;
+
+    margin-bottom:30px;
+
+    border-left:7px solid var(--primary);
+
+    box-shadow:
+
+    0 12px 30px rgba(0,0,0,.06);
+
+    transition:.35s;
+
+    position:relative;
+
+    overflow:hidden;
+
+}
+
+.account-box::after{
+
+    content:"";
+
+    position:absolute;
+
+    width:150px;
+
+    height:150px;
+
+    background:
+
+    rgba(255,107,53,.08);
+
+    border-radius:50%;
+
+    top:-60px;
+
+    right:-60px;
+
 }
 
 .account-box:hover{
-    transform:translateY(-6px);
-    box-shadow:0 15px 35px rgba(0,0,0,.12);
+
+    transform:translateY(-8px);
+
+    box-shadow:
+
+    0 25px 45px rgba(255,107,53,.18);
+
 }
 
 .account-box::before{
-    content:"🛒 Đơn hàng";
+
+    content:"🍽 Đơn hàng";
+
     display:inline-block;
-    background:#1f8f3a;
-    color:#fff;
-    padding:6px 15px;
-    border-radius:20px;
-    margin-bottom:18px;
-    font-size:14px;
+
+    padding:8px 18px;
+
+    border-radius:50px;
+
+    background:
+
+    linear-gradient(
+    135deg,
+    #ff6b35,
+    #ff9f43);
+
+    color:white;
+
     font-weight:bold;
+
+    margin-bottom:20px;
+
 }
 
 .account-box h3{
-    color:#1f8f3a;
+
+    color:var(--primary);
+
     margin-bottom:18px;
+
     font-size:28px;
+
 }
 
 .account-box p{
+
     margin:10px 0;
-    font-size:17px;
+
     color:#555;
-    line-height:1.6;
+
+    line-height:1.8;
+
 }
 
 .account-box strong{
+
     color:#222;
+
 }
 
+
+/* ===========================
+      STATUS
+=========================== */
+
 .status{
+
     display:inline-block;
-    padding:6px 14px;
-    border-radius:20px;
-    color:#fff;
+
+    padding:8px 16px;
+
+    border-radius:30px;
+
     font-size:14px;
+
     font-weight:bold;
+
+    color:white;
+
 }
 
 .status.wait{
-    background:#f39c12;
+
+    background:var(--warning);
+
 }
 
 .status.ship{
-    background:#3498db;
+
+    background:var(--info);
+
 }
 
 .status.done{
-    background:#27ae60;
+
+    background:var(--success);
+
 }
 
 .status.cancel{
-    background:#e74c3c;
+
+    background:var(--danger);
+
 }
 
-.btn{
+
+/* ===========================
+        BUTTON
+=========================== */
+
+.btn,
+button{
+
     display:inline-block;
+
+    width:100%;
+
     margin-top:18px;
-    background:#1f8f3a;
-    color:#fff;
+
+    padding:15px;
+
     border:none;
-    padding:12px 24px;
-    border-radius:8px;
+
+    border-radius:15px;
+
     cursor:pointer;
+
+    color:white;
+
     font-size:16px;
-    transition:.3s;
+
+    font-weight:700;
+
+    background:
+
+    linear-gradient(
+    135deg,
+    #ff6b35,
+    #ff9f43);
+
+    transition:.35s;
+
 }
 
-.btn:hover{
-    background:#166b2b;
+.btn:hover,
+button:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:
+
+    0 15px 30px rgba(255,107,53,.3);
+
 }
+
+
+/* ===========================
+      EMPTY ORDER
+=========================== */
 
 .empty-order{
+
     text-align:center;
-    padding:80px 20px;
-    color:#777;
-    font-size:22px;
+
+    padding:90px 20px;
+
+    color:#888;
+
+    font-size:24px;
+
 }
 
+.empty-order::before{
+
+    content:"🍔";
+
+    display:block;
+
+    font-size:70px;
+
+    margin-bottom:20px;
+
+}
+
+
+/* ===========================
+        TABLE
+=========================== */
+
 table{
+
     width:100%;
+
     border-collapse:collapse;
-    margin-top:20px;
+
+    margin-top:25px;
+
+    overflow:hidden;
+
+    border-radius:18px;
+
+}
+
+table thead{
+
+    background:
+
+    linear-gradient(
+    135deg,
+    #ff6b35,
+    #ff9f43);
+
+    color:white;
+
 }
 
 table th{
-    background:#1f8f3a;
-    color:#fff;
-    padding:15px;
+
+    padding:18px;
+
+    text-align:left;
+
 }
 
 table td{
-    padding:15px;
+
+    padding:18px;
+
     border-bottom:1px solid #eee;
+
 }
 
-table tr:hover{
-    background:#f9fff9;
+table tbody tr{
+
+    transition:.3s;
+
 }
+
+table tbody tr:hover{
+
+    background:#fff8f4;
+
+}
+
+
+/* ===========================
+      SELECT
+=========================== */
 
 select{
+
     width:100%;
-    padding:10px;
+
+    padding:14px;
+
     margin-top:12px;
-    border:1px solid #ccc;
-    border-radius:8px;
-    outline:none;
-    font-size:15px;
-}
 
-button{
-    width:100%;
-    margin-top:15px;
-    padding:12px;
-    background:#1f8f3a;
-    color:#fff;
-    border:none;
-    border-radius:8px;
-    cursor:pointer;
-    font-size:16px;
+    border-radius:12px;
+
+    border:1px solid #ddd;
+
+    background:white;
+
     transition:.3s;
+
 }
 
-button:hover{
-    background:#166b2b;
+select:focus{
+
+    outline:none;
+
+    border-color:var(--primary);
+
+    box-shadow:
+
+    0 0 0 4px rgba(255,107,53,.15);
+
 }
+
+
+/* ===========================
+      RESPONSIVE
+=========================== */
 
 @media(max-width:768px){
 
-    .container{
-        margin:20px auto;
-    }
+.container{
 
-    .card{
-        padding:20px;
-    }
+    margin:20px auto;
 
-    h1{
-        font-size:30px;
-    }
+}
 
-    nav{
-        flex-direction:column;
-    }
+.card{
 
-    nav a{
-        width:100%;
-        text-align:center;
-    }
+    padding:25px;
 
-    .account-box{
-        padding:18px;
-    }
+}
+
+h1{
+
+    font-size:32px;
+
+}
+
+nav{
+
+    flex-direction:column;
+
+}
+
+nav a{
+
+    width:100%;
+
+    text-align:center;
+
+}
+
+.account-box{
+
+    padding:22px;
+
+}
+
+table{
+
+    display:block;
+
+    overflow-x:auto;
+
+}
 
 }
