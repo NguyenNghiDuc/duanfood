@@ -36,9 +36,11 @@ nav a{
 }
 
 .username-highlight{
-    display:inline-block;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
     margin:0 8px;
-    padding:6px 12px;
+    padding:11px 18px;
     border-radius:999px;
     background:linear-gradient(135deg,#ff6b35,#ff9f43);
     color:#fff;

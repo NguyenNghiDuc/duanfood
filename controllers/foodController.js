@@ -19,9 +19,9 @@ async function showHome(req, res, next) {
 
 async function showFoods(req, res, next) {
   try {
-    const keyword = req.query.keyword || ''
-    const categoryId = req.query.categoryId || ''
-    const sort = req.query.sort || 'new'
+    const keyword = (req.query.keyword || '').trim()
+    const categoryId = (req.query.categoryId || '').trim()
+    const sort = (req.query.sort || 'new').trim()
 
     const categories = await foodModel.getAllCategories()
 

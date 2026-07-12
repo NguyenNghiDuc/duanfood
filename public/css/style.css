@@ -204,7 +204,8 @@ img{
 
 .login-btn,
 .register-btn,
-.logout-btn{
+.logout-btn,
+.username-highlight{
     display:inline-flex;
     align-items:center;
     justify-content:center;
@@ -214,6 +215,12 @@ img{
     font-weight:800;
     transition:var(--transition);
     box-shadow:var(--shadow-soft);
+}
+
+.username-highlight{
+    background:linear-gradient(135deg,#ff6b35,#ff9f43);
+    color:#fff;
+    text-decoration:none;
 }
 
 .login-btn{

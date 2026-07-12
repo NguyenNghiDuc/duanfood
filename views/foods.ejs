@@ -32,18 +32,16 @@
         <a href="/admin/stats" class="admin-nav-link">
           Thống kê doanh thu
         </a>
-        <a href="/logout" class="admin-nav-link">
+        <a href="/logout" class="admin-nav-link logout-link">
           Đăng xuất
         </a>
-      </nav>
-      <div class="admin-actions">
         <span class="admin-greeting">
           Xin chào,
           <strong>
-            <%= user.username %>
+            <span class="username-highlight"><%= user.username %></span>
           </strong>
         </span>
-      </div>
+      </nav>
     </div>
     <% } %>
     <header class="food-header">
@@ -70,17 +68,13 @@
       </div>
     </header>
     <form method="GET" action="/foods" class="food-filter">
-      <input type="text" name="keyword" value="<%= keyword || '' %>
-      " placeholder="Tìm món ăn..." >
+      <input type="text" name="keyword" value="<%= keyword || '' %>" placeholder="Tìm món ăn..." />
       <select name="categoryId">
         <option value="">
           Tất cả danh mục
         </option>
         <% categories.forEach(category => { %>
-        <option value="<%= category.id %>
-          "
-          <%= String(categoryId) === String(category.id) ? "selected" : "" %>
-          >
+        <option value="<%= category.id %>" <%= String(categoryId) === String(category.id) ? "selected" : "" %>>
           <%= category.name %>
         </option>
         <% }) %>
@@ -106,13 +100,9 @@
       <li>
         <div class="food-detail-image">
           <% if(food.image){ %>
-          <img src="<%= food.image %>
-          " alt="
-          <%= food.title %>
-          ">
+          <img src="<%= food.image %>" alt="<%= food.title %>">
           <% } else { %>
-          <img src="/images/default-food.jpg" alt="<%= food.title %>
-          ">
+          <img src="/images/default-food.jpg" alt="<%= food.title %>">
           <% } %>
           <span class="food-tag">
             <%= food.category_name || 'Món mới' %>
@@ -140,19 +130,16 @@
             </span>
           </div>
           <div class="food-actions">
-            <form method="POST" action="/cart/add/<%= food.id %>
-              ">
+            <form method="POST" action="/cart/add/<%= food.id %>">
               <button type="submit" class="btn btn-primary">
                 + Thêm vào giỏ
               </button>
             </form>
             <% if(user && user.role === "admin"){ %>
             <div class="admin-food-actions">
-              <a href="/admin/foods/edit/<%= food.id %>
-                " class="btn btn-secondary"> Chỉnh sửa
+              <a href="/admin/foods/edit/<%= food.id %>" class="btn btn-secondary"> Chỉnh sửa
               </a>
-              <form method="POST" action="/admin/foods/delete/<%= food.id %>
-                " onsubmit="return confirm('Bạn có chắc muốn xóa món này?')" >
+              <form method="POST" action="/admin/foods/delete/<%= food.id %>" onsubmit="return confirm('Bạn có chắc muốn xóa món này?')">
                 <button type="submit" class="delete-btn">
                   Xóa
                 </button>

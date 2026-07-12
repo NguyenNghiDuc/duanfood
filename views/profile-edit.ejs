@@ -6,7 +6,7 @@
     <title>
       Chỉnh sửa hồ sơ
     </title>
-    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/profile-edit.css" />
   </head>
   <body>
     <main class="container">
@@ -39,17 +39,12 @@
         <form method="POST" action="/profile/edit" class="form-grid">
           <label>
             Họ và tên
-          </label
-          >
-          <input type="text" name="fullname" value="<%= fullname %>
-          " />
-          <label
-            >
+          </label>
+          <input type="text" name="fullname" value="<%= fullname %>" />
+          <label>
             Tên đăng nhập
-          </label
-          >
-          <input type="text" value="<%= user.username %>
-          " disabled />
+          </label>
+          <input type="text" value="<%= user.username %>" disabled />
           <label
             >
             Mật khẩu mới

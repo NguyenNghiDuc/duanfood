@@ -230,15 +230,16 @@ nav a:hover{
   line-height:1.4;
 }
 
-.user-name{
+.user-name,
+.username-highlight{
   display:inline-flex;
   align-items:center;
   justify-content:center;
   margin-left:10px;
   padding:8px 16px;
   border-radius:999px;
-  background:rgba(255,111,0,.22);
-  color:#d94801;
+  background:linear-gradient(135deg,#ff6b35,#ff9f43);
+  color:#fff;
   font-weight:900;
   font-size:18px;
   letter-spacing:.02em;
