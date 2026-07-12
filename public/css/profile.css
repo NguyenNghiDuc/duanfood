@@ -2,129 +2,492 @@
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:Arial,sans-serif;
+    font-family:"Segoe UI",sans-serif;
+}
+
+:root{
+
+    --primary:#ff6b35;
+    --secondary:#ff9f43;
+    --bg:#fff8f2;
+    --white:#ffffff;
+    --text:#1f2937;
+    --muted:#64748b;
+    --border:#ececec;
+    --shadow:0 20px 40px rgba(0,0,0,.08);
+
 }
 
 body{
-    background:#f4f6f9;
+
+    background:
+    linear-gradient(
+    135deg,
+    #fff8f2,
+    #f5f7fb);
+
+    color:var(--text);
+
+    min-height:100vh;
+
 }
 
 .profile-container{
-    width:1200px;
+
+    max-width:1300px;
+
     margin:40px auto;
-    display:flex;
+
+    display:grid;
+
+    grid-template-columns:320px 1fr;
+
     gap:30px;
+
+    padding:0 20px;
+
 }
+
+/* ===========================
+        SIDEBAR
+=========================== */
 
 .sidebar{
-    width:280px;
-    background:#fff;
-    border-radius:12px;
-    padding:25px;
-    box-shadow:0 5px 20px rgba(0,0,0,.08);
+
+    background:white;
+
+    border-radius:28px;
+
+    padding:35px 30px;
+
+    box-shadow:var(--shadow);
+
+    height:fit-content;
+
+    position:sticky;
+
+    top:30px;
+
 }
 
+/* ===========================
+        AVATAR
+=========================== */
+
 .avatar{
+
     text-align:center;
+
+    margin-bottom:30px;
+
 }
 
 .avatar-circle{
-    width:110px;
-    height:110px;
-    border-radius:50%;
-    background:#4CAF50;
-    color:#fff;
-    font-size:42px;
-    font-weight:bold;
-    display:flex;
-    justify-content:center;
-    align-items:center;
+
+    width:130px;
+
+    height:130px;
+
     margin:auto;
+
+    border-radius:50%;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:46px;
+
+    font-weight:800;
+
+    color:white;
+
+    background:
+    linear-gradient(
+    135deg,
+    var(--primary),
+    var(--secondary));
+
+    box-shadow:
+    0 15px 35px rgba(255,107,53,.25);
+
+    transition:.35s;
+
+}
+
+.avatar-circle:hover{
+
+    transform:scale(1.05);
+
 }
 
 .avatar h2{
-    margin-top:15px;
+
+    margin-top:18px;
+
+    font-size:28px;
+
+    color:var(--text);
+
 }
 
 .avatar p{
-    color:#777;
-    margin-top:6px;
+
+    color:var(--muted);
+
+    margin-top:8px;
+
+    font-size:15px;
+
 }
 
+/* ===========================
+        MENU
+=========================== */
+
 .menu{
-    margin-top:30px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:12px;
+
 }
 
 .menu a{
-    display:block;
-    padding:14px;
+
     text-decoration:none;
-    color:#333;
-    border-radius:8px;
-    margin-bottom:10px;
+
+    color:#444;
+
+    padding:15px 20px;
+
+    border-radius:16px;
+
+    font-weight:600;
+
+    transition:.35s;
+
 }
 
-.menu a:hover,
-.menu .active{
-    background:#4CAF50;
-    color:#fff;
+.menu a:hover{
+
+    background:
+    linear-gradient(
+    135deg,
+    var(--primary),
+    var(--secondary));
+
+    color:white;
+
+    transform:translateX(6px);
+
 }
+
+.menu .active{
+
+    background:
+    linear-gradient(
+    135deg,
+    var(--primary),
+    var(--secondary));
+
+    color:white;
+
+    box-shadow:
+    0 12px 25px rgba(255,107,53,.25);
+
+}
+
+/* ===========================
+        CONTENT
+=========================== */
 
 .content{
-    flex:1;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:30px;
+
 }
 
+/* ===========================
+        CARD
+=========================== */
+
 .card{
-    background:#fff;
-    padding:30px;
-    border-radius:12px;
-    box-shadow:0 5px 20px rgba(0,0,0,.08);
-    margin-bottom:25px;
+
+    background:white;
+
+    border-radius:28px;
+
+    padding:35px;
+
+    box-shadow:var(--shadow);
+
+    transition:.35s;
+
+}
+
+.card:hover{
+
+    transform:translateY(-5px);
+
 }
 
 .card h2{
-    margin-bottom:25px;
+
+    font-size:30px;
+
+    color:var(--primary);
+
+    margin-bottom:28px;
+
 }
+
+/* ===========================
+        GRID
+=========================== */
 
 .grid{
+
     display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:20px;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:25px;
+
 }
 
+/* ===========================
+        FORM
+=========================== */
+
 .form-group{
+
     display:flex;
+
     flex-direction:column;
+
 }
 
 .form-group label{
-    margin-bottom:8px;
-    font-weight:bold;
+
+    margin-bottom:10px;
+
+    font-weight:700;
+
+    color:var(--text);
+
 }
 
 .form-group input{
-    padding:12px;
-    border:1px solid #ddd;
-    border-radius:8px;
+
+    padding:15px;
+
+    border-radius:15px;
+
+    border:1px solid #e5e7eb;
+
     background:#fafafa;
+
+    transition:.3s;
+
+    font-size:15px;
+
 }
 
+.form-group input:focus{
+
+    outline:none;
+
+    border-color:var(--primary);
+
+    background:white;
+
+    box-shadow:
+    0 0 0 4px rgba(255,107,53,.12);
+
+}
+
+/* ===========================
+        BUTTON
+=========================== */
+
 .btn{
-    display:inline-block;
-    margin-top:25px;
-    background:#4CAF50;
-    color:#fff;
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    margin-top:30px;
+
+    padding:15px 35px;
+
+    border-radius:999px;
+
     text-decoration:none;
-    padding:12px 25px;
-    border-radius:8px;
+
+    font-weight:700;
+
+    color:white;
+
+    background:
+    linear-gradient(
+    135deg,
+    var(--primary),
+    var(--secondary));
+
+    transition:.35s;
+
+    box-shadow:
+    0 15px 30px rgba(255,107,53,.25);
+
 }
 
 .btn:hover{
-    background:#43a047;
+
+    transform:translateY(-4px);
+
+    box-shadow:
+    0 20px 35px rgba(255,107,53,.35);
+
 }
 
+/* ===========================
+        TEXT
+=========================== */
+
 .card p{
-    margin-top:10px;
-    color:#555;
-    line-height:1.6;
+
+    margin-top:12px;
+
+    color:var(--muted);
+
+    line-height:1.8;
+
+}
+
+/* ===========================
+        INFO BOX
+=========================== */
+
+.info-box{
+
+    margin-top:25px;
+
+    padding:20px;
+
+    border-radius:18px;
+
+    background:#fff7f2;
+
+    border-left:5px solid var(--primary);
+
+}
+
+.info-box h3{
+
+    color:var(--primary);
+
+    margin-bottom:10px;
+
+}
+
+.info-box p{
+
+    margin:0;
+
+}
+
+/* ===========================
+        SCROLLBAR
+=========================== */
+
+::-webkit-scrollbar{
+
+    width:10px;
+
+}
+
+::-webkit-scrollbar-thumb{
+
+    background:
+    linear-gradient(
+    var(--primary),
+    var(--secondary));
+
+    border-radius:30px;
+
+}
+
+/* ===========================
+        RESPONSIVE
+=========================== */
+
+@media(max-width:992px){
+
+.profile-container{
+
+grid-template-columns:1fr;
+
+}
+
+.sidebar{
+
+position:static;
+
+}
+
+}
+
+@media(max-width:768px){
+
+.grid{
+
+grid-template-columns:1fr;
+
+}
+
+.card{
+
+padding:25px;
+
+}
+
+.sidebar{
+
+padding:25px;
+
+}
+
+.avatar-circle{
+
+width:110px;
+
+height:110px;
+
+font-size:38px;
+
+}
+
+.card h2{
+
+font-size:24px;
+
+}
+
+.btn{
+
+width:100%;
+
+}
+
 }
