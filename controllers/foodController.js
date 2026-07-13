@@ -23,6 +23,8 @@ async function showFoods(req, res, next) {
     const categoryId = (req.query.categoryId || '').trim()
     const sort = (req.query.sort || 'new').trim()
 
+    console.log('[showFoods] keyword=', keyword, 'categoryId=', categoryId, 'sort=', sort)
+
     const categories = await foodModel.getAllCategories()
 
     const foods = await foodModel.getFoods({

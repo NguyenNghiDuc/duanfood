@@ -161,8 +161,9 @@ async function getFoods({ keyword = "", categoryId = "" } = {}) {
   const params = []
 
   if (keyword) {
-    sql += " AND (f.title LIKE ? OR f.description LIKE ?)"
-    params.push(`%${keyword}%`, `%${keyword}%`)
+    const normalizedKeyword = `%${keyword.toLowerCase()}%`
+    sql += " AND (LOWER(f.title) LIKE ? OR LOWER(f.description) LIKE ?)"
+    params.push(normalizedKeyword, normalizedKeyword)
   }
 
   if (categoryId) {

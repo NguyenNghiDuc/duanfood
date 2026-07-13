@@ -21,14 +21,17 @@ async function getAllCategories() {
   return rows
 }
 
+function normalizeText(text) {
+  return String(text || '')
+    .trim()
+    .normalize('NFD')
+    .replace(/\p{Diacritic}/gu, '')
+    .toLowerCase()
+}
+
 async function getFoods({ keyword = '', categoryId = '', sort = 'new' } = {}) {
   let sql = `SELECT f.*, c.name AS category_name FROM foods f LEFT JOIN categories c ON c.id = f.category_id WHERE 1=1`
   const params = []
-
-  if (keyword) {
-    sql += ' AND (f.title LIKE ? OR f.description LIKE ?)'
-    params.push(`%${keyword}%`, `%${keyword}%`)
-  }
 
   if (categoryId) {
     sql += ' AND f.category_id = ?'
@@ -47,7 +50,18 @@ async function getFoods({ keyword = '', categoryId = '', sort = 'new' } = {}) {
   }
 
   const [rows] = await db.query(sql, params)
-  return rows
+
+  const normalizedKeyword = normalizeText(keyword)
+  if (!normalizedKeyword) {
+    return rows
+  }
+
+  return rows.filter((food) => {
+    return (
+      normalizeText(food.title).includes(normalizedKeyword) ||
+      normalizeText(food.description).includes(normalizedKeyword)
+    )
+  })
 }
 
 async function getFoodById(id) {
