@@ -1,0 +1,131 @@
+const db = require('../config/db')
+const foodModel = require('../models/foodModels')
+const bcrypt = require('bcryptjs')
+
+async function init() {
+  try {
+    console.log('Initializing database schema...')
+
+    await db.query(`
+      CREATE TABLE IF NOT EXISTS users (
+          id INT AUTO_INCREMENT PRIMARY KEY,
+          username VARCHAR(255) NOT NULL UNIQUE,
+          password VARCHAR(255) NOT NULL,
+          fullname VARCHAR(255) DEFAULT '',
+          balance DECIMAL(10,2) NOT NULL DEFAULT 0
+      )
+    `)
+
+    await db.query(`
+      CREATE TABLE IF NOT EXISTS posts (
+          id INT AUTO_INCREMENT PRIMARY KEY,
+          title VARCHAR(255) NOT NULL,
+          description TEXT NOT NULL,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `)
+
+    await db.query(`
+      CREATE TABLE IF NOT EXISTS addresses (
+          id INT AUTO_INCREMENT PRIMARY KEY,
+          user_id INT,
+          username VARCHAR(255) NOT NULL,
+          label VARCHAR(255) NOT NULL,
+          full_name VARCHAR(255) NOT NULL,
+          phone VARCHAR(50) NOT NULL,
+          city VARCHAR(255) NOT NULL,
+          district VARCHAR(255) NOT NULL,
+          ward VARCHAR(255) NOT NULL,
+          street VARCHAR(255) NOT NULL,
+          detail_address TEXT NOT NULL,
+          note TEXT,
+          is_default TINYINT(1) NOT NULL DEFAULT 0,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+      )
+    `)
+
+    await db.query(`
+      CREATE TABLE IF NOT EXISTS delivery_companies (
+          id INT AUTO_INCREMENT PRIMARY KEY,
+          name VARCHAR(255) NOT NULL,
+          fee DECIMAL(10,2) NOT NULL DEFAULT 0
+      )
+    `)
+
+    await db.query(`
+      CREATE TABLE IF NOT EXISTS categories (
+          id INT AUTO_INCREMENT PRIMARY KEY,
+          name VARCHAR(255) NOT NULL UNIQUE
+      )
+    `)
+
+    await db.query(`
+      INSERT IGNORE INTO categories (name)
+      VALUES
+        ('Đồ tươi sống'),
+        ('Rau củ'),
+        ('Trái cây'),
+        ('Hải sản'),
+        ('Gạo - Mì'),
+        ('Sữa và sản phẩm từ sữa'),
+        ('Thực phẩm đông lạnh'),
+        ('Thực phẩm khô'),
+        ('Gia vị'),
+        ('Đồ uống'),
+        ('Bánh kẹo'),
+        ('Bánh mì'),
+        ('Đồ gia dụng')
+    `)
+
+    await foodModel.initFoodSchema()
+
+    await db.query(`
+      CREATE TABLE IF NOT EXISTS reviews (
+          id INT AUTO_INCREMENT PRIMARY KEY,
+          food_id INT NOT NULL,
+          username VARCHAR(255) NOT NULL,
+          rating INT NOT NULL DEFAULT 5,
+          comment TEXT,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          FOREIGN KEY (food_id) REFERENCES foods(id) ON DELETE CASCADE
+      )
+    `)
+
+    try {
+      await db.query(`
+        ALTER TABLE users 
+        ADD COLUMN IF NOT EXISTS balance DECIMAL(10,2) NOT NULL DEFAULT 0
+      `)
+    } catch (e) {}
+
+    const adminPlain = '27032006'
+    const adminHash = await bcrypt.hash(adminPlain, 10)
+
+    const [existingAdmins] = await db.query(
+      "SELECT id FROM users WHERE username = ?",
+      ["admin"]
+    )
+
+    if (existingAdmins && existingAdmins.length > 0) {
+      await db.query(
+        "UPDATE users SET password = ? WHERE username = ?",
+        [adminHash, "admin"]
+      )
+    } else {
+      await db.query(
+        "INSERT INTO users (username, password, balance) VALUES (?, ?, 0)",
+        ["admin", adminHash]
+      )
+    }
+
+    console.log('Database initialization complete.')
+    process.exit(0)
+
+  } catch (err) {
+    console.error('Database init failed:', err)
+    process.exit(1)
+  }
+}
+
+init()

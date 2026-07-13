@@ -1,0 +1,163 @@
+/* ==========================
+   EDIT NEWS PAGE
+========================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:"Segoe UI",Arial,sans-serif;
+    background:#f5f7fb;
+    color:#333;
+}
+
+/* Navigation */
+
+nav{
+    width:100%;
+    background:#fff;
+    padding:18px 40px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:25px;
+    box-shadow:0 5px 20px rgba(0,0,0,.08);
+    margin-bottom:40px;
+}
+
+nav a{
+    text-decoration:none;
+    color:#444;
+    font-weight:600;
+    transition:.3s;
+}
+
+nav a:hover{
+    color:#ff6b35;
+}
+
+/* Người dùng */
+
+.user-info{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    padding:8px 18px;
+    background:#ff6b35;
+    color:#fff;
+    border-radius:30px;
+    font-weight:600;
+}
+
+.user-info strong{
+    color:#fff;
+}
+
+/* Tiêu đề */
+
+h1{
+    text-align:center;
+    color:#ff6b35;
+    font-size:40px;
+    margin-bottom:35px;
+}
+
+/* Form */
+
+form{
+    width:100%;
+    max-width:850px;
+    margin:0 auto 60px;
+    background:#fff;
+    padding:40px;
+    border-radius:20px;
+    box-shadow:0 15px 40px rgba(0,0,0,.08);
+}
+
+form div{
+    margin-bottom:25px;
+}
+
+label{
+    display:block;
+    margin-bottom:10px;
+    font-size:18px;
+    font-weight:700;
+    color:#333;
+}
+
+input,
+textarea{
+    width:100%;
+    border:2px solid #e5e7eb;
+    border-radius:12px;
+    padding:15px 18px;
+    font-size:16px;
+    outline:none;
+    transition:.3s;
+    font-family:inherit;
+}
+
+input{
+    height:55px;
+}
+
+textarea{
+    min-height:220px;
+    resize:vertical;
+}
+
+input:focus,
+textarea:focus{
+    border-color:#ff6b35;
+    box-shadow:0 0 0 4px rgba(255,107,53,.15);
+}
+
+/* Button */
+
+button{
+    width:100%;
+    height:56px;
+    border:none;
+    border-radius:12px;
+    background:#ff6b35;
+    color:#fff;
+    font-size:18px;
+    font-weight:700;
+    cursor:pointer;
+    transition:.3s;
+}
+
+button:hover{
+    background:#e85a2a;
+    transform:translateY(-2px);
+    box-shadow:0 10px 25px rgba(255,107,53,.3);
+}
+
+/* Responsive */
+
+@media(max-width:768px){
+
+    nav{
+        flex-wrap:wrap;
+        gap:15px;
+        padding:20px;
+    }
+
+    h1{
+        font-size:30px;
+    }
+
+    form{
+        width:92%;
+        padding:25px;
+    }
+
+    textarea{
+        min-height:180px;
+    }
+
+}

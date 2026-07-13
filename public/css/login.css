@@ -1,0 +1,235 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: linear-gradient(135deg, #eef7f0 0%, #f4f7fb 100%);
+    color: #1f2937;
+}
+
+.auth-container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 24px;
+}
+
+.auth-card,
+.login-card {
+    width: 100%;
+    max-width: 440px;
+    background: #ffffff;
+    border-radius: 28px;
+    overflow: hidden;
+    box-shadow: 0 32px 90px rgba(15, 23, 42, 0.12);
+    animation: appear 0.45s ease;
+}
+
+.auth-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 28px 24px;
+    background: linear-gradient(135deg, #1f6b3e, #2c8c52);
+    color: #ffffff;
+}
+
+.auth-icon {
+    width: 46px;
+    height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.16);
+    font-size: 22px;
+}
+
+.auth-header h1 {
+    font-size: 24px;
+    margin: 0;
+    letter-spacing: 0.02em;
+}
+
+.auth-subtitle {
+    text-align: center;
+    color: #475569;
+    margin: 20px 24px 30px;
+    font-size: 15px;
+    line-height: 1.7;
+}
+
+.auth-form,
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding: 0 24px 26px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.form-group label,
+.login-form label {
+    color: #334155;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.form-group input,
+.login-form input,
+.form-group textarea {
+    width: 100%;
+    padding: 14px 18px;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    background: #f8fafc;
+    font-size: 15px;
+    transition: all 0.25s ease;
+    outline: none;
+}
+
+.form-group textarea {
+    min-height: 104px;
+    resize: vertical;
+}
+
+.form-group input:focus,
+.login-form input:focus,
+.form-group textarea:focus {
+    background: #ffffff;
+    border-color: #1f6b3e;
+    box-shadow: 0 0 0 4px rgba(31, 107, 62, 0.12);
+}
+
+.checkbox-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #475569;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.checkbox-row input {
+    width: 18px;
+    height: 18px;
+    margin-top: 4px;
+}
+
+.checkbox-row a {
+    color: #1f6b3e;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.checkbox-row a:hover {
+    text-decoration: underline;
+}
+
+.btn,
+.btn-primary {
+    min-height: 56px;
+    border: none;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #1f6b3e, #24935d);
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.28s ease, box-shadow 0.28s ease;
+}
+
+.btn:hover,
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 18px 40px rgba(31, 107, 62, 0.18);
+}
+
+.error-box {
+    background: #fff1f2;
+    color: #b91c1c;
+    border: 1px solid #fecaca;
+    padding: 16px;
+    border-radius: 16px;
+    margin: 0 24px 0;
+    text-align: center;
+    font-weight: 700;
+}
+
+.auth-footer,
+.register-link {
+    margin: 22px 24px 20px;
+    text-align: center;
+    color: #475569;
+    font-size: 14px;
+}
+
+.auth-footer a,
+.register-link a {
+    color: #1f6b3e;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.auth-footer a:hover,
+.register-link a:hover {
+    text-decoration: underline;
+}
+
+.back-home {
+    margin: 0 24px 24px;
+    text-align: center;
+}
+
+.back-home a {
+    color: #475569;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.back-home a:hover {
+    color: #1f6b3e;
+}
+
+@media (max-width: 640px) {
+    .auth-card,
+    .login-card {
+        max-width: 100%;
+        border-radius: 22px;
+    }
+
+    .auth-header {
+        padding: 22px 18px;
+    }
+
+    .auth-subtitle {
+        margin: 18px 20px 28px;
+    }
+
+    .auth-form,
+    .login-form {
+        padding: 0 20px 20px;
+    }
+}
+
+@keyframes appear {
+    from {
+        opacity: 0;
+        transform: translateY(22px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

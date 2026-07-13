@@ -1,0 +1,493 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Segoe UI",sans-serif;
+}
+
+:root{
+
+    --primary:#ff6b35;
+    --secondary:#ff9f43;
+    --bg:#fff8f2;
+    --white:#ffffff;
+    --text:#1f2937;
+    --muted:#64748b;
+    --border:#ececec;
+    --shadow:0 20px 40px rgba(0,0,0,.08);
+
+}
+
+body{
+
+    background:
+    linear-gradient(
+    135deg,
+    #fff8f2,
+    #f5f7fb);
+
+    color:var(--text);
+
+    min-height:100vh;
+
+}
+
+.profile-container{
+
+    max-width:1300px;
+
+    margin:40px auto;
+
+    display:grid;
+
+    grid-template-columns:320px 1fr;
+
+    gap:30px;
+
+    padding:0 20px;
+
+}
+
+/* ===========================
+        SIDEBAR
+=========================== */
+
+.sidebar{
+
+    background:white;
+
+    border-radius:28px;
+
+    padding:35px 30px;
+
+    box-shadow:var(--shadow);
+
+    height:fit-content;
+
+    position:sticky;
+
+    top:30px;
+
+}
+
+/* ===========================
+        AVATAR
+=========================== */
+
+.avatar{
+
+    text-align:center;
+
+    margin-bottom:30px;
+
+}
+
+.avatar-circle{
+
+    width:130px;
+
+    height:130px;
+
+    margin:auto;
+
+    border-radius:50%;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:46px;
+
+    font-weight:800;
+
+    color:white;
+
+    background:
+    linear-gradient(
+    135deg,
+    var(--primary),
+    var(--secondary));
+
+    box-shadow:
+    0 15px 35px rgba(255,107,53,.25);
+
+    transition:.35s;
+
+}
+
+.avatar-circle:hover{
+
+    transform:scale(1.05);
+
+}
+
+.avatar h2{
+
+    margin-top:18px;
+
+    font-size:28px;
+
+    color:var(--text);
+
+}
+
+.avatar p{
+
+    color:var(--muted);
+
+    margin-top:8px;
+
+    font-size:15px;
+
+}
+
+/* ===========================
+        MENU
+=========================== */
+
+.menu{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:12px;
+
+}
+
+.menu a{
+
+    text-decoration:none;
+
+    color:#444;
+
+    padding:15px 20px;
+
+    border-radius:16px;
+
+    font-weight:600;
+
+    transition:.35s;
+
+}
+
+.menu a:hover{
+
+    background:
+    linear-gradient(
+    135deg,
+    var(--primary),
+    var(--secondary));
+
+    color:white;
+
+    transform:translateX(6px);
+
+}
+
+.menu .active{
+
+    background:
+    linear-gradient(
+    135deg,
+    var(--primary),
+    var(--secondary));
+
+    color:white;
+
+    box-shadow:
+    0 12px 25px rgba(255,107,53,.25);
+
+}
+
+/* ===========================
+        CONTENT
+=========================== */
+
+.content{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:30px;
+
+}
+
+/* ===========================
+        CARD
+=========================== */
+
+.card{
+
+    background:white;
+
+    border-radius:28px;
+
+    padding:35px;
+
+    box-shadow:var(--shadow);
+
+    transition:.35s;
+
+}
+
+.card:hover{
+
+    transform:translateY(-5px);
+
+}
+
+.card h2{
+
+    font-size:30px;
+
+    color:var(--primary);
+
+    margin-bottom:28px;
+
+}
+
+/* ===========================
+        GRID
+=========================== */
+
+.grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:25px;
+
+}
+
+/* ===========================
+        FORM
+=========================== */
+
+.form-group{
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+.form-group label{
+
+    margin-bottom:10px;
+
+    font-weight:700;
+
+    color:var(--text);
+
+}
+
+.form-group input{
+
+    padding:15px;
+
+    border-radius:15px;
+
+    border:1px solid #e5e7eb;
+
+    background:#fafafa;
+
+    transition:.3s;
+
+    font-size:15px;
+
+}
+
+.form-group input:focus{
+
+    outline:none;
+
+    border-color:var(--primary);
+
+    background:white;
+
+    box-shadow:
+    0 0 0 4px rgba(255,107,53,.12);
+
+}
+
+/* ===========================
+        BUTTON
+=========================== */
+
+.btn{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    margin-top:30px;
+
+    padding:15px 35px;
+
+    border-radius:999px;
+
+    text-decoration:none;
+
+    font-weight:700;
+
+    color:white;
+
+    background:
+    linear-gradient(
+    135deg,
+    var(--primary),
+    var(--secondary));
+
+    transition:.35s;
+
+    box-shadow:
+    0 15px 30px rgba(255,107,53,.25);
+
+}
+
+.btn:hover{
+
+    transform:translateY(-4px);
+
+    box-shadow:
+    0 20px 35px rgba(255,107,53,.35);
+
+}
+
+/* ===========================
+        TEXT
+=========================== */
+
+.card p{
+
+    margin-top:12px;
+
+    color:var(--muted);
+
+    line-height:1.8;
+
+}
+
+/* ===========================
+        INFO BOX
+=========================== */
+
+.info-box{
+
+    margin-top:25px;
+
+    padding:20px;
+
+    border-radius:18px;
+
+    background:#fff7f2;
+
+    border-left:5px solid var(--primary);
+
+}
+
+.info-box h3{
+
+    color:var(--primary);
+
+    margin-bottom:10px;
+
+}
+
+.info-box p{
+
+    margin:0;
+
+}
+
+/* ===========================
+        SCROLLBAR
+=========================== */
+
+::-webkit-scrollbar{
+
+    width:10px;
+
+}
+
+::-webkit-scrollbar-thumb{
+
+    background:
+    linear-gradient(
+    var(--primary),
+    var(--secondary));
+
+    border-radius:30px;
+
+}
+
+/* ===========================
+        RESPONSIVE
+=========================== */
+
+@media(max-width:992px){
+
+.profile-container{
+
+grid-template-columns:1fr;
+
+}
+
+.sidebar{
+
+position:static;
+
+}
+
+}
+
+@media(max-width:768px){
+
+.grid{
+
+grid-template-columns:1fr;
+
+}
+
+.card{
+
+padding:25px;
+
+}
+
+.sidebar{
+
+padding:25px;
+
+}
+
+.avatar-circle{
+
+width:110px;
+
+height:110px;
+
+font-size:38px;
+
+}
+
+.card h2{
+
+font-size:24px;
+
+}
+
+.btn{
+
+width:100%;
+
+}
+
+}

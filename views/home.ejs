@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      Mini Food
+    </title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="container topbar-inner">
+        <a href="/" class="brand" aria-label="Mini Food">
+          <div class="brand-badge">
+            <img src="/images/anh.png" class="brand-logo" alt="Mini Food" />
+          </div>
+          <div class="brand-copy">
+            <span class="brand-text">
+              Mini Food
+            </span>
+            <small class="brand-subtitle">
+              Fast delivery • Fresh taste
+            </small>
+          </div>
+        </a>
+        <nav class="header-nav" aria-label="Primary navigation">
+          <a href="/" class="active">
+            Trang chủ
+          </a>
+          <a href="/foods">
+            Món ăn
+          </a>
+          <a href="/promotion">
+            Khuyến mãi
+          </a>
+          <a href="/about">
+            Về chúng tôi
+          </a>
+          <a href="/news">
+            Tin tức
+          </a>
+          <a href="/contact">
+            Liên hệ
+          </a>
+        </nav>
+        <div class="topbar-actions">
+          <form action="/foods" method="GET" class="search-form">
+            <i class="fa-solid fa-magnifying-glass search-icon">
+            </i>
+            <input type="search" name="keyword" placeholder="Tìm món ăn..." />
+          </form>
+          <a href="/cart" class="cart-btn" aria-label="Giỏ hàng">
+            <i class="fa-solid fa-cart-shopping">
+            </i>
+            <span class="cart-count">
+              <%= cartCount || 0 %>
+            </span>
+          </a>
+          <% if (user) { %>
+          <div class="auth-group auth-group-user">
+            <a href="/profile" class="login-btn username-highlight">
+              <%= user.username %>
+            </a>
+            <a href="/logout" class="logout-btn">
+              Đăng xuất
+            </a>
+          </div>
+          <% } else { %>
+          <div class="auth-group">
+            <a href="/login" class="login-btn">
+              Đăng nhập
+            </a>
+            <a href="/register" class="register-btn">
+              Đăng ký
+            </a>
+          </div>
+          <% } %>
+        </div>
+      </div>
+    </header>
+    <main class="container">
+      <section class="hero-grid">
+        <article class="hero-content">
+          <span class="badge">
+            🍔 FAST FOOD
+          </span>
+          <h1>
+            Đặt món ăn
+            <span class="accent">
+              nhanh chóng
+            </span>
+          </h1>
+          <p>
+            Khám phá hàng trăm món ăn hấp dẫn với giá ưu đãi. Giao hàng nhanh,
+            thanh toán tiện lợi và phục vụ tận nơi chỉ trong vài phút.
+          </p>
+          <div class="cta-row">
+            <a href="/foods" class="btn">
+              Đặt ngay
+            </a
+            >
+            <a href="/promotion" class="btn btn-secondary">
+              Xem ưu đãi
+            </a>
+          </div>
+          <div class="hero-users">
+            <div class="avatars">
+              <img src="/images/user1.png" />
+              <img src="/images/user2.png" />
+              <img
+                src="/images/user3.png"
+              />
+              <span>
+                +2K
+              </span>
+            </div>
+            <p>
+              Khách hàng hài lòng
+            </p>
+          </div>
+          <div class="discount-box">
+            <small>
+              Giảm đến
+            </small>
+            <strong>
+              50%
+            </strong>
+            <span>
+              Cho đơn đầu tiên
+            </span>
+          </div>
+        </article>
+        <aside class="banner-stack">
+          <div class="hero-image">
+            <img src="/images/anhfood.png" alt="Food" />
+          </div>
+          <div class="mini-banner-group">
+            <div class="mini-banner">
+              🍔 BURGER
+            </div>
+            <div class="mini-banner">
+              🍕 PIZZA
+            </div>
+            <div class="mini-banner">
+              🍗 GÀ RÁN
+            </div>
+          </div>
+        </aside>
+      </section>
+      <section class="feature-grid">
+        <a class="feature-card" href="/foods">
+          <div class="feature-icon">
+            🚚
+          </div>
+          <div>
+            <h3>
+              Giao hàng nhanh
+            </h3>
+            <p>
+              Giao tận nơi trong 30 phút
+            </p>
+          </div>
+        </a>
+        <a class="feature-card" href="/categories">
+          <div class="feature-icon">
+            🥬
+          </div>
+          <div>
+            <h3>
+              Nguyên liệu tươi
+            </h3>
+            <p>
+              100% nguyên liệu sạch
+            </p>
+          </div>
+        </a>
+        <a class="feature-card" href="/wallet/top-up">
+          <div class="feature-icon">
+            💳
+          </div>
+          <div>
+            <h3>
+              Thanh toán tiện lợi
+            </h3>
+            <p>
+              Nạp tiền vào ví để thanh toán nhanh.
+            </p>
+          </div>
+        </a>
+        <a class="feature-card" href="/promotion">
+          <div class="feature-icon">
+            🔥
+          </div>
+          <div>
+            <h3>
+              Ưu đãi hấp dẫn
+            </h3>
+            <p>
+              Nhiều khuyến mãi mỗi ngày
+            </p>
+          </div>
+        </a>
+      </section>
+      <section class="section-title-row">
+        <div class="section-title">
+          <h2>
+            🍽️ Khám phá theo danh mục
+          </h2>
+          <a href="/foods">
+            Xem tất cả →
+          </a>
+        </div>
+        <div class="categories-row">
+          <% if (categories && categories.length) { %>
+            <% categories.forEach(category => { %>
+              <a
+                class="category-item"
+                href="/foods?categoryId=<%= category.id %>"
+              >
+                <div class="category-icon">
+                  <% const name = category.name.toLowerCase(); %>
+                  <%= name.includes("burger") ? "🍔" : name.includes("pizza") ? "🍕" :
+                      name.includes("gà") || name.includes("ga") ? "🍗" :
+                      name.includes("mì") ? "🍜" : name.includes("salad") ? "🥗" :
+                      name.includes("đồ uống") ? "🥤" : "🍽️" %>
+                </div>
+                <strong>
+                  <%= category.name %>
+                </strong>
+              </a>
+            <% }) %>
+          <% } %>
+        </div>
+      </section>
+      <section class="card">
+        <div class="section-title">
+          <h2>
+            🌐 Các trang chính
+          </h2>
+        </div>
+        <div class="feature-grid">
+          <a class="feature-card" href="/foods">
+            <div class="feature-icon">🍽️</div>
+            <div>
+              <h3>
+                Món ăn
+              </h3>
+              <p>
+                Xem tất cả món ngon có sẵn.
+              </p>
+            </div>
+          </a>
+          <a class="feature-card" href="/promotion">
+            <div class="feature-icon">🎉</div>
+            <div>
+              <h3>
+                Khuyến mãi
+              </h3>
+              <p>
+                Kiểm tra chương trình ưu đãi mới.
+              </p>
+            </div>
+          </a>
+          <a class="feature-card" href="/news">
+            <div class="feature-icon">📰</div>
+            <div>
+              <h3>
+                Tin tức
+              </h3>
+              <p>
+                Đọc tin tức và cập nhật mới.
+              </p>
+            </div>
+          </a>
+          <a class="feature-card" href="/contact">
+            <div class="feature-icon">📞</div>
+            <div>
+              <h3>
+                Liên hệ
+              </h3>
+              <p>
+                Gửi yêu cầu hoặc góp ý.
+              </p>
+            </div>
+          </a>
+        </div>
+      </section>
+      <section class="card">
+        <div class="section-title">
+          <h2>
+            ⭐ Món ăn nổi bật
+          </h2>
+          <a href="/foods">
+            Xem tất cả →
+          </a>
+        </div>
+        <div class="food-grid">
+          <% if (foods && foods.length) { %>
+          <% foods.forEach(food => { %>
+          <article class="food-card">
+            <div class="food-image">
+              <% if(food.image){ %>
+              <img
+                src="<%= food.image %>
+              "
+                alt="
+              <%= food.title %>
+              "
+              />
+              <% }else{ %>
+              <img src="/images/no-image.png" alt="Food" />
+              <% }
+              %>
+              <span class="food-tag">
+                Món ngon
+              </span>
+            </div>
+            <div class="food-content">
+              <h3>
+                <%= food.title %>
+              </h3>
+              <p>
+                <%= food.description %>
+              </p>
+              <div class="food-price">
+                <%= Number(food.price).toLocaleString("vi-VN") %>
+                đ
+              </div>
+              <div class="food-info">
+                <span>
+                  ⭐ 4.8
+                </span>
+                <span>
+                  ❤️ 98%
+                </span>
+              </div>
+              <div class="food-actions">
+                <a href="/foods/<%= food.id %>" class="detail-btn">
+                  Xem chi tiết
+                </a>
+                <form action="/cart/add/<%= food.id %>" method="POST">
+                  <button class="cart-add-btn">
+                    <i class="fa-solid fa-cart-plus">
+                    </i>
+                    Thêm
+                  </button>
+                </form>
+              </div>
+            </div>
+          </article>
+          <% }) %>
+          <% } else { %>
+          <p>
+            Hiện chưa có món ăn nào.
+          </p>
+          <% } %>
+        </div>
+      </section>
+      <section class="promo-section">
+        <div class="promo-box">
+          <div>
+            <h2>
+              🎉 Giảm 50%
+            </h2>
+            <p>
+              Cho đơn hàng đầu tiên.
+            </p>
+          </div>
+        </div>
+        <div class="promo-box">
+          <div>
+            <h2>
+              🚚 Miễn phí Ship
+            </h2>
+            <p>
+              Đơn từ 199.000đ.
+            </p>
+          </div>
+        </div>
+        <div class="promo-box">
+          <div>
+            <h2>
+              💳 Hoàn tiền nếu sản           phẩm bị hư hoặc lỗi
+            </h2>
+            <p>
+              Thanh toán Online.
+            </p>
+          </div>
+        </div>
+      </section>
+      <section class="card">
+        <div class="section-title">
+          <h2>
+            📰 Tin tức mới
+          </h2>
+          <a href="/news">
+            Xem tất cả →
+          </a>
+        </div>
+        <div class="news-grid">
+          <% if(posts && posts.length){ %>
+          <% posts.slice(0,3).forEach(post=>{ %>
+          <article class="news-card">
+            <div class="news-thumb">
+              <img src="<%= post.image || '/images/news.png' %>" alt="<%= post.title %>" />
+            </div>
+            <div class="news-body">
+              <span class="news-date">🗓️ <%= new Date(post.created_at).toLocaleDateString('vi-VN') %></span>
+              <h3><%= post.title %></h3>
+              <p><%= (post.description || '').substring(0,120) %>...</p>
+              <a href="/news/<%= post.id %>" class="read-more">Đọc tiếp →</a>
+            </div>
+          </article>
+          <% }) %>
+          <% }else{ %>
+          <p>
+            Chưa có bài viết.
+          </p>
+          <% } %>
+        </div>
+      </section>
+      <section class="card">
+        <div class="section-title">
+          <h2>
+            ❤️ Khách hàng nói gì
+          </h2>
+        </div>
+        <div class="review-grid">
+          <div class="review-card">
+            <img src="/images/user1.png" alt="" />
+            <h3>
+              Nguyễn Văn A
+            </h3>
+            <div>
+              ⭐⭐⭐⭐⭐
+            </div>
+            <p>
+              Món ăn rất ngon, giao hàng nhanh, nhân viên thân thiện.
+            </p>
+          </div>
+          <div class="review-card">
+            <img src="/images/user2.png" alt="" />
+            <h3>
+              Trần Thị B
+            </h3>
+            <div>
+              ⭐⭐⭐⭐⭐
+            </div>
+            <p>
+              Giá hợp lý, đóng gói đẹp, sẽ tiếp tục ủng hộ.
+            </p>
+          </div>
+          <div class="review-card">
+            <img src="/images/user3.png" alt="" />
+            <h3>
+              Lê Văn C
+            </h3>
+            <div>
+              ⭐⭐⭐⭐⭐
+            </div>
+            <p>
+              Website đẹp, đặt món rất nhanh, giao đúng giờ.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer class="footer">
+      <div class="container footer-grid">
+        <div>
+          <h3>
+            Mini Food
+          </h3>
+          <p>
+            Website đặt món ăn trực tuyến nhanh chóng và tiện lợi.
+          </p>
+        </div>
+        <div>
+          <h3>
+            Liên hệ
+          </h3>
+          <p>
+            📍 Dương Nội - Hà Đông
+          </p>
+          <p>
+            ☎ 0909 999 999
+          </p>
+          <p>
+            ✉ support@minifood.vn
+          </p>
+        </div>
+        <div>
+          <h3>
+            Dịch vụ
+          </h3>
+          <a href="/foods">
+            Món ăn
+          </a>
+          <a href="/promotion">
+            Khuyến mãi
+          </a
+          >
+          <a href="/news">
+            Tin tức
+          </a>
+          <a href="/contact">
+            Liên hệ
+          </a>
+        </div>
+        <div>
+          <h3>
+            Theo dõi
+          </h3>
+          <div class="socials">
+            <a href="#">
+              <i class="fab fa-facebook-f">
+              </i>
+            </a
+            >
+            <a href="#">
+              <i class="fab fa-instagram">
+              </i>
+            </a
+            >
+            <a href="#">
+              <i class="fab fa-youtube">
+              </i>
+            </a
+            >
+            <a href="#">
+              <i class="fab fa-tiktok">
+              </i>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="copyright">
+        ©
+        <%= new Date().getFullYear() %>
+        Mini Food. All Rights Reserved.
+      </div>
+    </footer>
+  </body>
+</html>

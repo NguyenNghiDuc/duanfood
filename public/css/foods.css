@@ -1,0 +1,1183 @@
+/* ==========================================
+   MINI FOOD - FOOD PAGE CSS
+   PART 1
+========================================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+:root{
+
+    --primary:#ff6b35;
+    --primary-dark:#e85a2a;
+    --secondary:#16a34a;
+    --secondary-soft:#ecfdf5;
+
+    --success:#22c55e;
+    --danger:#ef4444;
+
+    --bg:#f5f7fb;
+    --white:#ffffff;
+
+    --text:#0f172a;
+    --muted:#64748b;
+
+    --border:#e5edf5;
+
+    --radius:22px;
+
+    --shadow:
+        0 16px 40px rgba(15,23,42,.08);
+
+    --shadow-soft:
+        0 10px 24px rgba(15,23,42,.06);
+
+    --transition:.28s ease;
+
+}
+
+body{
+
+    font-family:
+    "Segoe UI",
+    Arial,
+    sans-serif;
+
+    background:
+        radial-gradient(circle at top left, rgba(255,107,53,.10), transparent 30%),
+        linear-gradient(180deg, #f9fbff 0%, #f5f7fb 100%);
+
+    color:var(--text);
+
+}
+
+/* ========================= */
+
+.food-page{
+
+    max-width:1320px;
+
+    margin:auto;
+
+    padding:45px 20px 80px;
+
+}
+
+/* ========================= */
+
+.food-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:40px;
+
+    margin-bottom:34px;
+
+    flex-wrap:wrap;
+
+    padding:28px 30px;
+
+    background:linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+
+    border:1px solid rgba(229, 237, 245, 0.95);
+
+    border-radius:28px;
+
+    box-shadow:var(--shadow);
+
+}
+
+.food-header h1{
+
+    font-size:clamp(2.2rem, 4vw, 3.4rem);
+
+    font-weight:800;
+
+    color:var(--text);
+
+    margin-bottom:10px;
+
+    letter-spacing:-0.03em;
+
+}
+
+.food-header p{
+
+    color:var(--muted);
+
+    font-size:17px;
+
+    line-height:1.8;
+
+    max-width:700px;
+
+}
+
+.admin-nav{
+
+    display:flex;
+
+    flex-wrap:nowrap;
+
+    align-items:center;
+
+    justify-content:flex-start;
+
+    gap:12px;
+
+    margin-bottom:25px;
+
+    padding:18px 24px;
+
+    background:#fff;
+
+    border-radius:20px;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.06);
+
+    overflow-x:auto;
+
+}
+
+.admin-nav-link{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:12px 22px;
+
+    border-radius:999px;
+
+    background:#f8f9fa;
+
+    color:#334155;
+
+    font-weight:700;
+
+    text-decoration:none;
+
+    white-space:nowrap;
+
+    transition:var(--transition);
+
+}
+
+.admin-nav-link:hover,
+
+.admin-nav-link.active{
+
+    background:var(--primary);
+
+    color:#fff;
+
+}
+
+.admin-greeting{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    padding:12px 20px;
+
+    background:#ecfdf5;
+
+    color:#166534;
+
+    font-weight:700;
+
+    border-radius:999px;
+
+    border:1px solid #bbf7d0;
+
+    white-space:nowrap;
+
+    margin-left:auto;
+
+}
+
+/* ========================= */
+
+.food-header-actions{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    flex-wrap:wrap;
+
+    padding:8px;
+
+    background:#f8fafc;
+
+    border:1px solid var(--border);
+
+    border-radius:999px;
+
+    box-shadow:var(--shadow-soft);
+
+}
+
+.tab{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    text-decoration:none;
+
+    padding:11px 18px;
+
+    border-radius:999px;
+
+    background:transparent;
+
+    color:#475569;
+
+    font-weight:700;
+
+    border:1px solid transparent;
+
+    transition:var(--transition);
+
+}
+
+.tab:hover{
+
+    background:linear-gradient(135deg, var(--primary), #ff9251);
+
+    color:#fff;
+
+    transform:translateY(-1px);
+
+    box-shadow:0 10px 20px rgba(255,107,53,.22);
+
+}
+
+.tab.active{
+
+    background:linear-gradient(135deg, var(--primary), #ff9251);
+
+    color:#fff;
+
+    border-color:transparent;
+
+    box-shadow:0 10px 20px rgba(255,107,53,.22);
+
+}
+
+/* ========================= */
+
+.food-filter{
+
+    display:grid;
+
+    grid-template-columns:
+        minmax(0, 2fr)
+        minmax(180px, 1fr)
+        auto;
+
+    align-items:stretch;
+
+    gap:18px;
+
+    background:linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+
+    padding:24px;
+
+    border:1px solid rgba(229, 237, 245, 0.95);
+
+    border-radius:24px;
+
+    margin-bottom:40px;
+
+    box-shadow:var(--shadow);
+
+}
+
+.food-filter input,
+
+.food-filter select{
+
+    width:100%;
+
+    height:58px;
+
+    border:1px solid var(--border);
+
+    border-radius:16px;
+
+    padding:0 18px;
+
+    font-size:16px;
+
+    color:var(--text);
+
+    background:#f8fbfd;
+
+    outline:none;
+
+    transition:var(--transition);
+
+}
+
+.food-filter input:focus,
+
+.food-filter select:focus{
+
+    border-color:var(--primary);
+
+    box-shadow:
+        0 0 0 4px rgba(255,107,53,.18);
+
+    background:#fff;
+
+}
+
+/* ========================= */
+
+.food-filter button{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border:none;
+
+    background:linear-gradient(135deg, var(--primary), #ff9251);
+
+    color:#fff;
+
+    font-size:16px;
+
+    font-weight:800;
+
+    border-radius:16px;
+
+    height:58px;
+
+    min-width:160px;
+
+    padding:0 35px;
+
+    cursor:pointer;
+
+    transition:var(--transition);
+
+    box-shadow:0 12px 24px rgba(255,107,53,.24);
+
+}
+
+.food-filter button:hover{
+
+    background:linear-gradient(135deg, var(--primary-dark), #ff7a3c);
+
+    transform:translateY(-2px);
+
+    box-shadow:0 16px 28px rgba(255,107,53,.3);
+
+}
+
+/* ========================= */
+
+.food-list{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(auto-fill,minmax(310px,1fr));
+
+    gap:30px;
+
+    list-style:none;
+
+}/* ==========================================
+   MINI FOOD - FOOD PAGE CSS
+   PART 2 - FOOD CARD
+========================================== */
+
+/* ========================= */
+/* FOOD CARD */
+/* ========================= */
+
+.food-list li{
+
+    background:var(--white);
+
+    border:1px solid rgba(229, 237, 245, 0.95);
+
+    border-radius:24px;
+
+    overflow:hidden;
+
+    box-shadow:var(--shadow);
+
+    display:flex;
+
+    flex-direction:column;
+
+    transition:var(--transition);
+
+    position:relative;
+
+}
+
+.food-list li:hover{
+
+    transform:translateY(-10px);
+
+    box-shadow:
+        0 22px 50px rgba(15,23,42,.16);
+
+}
+
+/* ========================= */
+/* IMAGE */
+/* ========================= */
+
+.food-detail-image{
+
+    position:relative;
+
+    overflow:hidden;
+
+    height:240px;
+
+}
+
+.food-detail-image img{
+
+    width:100%;
+
+    height:100%;
+
+    object-fit:cover;
+
+    transition:.6s;
+
+}
+
+.food-list li:hover .food-detail-image img{
+
+    transform:scale(1.08);
+
+}
+
+/* ========================= */
+/* BADGE */
+/* ========================= */
+
+.food-tag{
+
+    position:absolute;
+
+    top:18px;
+
+    left:18px;
+
+    background:linear-gradient(
+        135deg,
+        var(--primary),
+        #ff9a3d
+    );
+
+    color:#fff;
+
+    padding:8px 16px;
+
+    border-radius:999px;
+
+    font-size:13px;
+
+    font-weight:700;
+
+    letter-spacing:.5px;
+
+    box-shadow:
+        0 6px 15px rgba(255,107,53,.35);
+
+}
+
+/* ========================= */
+/* CATEGORY */
+/* ========================= */
+
+.food-category{
+
+    display:inline-block;
+
+    margin:18px 20px 5px;
+
+    padding:7px 16px;
+
+    border-radius:999px;
+
+    background:#fff2ec;
+
+    color:var(--primary);
+
+    font-size:13px;
+
+    font-weight:700;
+
+}
+
+/* ========================= */
+/* BODY */
+/* ========================= */
+
+.food-card-body{
+
+    flex:1;
+
+    display:flex;
+
+    flex-direction:column;
+
+    padding:22px;
+
+    gap:16px;
+
+}
+
+.food-list h3{
+
+    font-size:24px;
+
+    color:var(--text);
+
+    line-height:1.4;
+
+    font-weight:800;
+
+}
+
+.food-description{
+
+    color:var(--muted);
+
+    line-height:1.8;
+
+    font-size:15px;
+
+    min-height:72px;
+
+}
+
+/* ========================= */
+/* PRICE */
+/* ========================= */
+
+.food-price-row{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:15px;
+
+}
+
+.food-price{
+
+    font-size:28px;
+
+    color:var(--primary);
+
+    font-weight:800;
+
+}
+
+.food-rating{
+
+    background:#fff7e6;
+
+    color:#f59e0b;
+
+    padding:8px 14px;
+
+    border-radius:999px;
+
+    font-size:14px;
+
+    font-weight:700;
+
+    box-shadow:inset 0 0 0 1px rgba(245, 158, 11, 0.14);
+
+}
+
+/* ========================= */
+/* ACTION */
+/* ========================= */
+
+.food-actions{
+
+    margin-top:auto;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:14px;
+
+}
+
+.food-actions form{
+
+    margin:0;
+
+}
+
+/* ========================= */
+/* BUTTON */
+/* ========================= */
+
+.btn{
+
+    width:100%;
+
+    border:none;
+
+    background:linear-gradient(
+        135deg,
+        var(--primary),
+        #ff9248
+    );
+
+    color:#fff;
+
+    height:50px;
+
+    border-radius:14px;
+
+    font-size:16px;
+
+    font-weight:800;
+
+    cursor:pointer;
+
+    transition:var(--transition);
+
+    box-shadow:0 12px 24px rgba(255,107,53,.24);
+
+}
+
+.btn:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:
+        0 16px 28px rgba(255,107,53,.34);
+
+}
+
+/* ========================= */
+/* DETAIL */
+/* ========================= */
+
+.food-detail-link{
+
+    display:block;
+
+    text-align:center;
+
+    text-decoration:none;
+
+    color:#2563eb;
+
+    border:2px solid #dbeafe;
+
+    border-radius:14px;
+
+    padding:13px;
+
+    font-weight:700;
+
+    transition:var(--transition);
+
+}
+
+.food-detail-link:hover{
+
+    background:#2563eb;
+
+    color:#fff;
+
+}
+
+/* ========================= */
+/* ADMIN BUTTON */
+/* ========================= */
+
+.admin-food-actions{
+
+    display:grid;
+
+    grid-template-columns:1fr auto;
+
+    gap:12px;
+
+    align-items:stretch;
+
+}
+
+.admin-food-actions form{
+
+    margin:0;
+
+    display:flex;
+
+}
+
+.admin-food-actions .btn-secondary{
+
+    width:auto;
+
+    min-width:132px;
+
+    background:linear-gradient(135deg, #ffffff, #f8fafc);
+
+    color:#0f172a;
+
+    border:1px solid rgba(15, 23, 42, 0.08);
+
+    box-shadow:0 10px 24px rgba(15,23,42,.06);
+
+    text-decoration:none;
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+}
+
+.admin-food-actions .btn-secondary:hover{
+
+    background:linear-gradient(135deg, #f8fafc, #eef2f7);
+
+    box-shadow:0 14px 28px rgba(15,23,42,.10);
+
+    transform:translateY(-2px);
+
+}
+
+.delete-btn{
+
+    width:auto;
+
+    min-width:132px;
+
+    border:none;
+
+    height:50px;
+
+    border-radius:14px;
+
+    background:linear-gradient(135deg, #ef4444, #dc2626);
+
+    color:#fff;
+
+    font-size:15px;
+
+    font-weight:800;
+
+    cursor:pointer;
+
+    transition:var(--transition);
+
+    box-shadow:0 12px 24px rgba(239,68,68,.22);
+
+    padding:0 18px;
+
+}
+
+.delete-btn:hover{
+
+    background:linear-gradient(135deg, #dc2626, #b91c1c);
+
+    transform:translateY(-2px);
+
+    box-shadow:0 16px 28px rgba(239,68,68,.28);
+
+}/* ==========================================
+   MINI FOOD - FOOD PAGE CSS
+   PART 3 - RESPONSIVE & EFFECT
+========================================== */
+
+/* Empty */
+
+.empty-food{
+
+    background:var(--white);
+
+    border-radius:var(--radius);
+
+    padding:80px 30px;
+
+    text-align:center;
+
+    box-shadow:var(--shadow);
+
+}
+
+.empty-food h2{
+
+    font-size:34px;
+
+    color:var(--primary);
+
+    margin-bottom:15px;
+
+}
+
+.empty-food p{
+
+    color:var(--muted);
+
+    font-size:17px;
+
+    line-height:1.7;
+
+}
+
+/* Animation */
+
+.food-list li{
+
+    animation:fadeUp .6s ease both;
+
+}
+
+.food-list li:nth-child(2){
+
+    animation-delay:.08s;
+
+}
+
+.food-list li:nth-child(3){
+
+    animation-delay:.16s;
+
+}
+
+.food-list li:nth-child(4){
+
+    animation-delay:.24s;
+
+}
+
+.food-list li:nth-child(5){
+
+    animation-delay:.32s;
+
+}
+
+.food-list li:nth-child(6){
+
+    animation-delay:.40s;
+
+}
+
+@keyframes fadeUp{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(35px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}
+
+/* Scrollbar */
+
+::-webkit-scrollbar{
+
+    width:10px;
+
+}
+
+::-webkit-scrollbar-track{
+
+    background:#f1f1f1;
+
+}
+
+::-webkit-scrollbar-thumb{
+
+    background:var(--primary);
+
+    border-radius:20px;
+
+}
+
+::-webkit-scrollbar-thumb:hover{
+
+    background:var(--primary-dark);
+
+}
+
+/* Selection */
+
+::selection{
+
+    background:var(--primary);
+
+    color:#fff;
+
+}
+
+/* Focus */
+
+button:focus,
+input:focus,
+select:focus,
+a:focus{
+
+    outline:none;
+
+}
+
+/* Responsive */
+
+@media(max-width:1100px){
+
+.food-filter{
+
+grid-template-columns:1fr;
+
+}
+
+.food-header{
+
+flex-direction:column;
+
+align-items:flex-start;
+
+}
+
+.food-header-actions{
+
+width:100%;
+
+}
+
+.tab{
+
+flex:1;
+
+text-align:center;
+
+}
+
+}
+
+@media(max-width:768px){
+
+.food-page{
+
+padding:25px 15px 60px;
+
+}
+
+.food-header h1{
+
+font-size:34px;
+
+}
+
+.food-header p{
+
+font-size:15px;
+
+}
+
+.food-list{
+
+grid-template-columns:1fr;
+
+gap:22px;
+
+}
+
+.food-detail-image{
+
+height:220px;
+
+}
+
+.food-price{
+
+font-size:24px;
+
+}
+
+.food-card-body{
+
+padding:18px;
+
+}
+
+.food-actions{
+
+gap:12px;
+
+}
+
+.btn,
+.delete-btn{
+
+height:48px;
+
+font-size:15px;
+
+}
+
+.food-filter{
+
+padding:18px;
+
+}
+
+.food-filter input,
+.food-filter select,
+.food-filter button{
+
+height:52px;
+
+}
+
+}
+
+@media(max-width:480px){
+
+.food-header h1{
+
+font-size:28px;
+
+}
+
+.food-header-actions{
+
+flex-direction:column;
+
+width:100%;
+
+}
+
+.tab{
+
+width:100%;
+
+}
+
+.food-price-row{
+
+flex-direction:column;
+
+align-items:flex-start;
+
+}
+
+.food-rating{
+
+margin-top:5px;
+
+}
+
+.food-detail-image{
+
+height:200px;
+
+}
+
+.food-card-body{
+
+padding:16px;
+
+}
+
+.food-list h3{
+
+font-size:20px;
+
+}
+
+.food-description{
+
+font-size:14px;
+
+min-height:auto;
+
+}
+
+}
+
+/* Hover Effect */
+
+.food-list li::after{
+
+content:"";
+
+position:absolute;
+
+left:0;
+
+bottom:0;
+
+width:100%;
+
+height:5px;
+
+background:linear-gradient(
+
+90deg,
+
+var(--primary),
+
+#ffb347
+
+);
+
+transform:scaleX(0);
+
+transform-origin:left;
+
+transition:.4s;
+
+}
+
+.food-list li:hover::after{
+
+transform:scaleX(1);
+
+}

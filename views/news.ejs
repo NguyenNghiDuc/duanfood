@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      Các món ăn mới
+    </title>
+    <link rel="stylesheet" href="/css/news.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="card">
+        <h1>
+          Các Món Ăn Mới Nhất
+        </h1>
+        <p class="subtext">
+          Cập nhật những món ăn mới và hấp dẫn nhất tại Food
+        </p>
+        <nav class="news-nav">
+          <a href="/">
+            Trang chủ
+          </a>
+          <a href="/news">
+            Món mới
+          </a>
+          <a href="/foods">
+            Thực đơn
+          </a>
+          <% if (user && user.role === 'admin') { %>
+          <a class="btn-add-news" href="/news/add">
+            Thêm tin tức mới
+          </a>
+          <% } %>
+        </nav>
+        <% if (posts && posts.length > 0) { %>
+        <div class="news-grid">
+          <% posts.forEach(post => { %>
+          <div class="news-card">
+            <div class="news-icon">
+              🍽️
+            </div>
+            <h2>
+              <%= post.title %>
+            </h2>
+            <div class="news-meta">
+              <span>
+                <strong><%= post.author || 'Admin' %></strong>
+              </span>
+              <span>
+                • <%= new Date(post.created_at).toLocaleDateString('vi-VN') %>
+              </span>
+            </div>
+            <p>
+              <%= post.description %>
+            </p>
+          </div>
+          <% }) %>
+        </div>
+        <% } else { %>
+        <div class="empty-news">
+          <h3>
+            📢 Chưa có món ăn mới
+          </h3>
+          <p>
+            Vui lòng quay lại sau để xem các cập nhật mới nhất.
+          </p>
+        </div>
+        <% } %>
+      </div>
+    </div>
+  </body>
+</html>

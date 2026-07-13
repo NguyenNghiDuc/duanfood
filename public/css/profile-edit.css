@@ -1,0 +1,367 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Segoe UI",sans-serif;
+}
+
+:root{
+
+    --primary:#ff6b35;
+    --secondary:#ff9f43;
+    --bg:#fff8f3;
+    --white:#ffffff;
+    --text:#1f2937;
+    --muted:#6b7280;
+    --border:#e5e7eb;
+    --success:#22c55e;
+    --danger:#ef4444;
+
+}
+
+body{
+
+    min-height:100vh;
+
+    background:
+    linear-gradient(
+    135deg,
+    #fff7f2,
+    #f5f7fb);
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    padding:40px 20px;
+
+    color:var(--text);
+
+}
+
+.container{
+
+    width:100%;
+
+    max-width:900px;
+
+}
+
+.card{
+
+    background:var(--white);
+
+    border-radius:30px;
+
+    padding:45px;
+
+    box-shadow:
+    0 20px 45px rgba(0,0,0,.08);
+
+    animation:fadeUp .5s ease;
+
+}
+
+@keyframes fadeUp{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(25px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}
+
+h1{
+
+    text-align:center;
+
+    font-size:40px;
+
+    color:var(--primary);
+
+    margin-bottom:30px;
+
+    font-weight:800;
+
+}
+
+/* =========================
+            MENU
+========================= */
+
+nav{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:15px;
+
+    flex-wrap:wrap;
+
+    margin-bottom:35px;
+
+}
+
+nav a{
+
+    text-decoration:none;
+
+    padding:13px 25px;
+
+    border-radius:999px;
+
+    background:#fff3eb;
+
+    color:var(--primary);
+
+    font-weight:700;
+
+    transition:.35s;
+
+}
+
+nav a:hover{
+
+    background:
+    linear-gradient(
+    135deg,
+    var(--primary),
+    var(--secondary));
+
+    color:white;
+
+    transform:translateY(-3px);
+
+}
+
+/* =========================
+        THÔNG BÁO
+========================= */
+
+.notice{
+
+    background:#ffe5e5;
+
+    color:var(--danger);
+
+    padding:15px 18px;
+
+    border-left:5px solid var(--danger);
+
+    border-radius:15px;
+
+    margin-bottom:20px;
+
+}
+
+.success{
+
+    background:#eafaf0;
+
+    color:var(--success);
+
+    padding:15px 18px;
+
+    border-left:5px solid var(--success);
+
+    border-radius:15px;
+
+    margin-bottom:20px;
+
+}
+
+/* =========================
+            FORM
+========================= */
+
+.form-grid{
+
+    display:grid;
+
+    grid-template-columns:1fr;
+
+    gap:18px;
+
+}
+
+.form-grid label{
+
+    font-weight:700;
+
+    color:var(--text);
+
+    margin-top:5px;
+
+}
+
+.form-grid input{
+
+    width:100%;
+
+    padding:15px 18px;
+
+    border:1px solid var(--border);
+
+    border-radius:15px;
+
+    background:#fafafa;
+
+    font-size:15px;
+
+    transition:.3s;
+
+}
+
+.form-grid input:focus{
+
+    outline:none;
+
+    border-color:var(--primary);
+
+    background:white;
+
+    box-shadow:
+    0 0 0 5px rgba(255,107,53,.15);
+
+}
+
+.form-grid input:disabled{
+
+    background:#f3f4f6;
+
+    color:#888;
+
+    cursor:not-allowed;
+
+}
+
+/* =========================
+            BUTTON
+========================= */
+
+.btn{
+
+    margin-top:20px;
+
+    border:none;
+
+    cursor:pointer;
+
+    width:100%;
+
+    padding:16px;
+
+    border-radius:16px;
+
+    color:white;
+
+    font-size:18px;
+
+    font-weight:700;
+
+    background:
+    linear-gradient(
+    135deg,
+    var(--primary),
+    var(--secondary));
+
+    transition:.35s;
+
+    box-shadow:
+    0 15px 30px rgba(255,107,53,.25);
+
+}
+
+.btn:hover{
+
+    transform:translateY(-4px);
+
+    box-shadow:
+    0 20px 40px rgba(255,107,53,.35);
+
+}
+
+/* =========================
+        PLACEHOLDER
+========================= */
+
+::placeholder{
+
+    color:#9ca3af;
+
+}
+
+/* =========================
+        SCROLLBAR
+========================= */
+
+::-webkit-scrollbar{
+
+    width:10px;
+
+}
+
+::-webkit-scrollbar-thumb{
+
+    background:
+    linear-gradient(
+    var(--primary),
+    var(--secondary));
+
+    border-radius:20px;
+
+}
+
+/* =========================
+        RESPONSIVE
+========================= */
+
+@media(max-width:768px){
+
+.card{
+
+padding:28px;
+
+}
+
+h1{
+
+font-size:30px;
+
+}
+
+nav{
+
+flex-direction:column;
+
+}
+
+nav a{
+
+text-align:center;
+
+width:100%;
+
+}
+
+.btn{
+
+font-size:16px;
+
+}
+
+}
