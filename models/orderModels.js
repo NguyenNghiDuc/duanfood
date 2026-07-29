@@ -13,7 +13,10 @@ async function getOrdersByUsername(username) {
   const [rows] = await db.query('SELECT * FROM orders WHERE username = ? ORDER BY id DESC', [username])
   return rows
 }
-
+async function getOrderById(id) {
+  const [rows] = await db.query('SELECT * FROM orders WHERE id = ?', [id])
+  return rows[0] || null
+}
 async function getAllOrders() {
   const [rows] = await db.query('SELECT * FROM orders ORDER BY id DESC')
   return rows

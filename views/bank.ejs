@@ -40,8 +40,7 @@
           <strong>
             Nội dung CK:
           </strong>
-          <%= topUpAmount ? `NAP${orderId ||
-          '001'}` : `DH${orderId || '001'}` %>
+          <%= topUpAmount ? `NAP${orderId || '001'}` : `DH${orderId || '001'}` %>
         </p>
         <hr />
         <h3>
@@ -53,9 +52,7 @@
         </p>
         <div class="bank-qr-box" style="text-align: center; margin-top: 20px">
           <p class="small-note">
-            <%= topUpAmount ? 'Quét mã QR bên dưới, chuyển đúng số tiền rồi bấm
-            xác nhận để tiền vào ví.' : 'Vui lòng quét mã QR bên dưới để hoàn
-            tất chuyển khoản trước khi xác nhận.' %>
+            <%= topUpAmount ? 'Quét mã QR bên dưới, chuyển đúng số tiền rồi bấm xác nhận để tiền vào ví.' : 'Vui lòng quét mã QR bên dưới để hoàn tất chuyển khoản trước khi xác nhận.' %>
           </p>
           <img
             src="/images/bank.png"
@@ -66,14 +63,8 @@
         </div>
         <br />
         <form action="/payment-success" method="POST">
-          <input type="hidden" name="orderId" value="<%= orderId %>
-          " />
-          <input
-            type="hidden"
-            name="amount"
-            value="<%= topUpAmount || 0 %>
-          "
-          />
+          <input type="hidden" name="orderId" value="<%= orderId || '' %>" />
+          <input type="hidden" name="amount" value="<%= topUpAmount || 0 %>" />
           <button type="submit" class="btn">
             <%= topUpAmount ? 'Tôi đã chuyển khoản' : 'Tôi đã thanh toán' %>
           </button>

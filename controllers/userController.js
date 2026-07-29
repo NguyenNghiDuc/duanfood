@@ -79,10 +79,18 @@ function logout(req, res) {
 async function showBank(req, res) {
   const orderId = req.query.orderId || null
   const topUpAmount = Number(req.query.amount || 0)
+  let totalPrice = topUpAmount
+
+  if (orderId && !topUpAmount) {
+    const order = await orderModel.getOrderById(orderId)
+    if (order) {
+      totalPrice = Number(order.total || 0) + Number(order.shipping_fee || 0)
+    }
+  }
 
   res.render('bank', {
     orderId,
-    totalPrice: topUpAmount,
+    totalPrice,
     topUpAmount,
     user: req.session.user
   })
