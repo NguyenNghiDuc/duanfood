@@ -2,6 +2,7 @@ const chatIndex = require('../lib/chatIndex')
 const foodModel = require('../models/foodModels')
 const orderModel = require('../models/orderModels')
 const userModel = require('../models/userModels')
+const aiLearningService = require('../lib/aiLearningService')
 
 const SUPPORT_TICKETS = new Map()
 
@@ -499,6 +500,12 @@ async function handleSupportRequest(req, res, intent, originalText, context) {
   }
 }
 
+function buildConfidenceReply(intent, responseText, confidence) {
+  if (confidence >= 0.85) return responseText
+  if (confidence >= 0.6) return `${responseText}\n\n⚠️ Tôi vẫn có thể cần xác nhận thêm để chắc chắn đúng ý bạn.`
+  return `${responseText}\n\n❓ Tôi chưa chắc chắn. Bạn có thể mô tả rõ hơn hoặc hỏi theo cách khác không?`
+}
+
 async function handleFoodQuery(req, res, intent, originalText, context) {
   const priceInfo = parsePriceQuery(originalText)
   const ingredient = determineIngredient(originalText)
@@ -528,6 +535,9 @@ async function handleFoodQuery(req, res, intent, originalText, context) {
     return buildResponse(intent, 'food', 'Mình chưa tìm thấy món phù hợp ở Mini Food với yêu cầu của bạn. Bạn có thể thử mô tả rõ hơn như “món bò dưới 70k”, “món cay”, hoặc “món Hàn” nhé.', { cards: [] })
   }
 
+  const relevantKnowledge = await aiLearningService.getRelevantKnowledge(originalText)
+  const correctionMatches = await aiLearningService.getCorrectionsFor(originalText)
+  const confidence = relevantKnowledge.length ? 0.78 : 0.7
   const leadMap = {
     FOOD_RECOMMENDATION: 'Mình gợi ý cho bạn những món phù hợp nhất:',
     FOOD_SEARCH: 'Mình tìm được những món phù hợp với yêu cầu của bạn:',
@@ -546,7 +556,16 @@ async function handleFoodQuery(req, res, intent, originalText, context) {
     default: 'Mình gợi ý cho bạn:'
   }
 
-  return buildResponse(intent, 'food', `${leadMap[intent] || leadMap.default}\n${results.map(item => `• ${item.title} — ${formatCurrency(item.price)}`).join('\n')}`, { cards: results.map(formatFoodCard), data: results })
+  const baseReply = `${leadMap[intent] || leadMap.default}\n${results.map(item => `• ${item.title} — ${formatCurrency(item.price)}`).join('\n')}`
+  const knowledgeHints = relevantKnowledge.length
+    ? `\n\n🧠 Tôi đã ghi nhớ một số cách hiểu liên quan từ các cuộc trò chuyện trước: ${relevantKnowledge.slice(0, 3).map((item) => item.value_text).join(' | ')}`
+    : ''
+  const correctionHint = correctionMatches.length
+    ? `\n\n🛠️ Tôi đang ưu tiên dữ liệu đã được admin chỉnh sửa cho câu hỏi tương tự.`
+    : ''
+  const reply = buildConfidenceReply(intent, `${baseReply}${knowledgeHints}${correctionHint}`, confidence)
+
+  return buildResponse(intent, 'food', reply, { cards: results.map(formatFoodCard), data: results })
 }
 
 async function handleAdminFoodDraft(req, res, text, uploadedFile) {
@@ -650,7 +669,33 @@ async function handleAdminFoodDraft(req, res, text, uploadedFile) {
       return buildResponse('ADD_FOOD', 'admin_food', `🍽️ Món mới\n\n📷 [Ảnh món]\nTên: ${parsedDraft.title}\nGiá: ${formatCurrency(parsedDraft.price)}\nDanh mục: chưa xác định\n\nBạn cho mình biết danh mục món này nhé.`, { cards: [{ id: 'draft-preview', title: parsedDraft.title, price: formatCurrency(parsedDraft.price), image: parsedDraft.image || '', url: '#', subtitle: 'Preview chờ xác nhận' }], data: [{ ...parsedDraft, categories }] })
     }
 
-    return buildResponse('ADD_FOOD', 'admin_food_preview', `🍽️ Món mới\n\n📷 [Ảnh món]\nTên: ${parsedDraft.title}\nGiá: ${formatCurrency(parsedDraft.price)}\nDanh mục: ${parsedDraft.category || 'Chưa xác định'}\n\nBạn có muốn thêm món này vào Mini Food không?`, { cards: [{ id: 'draft-preview', title: parsedDraft.title, price: formatCurrency(parsedDraft.price), image: parsedDraft.image || '', url: '#', subtitle: parsedDraft.category || 'Chưa xác định' }], data: [parsedDraft] })
+    const createdId = await foodModel.createFood({
+      title: parsedDraft.title,
+      description: parsedDraft.description || null,
+      price: parsedDraft.price,
+      category_id: parsedDraft.categoryId || null,
+      image: parsedDraft.image || '',
+      gram: 0
+    })
+    await chatIndex.buildIndex()
+    await aiLearningService.learnFromFood({
+      title: parsedDraft.title,
+      description: parsedDraft.description || '',
+      category: parsedDraft.category || '',
+      price: parsedDraft.price,
+      ingredients: parsedDraft.description || ''
+    })
+    await aiLearningService.learnFromConversation({
+      username: user?.username || null,
+      sessionKey: req.sessionID,
+      inputText: cleanText,
+      intent: 'ADD_FOOD',
+      entity: parsedDraft.title,
+      responseText: `Đã thêm món ${parsedDraft.title}`,
+      confidence: 0.9
+    })
+
+    return buildResponse('ADD_FOOD', 'admin_food_success', `✅ Đã thêm món ${parsedDraft.title} thành công.\n💰 Giá: ${formatCurrency(parsedDraft.price)}\n📂 Danh mục: ${parsedDraft.category || 'Chưa xác định'}`, { cards: [{ id: createdId, title: parsedDraft.title, price: formatCurrency(parsedDraft.price), image: parsedDraft.image || '', url: `/foods/${createdId}`, subtitle: parsedDraft.category || 'Chưa xác định' }], data: [{ id: createdId, ...parsedDraft }] })
   }
 
   return null
@@ -677,6 +722,16 @@ async function chat(req, res, next) {
     if (adminDraftResponse) {
       return res.json(adminDraftResponse)
     }
+
+    await aiLearningService.learnFromConversation({
+      username: req.session.user?.username || null,
+      sessionKey: req.sessionID,
+      inputText: originalText,
+      intent: detectIntent(text, req.session.chatContext || {}),
+      entity: null,
+      responseText: null,
+      confidence: 0.5
+    })
 
     const context = req.session.chatContext || {}
     const intent = detectIntent(text, context)
@@ -707,6 +762,17 @@ async function chat(req, res, next) {
     req.session.chatContext = { ...(req.session.chatContext || {}), lastIntent: intent }
 
     if (!response.quickActions) response.quickActions = getQuickActions()
+
+    await aiLearningService.learnFromConversation({
+      username: req.session.user?.username || null,
+      sessionKey: req.sessionID,
+      inputText: originalText,
+      intent,
+      entity: currentFood?.title || null,
+      responseText: response.reply,
+      confidence: 0.7
+    })
+
     return res.json(response)
   } catch (error) {
     console.error('chat error', error)

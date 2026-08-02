@@ -199,15 +199,37 @@
     return d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})
   }
 
-  function addMessage(text, from='bot'){
+  function addMessage(text, from='bot', meta = null){
     const wrap = el('div', {class: 'chat-msg ' + from})
     const content = document.createElement('div')
     content.innerText = text
     const time = el('span', {class: 'time'}, formatTime())
     wrap.appendChild(content)
     wrap.appendChild(time)
+    if (from === 'bot' && meta) {
+      const feedback = el('div', {class: 'chat-feedback'})
+      const useful = el('button', {type:'button', class:'feedback-btn'}, '👍 Hữu ích')
+      const notUseful = el('button', {type:'button', class:'feedback-btn'}, '👎 Không hữu ích')
+      useful.addEventListener('click', () => sendFeedback(meta, 'positive'))
+      notUseful.addEventListener('click', () => sendFeedback(meta, 'negative'))
+      feedback.appendChild(useful)
+      feedback.appendChild(notUseful)
+      wrap.appendChild(feedback)
+    }
     messages.appendChild(wrap)
     messages.scrollTop = messages.scrollHeight
+  }
+
+  async function sendFeedback(meta, feedback) {
+    try {
+      await fetch('/api/ai/feedback', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ conversationKey: meta?.conversationKey || '', intent: meta?.intent || 'UNKNOWN', feedback, reason: meta?.reason || null })
+      })
+    } catch (error) {
+      // ignore
+    }
   }
 
   function addMessageHTML(html, from='bot'){
@@ -344,7 +366,7 @@
       const ct = res.headers.get('content-type') || ''
       if (ct.includes('application/json')){
         const j = await res.json()
-        if (j.reply) addMessage(j.reply)
+        if (j.reply) addMessage(j.reply, 'bot', { conversationKey: j.data?.[0]?.id || j.data?.[0]?.title || '', intent: j.intent || 'UNKNOWN' })
         if (j && (j.type === 'admin_food_success' || /đã thêm món|da them mon|thành công/i.test(j.reply || ''))) {
           setTimeout(() => {
             const target = window.location.pathname === '/foods' ? '/foods?success=created' : '/foods?success=created'
