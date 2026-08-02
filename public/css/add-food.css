@@ -440,6 +440,46 @@
 
 }
 
+.admin-alert{
+    margin-bottom: 24px;
+    padding: 16px 20px;
+    border-radius: 16px;
+    font-weight: 700;
+    border: 1px solid transparent;
+}
+
+.admin-alert.error{
+    background: rgba(239, 68, 68, 0.09);
+    border-color: rgba(239, 68, 68, 0.2);
+    color: #b91c1c;
+}
+
+.admin-alert.success{
+    background: rgba(34, 197, 94, 0.09);
+    border-color: rgba(34, 197, 94, 0.2);
+    color: #166534;
+}
+
+.admin-form-actions{
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+.admin-form-actions .btn {
+    flex: 1;
+}
+
+.btn-inline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    min-width: 120px;
+    text-decoration: none;
+    text-align: center;
+}
+
 /* ===============================
  RESPONSIVE
 ================================ */

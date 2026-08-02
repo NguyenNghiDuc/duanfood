@@ -22,6 +22,12 @@ async function showFoods(req, res, next) {
     const keyword = (req.query.keyword || '').trim()
     const categoryId = (req.query.categoryId || '').trim()
     const sort = (req.query.sort || 'new').trim()
+    const successKey = String(req.query.success || '')
+    const successMessage = {
+      created: 'Thêm món thành công.',
+      updated: 'Cập nhật món thành công.',
+      deleted: 'Xóa món thành công.'
+    }[successKey] || null
 
     console.log('[showFoods] keyword=', keyword, 'categoryId=', categoryId, 'sort=', sort)
 
@@ -38,7 +44,9 @@ async function showFoods(req, res, next) {
       categories,
       keyword,
       categoryId,
-      sort
+      sort,
+      success: successMessage,
+      user: req.session.user || null
     })
   } catch (error) {
     next(error)

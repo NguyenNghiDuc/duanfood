@@ -20,8 +20,8 @@
         <a href="/foods" class="admin-nav-link active">
           Món ăn
         </a>
-        <a href="/admin/foods/add" class="admin-nav-link">
-          Thêm món ăn
+        <a href="/admin/foods/create" class="admin-nav-link">
+          + Thêm món ăn
         </a>
         <a href="/admin/orders" class="admin-nav-link">
           Quản lý đơn hàng
@@ -43,6 +43,9 @@
         </span>
       </nav>
     </div>
+    <% } %>
+    <% if (success) { %>
+      <div class="admin-alert success"><%= success %></div>
     <% } %>
     <header class="food-header">
       <div>

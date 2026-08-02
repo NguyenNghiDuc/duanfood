@@ -3,9 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>
-      Chỉnh sửa món ăn
-    </title>
+    <title>Chỉnh sửa món ăn</title>
     <link rel="stylesheet" href="/css/add-food.css" />
   </head>
   <body>
@@ -13,91 +11,72 @@
       <section class="card admin-card">
         <div class="admin-header">
           <div>
-            <h1>
-              Chỉnh sửa món ăn
-            </h1>
-            <p>
-              Cập nhật thông tin món ăn và đổi ảnh nếu cần.
-            </p>
+            <h1>Chỉnh sửa món ăn</h1>
+            <p>Cập nhật thông tin món ăn và đổi ảnh nếu cần.</p>
           </div>
           <div class="admin-actions">
-            <a href="/foods" class="btn btn-secondary">
-              Quay lại danh sách
-            </a>
+            <a href="/foods" class="btn btn-secondary">Quay lại danh sách</a>
           </div>
         </div>
+
         <nav class="admin-breadcrumb">
-          <a href="/">
-            Trang chủ
-          </a>
-          <span>
-            ›
-          </span>
-          <a href="/foods">
-            Món ăn
-          </a>
-          <span>
-            ›
-          </span>
-          <span>
-            Chỉnh sửa món ăn
-          </span>
+          <a href="/">Trang chủ</a>
+          <span>›</span>
+          <a href="/foods">Món ăn</a>
+          <span>›</span>
+          <span>Chỉnh sửa món ăn</span>
         </nav>
-        <form method="POST" action="/admin/foods/edit/<%= food.id %>
-          " class="form-grid admin-form" id="edit-food-form" >
+
+        <% if (error) { %>
+          <div class="admin-alert error"><%= error %></div>
+        <% } %>
+
+        <form method="POST" action="/admin/foods/edit/<%= food.id %>" class="form-grid admin-form" id="edit-food-form">
           <label>
-            Tiêu đề món ăn
-            <input type="text" name="title" value="<%= food.title %>
-            " required />
+            Tên món
+            <input type="text" name="title" value="<%= formData.title || food.title || '' %>" maxlength="200" required />
           </label>
+
           <label>
-            Giá bán (₫)
-            <input type="text" name="price" id="price-input" inputmode="numeric" autocomplete="off" placeholder="1.000" value="<%= Number(food.price).toLocaleString('vi-VN') %>
-            " required />
-            <small>
-              Nhập số và hệ thống sẽ tự thêm dấu chấm cho hàng nghìn.
-            </small>
+            Giá (₫)
+            <input type="number" name="price" min="1" step="1000" value="<%= formData.price ?? Number(food.price || 0) %>" required />
           </label>
-          <label>
-            Định lượng (gram)
-            <input type="number" name="gram" min="1" placeholder="Ví dụ: 300" value="<%= food.gram || '' %>
-            " required />
-          </label>
+
           <label>
             Danh mục
-            <select name="category_id">
+            <select name="category_id" required>
               <% categories.forEach(category => { %>
-              <option value="<%= category.id %>
-                "
-                <%= String(food.category_id) === String(category.id) ? 'selected' : '' %>
-                >
-                <%= category.name %>
-              </option>
+                <option value="<%= category.id %>" <%= String((formData.category_id ?? food.category_id) || '') === String(category.id) ? 'selected' : '' %>><%= category.name %></option>
               <% }) %>
             </select>
           </label>
+
           <label>
-            URL ảnh món ăn
-            <input type="text" name="image" placeholder="https://..." value="<%= food.image %>
-            " />
-            <small>
-              Dùng link ảnh trực tiếp hoặc đường dẫn local như /images/tenfile.png
-            </small>
+            Mô tả
+            <textarea name="description" rows="5" maxlength="2000"><%= formData.description ?? (food.description || '') %></textarea>
           </label>
+
           <label>
-            Mô tả món ăn
-            <textarea name="description" rows="5" required >
-              <%= food.description %>
-            </textarea>
+            Nguyên liệu
+            <textarea name="ingredients" rows="3"><%= formData.ingredients || '' %></textarea>
           </label>
-          <button type="submit" class="btn" >
-            Cập nhật món ăn
-          </button>
+
+          <label>
+            Hình ảnh
+            <input type="text" name="image" value="<%= formData.image ?? (food.image || '') %>" placeholder="https://... hoặc /images/tenfile.png" />
+          </label>
+
+          <label>
+            Số lượng
+            <input type="number" name="quantity" min="0" step="1" value="<%= formData.quantity ?? Number(food.gram || 0) %>" />
+          </label>
+
+          <div class="admin-form-actions">
+            <button type="submit" class="btn">Cập nhật món</button>
+            <a href="/foods" class="btn btn-secondary btn-inline">Hủy</a>
+          </div>
         </form>
       </section>
     </main>
-    <script>
-      const priceInput = document.getElementById('price-input') const editFoodForm = document.getElementById('edit-food-form') function formatPrice(value) { const digits = String(value || '').replace(/\D/g, '') return digits.replace(/\B(?=(\d{3})+(?!\d))/g, '.') } priceInput.addEventListener('input', () => { priceInput.value = formatPrice(priceInput.value) }) editFoodForm.addEventListener('submit', () => { priceInput.value = priceInput.value.replace(/\./g, '') })
-    </script>
   </body>
 </html>

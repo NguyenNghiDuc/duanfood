@@ -6,6 +6,7 @@
     "express": "^5.2.1",
     "express-session": "^1.19.0",
     "express-validator": "^7.0.1",
+    "multer": "^2.2.0",
     "mysql2": "^3.22.5",
     "sqlite3": "^5.1.6"
   },

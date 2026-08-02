@@ -348,6 +348,38 @@
    INPUT
    ========================= */
 
+#chat-image-preview {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px 0;
+  background: #fff;
+}
+
+#chat-image-preview.hidden {
+  display: none;
+}
+
+#chat-image-preview img {
+  width: 72px;
+  height: 72px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid #f1e5df;
+  box-shadow: 0 2px 8px rgba(0,0,0,.08);
+}
+
+#chat-image-remove {
+  width: 26px;
+  height: 26px;
+  border: none;
+  border-radius: 50%;
+  background: #ffe7e0;
+  color: #d95b2b;
+  font-weight: 700;
+  cursor: pointer;
+}
+
 #chat-form {
   display: flex;
 
@@ -395,6 +427,23 @@
 
 #chat-input::placeholder {
   color: #aaa;
+}
+
+#chat-upload-btn {
+  width: 46px;
+  height: 42px;
+  border: none;
+  border-radius: 10px;
+  background: #fff3ee;
+  color: #ff7043;
+  font-size: 18px;
+  cursor: pointer;
+  border: 1px solid #ffd7c6;
+}
+
+#chat-form.dragover {
+  border-top: 2px dashed #ff8a65;
+  background: #fffaf7;
 }
 
 #chat-form button {

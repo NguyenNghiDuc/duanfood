@@ -8,7 +8,8 @@ const app = express()
 const port = process.env.PORT || 5000
 app.set("view engine", "ejs")
 
-app.use(express.urlencoded({extended:true}))
+app.use(express.json({ limit: '5mb' }))
+app.use(express.urlencoded({extended:true, limit: '5mb'}))
 app.use(express.static(path.join(__dirname, "public")))
 
 app.use(session({
@@ -94,7 +95,8 @@ app.post('/_ping', express.json(), (req, res) => {
 // stable JSON chat endpoint bound to controller
 try {
   const chatController = require('./controllers/chatController')
-  app.post('/api/chat', express.json(), chatController.chat)
+  const upload = require('./middleware/upload')
+  app.post('/api/chat', upload.single('image'), chatController.chat)
   // debug: list top-level routes after binding
   if (app._router && Array.isArray(app._router.stack)) {
     console.log('[post-bind] routes count=', app._router.stack.length)
@@ -153,9 +155,15 @@ app.use(notFoundHandler)
 app.use(errorHandler)
 
 const host = process.env.HOST || 'localhost'
-const server = app.listen(port, host, () => {
-  console.log(`Server is running at http://${host}:${port}`)
-})
+
+if (require.main === module) {
+  const server = app.listen(port, host, () => {
+    console.log(`Server is running at http://${host}:${port}`)
+  })
+  module.exports = { app, server }
+} else {
+  module.exports = app
+}
 
 // Build public chat index for client-side assistant (best-effort)
 ;(async () => {

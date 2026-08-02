@@ -23,15 +23,105 @@
   const messages = el('div',{id:'chat-messages'})
   const form = el('form',{id:'chat-form'})
   const input = el('input',{id:'chat-input','placeholder':'Gõ câu hỏi...','autocomplete':'off'})
+  const uploadInput = el('input',{id:'chat-upload-input', type:'file', accept:'image/jpeg,image/png,image/webp', hidden:'hidden'})
+  const uploadBtn = el('button',{type:'button', id:'chat-upload-btn', title:'Gửi ảnh'}, '📷')
   const send = el('button',{type:'submit'}, 'Gửi')
+  const previewWrap = el('div',{id:'chat-image-preview', class:'hidden'})
+  const previewImg = el('img',{alt:'Preview ảnh món'})
+  const previewRemove = el('button',{type:'button', id:'chat-image-remove', title:'Xóa ảnh'}, '✕')
+  previewWrap.appendChild(previewImg)
+  previewWrap.appendChild(previewRemove)
 
-  form.appendChild(input); form.appendChild(send)
-  panel.appendChild(header); panel.appendChild(messages); panel.appendChild(form)
+  form.appendChild(input); form.appendChild(uploadBtn); form.appendChild(send)
+  panel.appendChild(header); panel.appendChild(messages); panel.appendChild(previewWrap); panel.appendChild(form)
+  form.appendChild(uploadInput)
 
   const appState = window.__MINI_FOOD_APP || { user: null, cartCount: 0 }
+  const STORAGE_KEY = 'mini_food_chat_draft'
+  let pendingImageFile = null
+  let pendingImageUrl = null
+
+  function persistDraft() {
+    try {
+      const payload = {
+        text: input.value.trim(),
+        image: pendingImageUrl || null,
+        hasImage: !!pendingImageFile,
+        pendingFileName: pendingImageFile ? pendingImageFile.name : '',
+        updatedAt: Date.now()
+      }
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(payload))
+    } catch (error) {
+      // ignore storage failure
+    }
+  }
+
+  function restoreDraft() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY)
+      if (!raw) return
+      const payload = JSON.parse(raw)
+      if (!payload || typeof payload !== 'object') return
+      if (payload.text) input.value = payload.text
+      if (payload.hasImage && payload.pendingFileName) {
+        const saved = document.querySelector('#chat-upload-input')
+        if (saved) saved.value = ''
+      }
+    } catch (error) {
+      // ignore restore failure
+    }
+  }
+
   function updateCartCountDisplay(count) {
     if (cartCount) cartCount.innerText = String(count)
   }
+
+  function showImagePreview(file) {
+    if (!file || !/^image\//.test(file.type)) {
+      addMessage('Chỉ hỗ trợ ảnh JPG, JPEG, PNG, WEBP.', 'bot')
+      return
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      addMessage('Ảnh quá lớn. Vui lòng chọn ảnh nhỏ hơn 5MB.', 'bot')
+      return
+    }
+    if (pendingImageUrl) URL.revokeObjectURL(pendingImageUrl)
+    pendingImageFile = file
+    pendingImageUrl = URL.createObjectURL(file)
+    previewImg.src = pendingImageUrl
+    previewWrap.classList.remove('hidden')
+  }
+
+  function clearPendingImage() {
+    pendingImageFile = null
+    if (pendingImageUrl) URL.revokeObjectURL(pendingImageUrl)
+    pendingImageUrl = null
+    previewWrap.classList.add('hidden')
+    previewImg.src = ''
+    uploadInput.value = ''
+    try { localStorage.removeItem(STORAGE_KEY) } catch (error) {}
+  }
+
+  uploadBtn.addEventListener('click', () => uploadInput.click())
+  uploadInput.addEventListener('change', (event) => {
+    const file = event.target.files && event.target.files[0]
+    if (!file) return
+    showImagePreview(file)
+    persistDraft()
+  })
+  previewRemove.addEventListener('click', clearPendingImage)
+  input.addEventListener('input', persistDraft)
+  form.addEventListener('dragover', (event) => {
+    event.preventDefault()
+    form.classList.add('dragover')
+  })
+  form.addEventListener('dragleave', () => form.classList.remove('dragover'))
+  form.addEventListener('drop', (event) => {
+    event.preventDefault()
+    form.classList.remove('dragover')
+    const file = event.dataTransfer && event.dataTransfer.files && event.dataTransfer.files[0]
+    if (file) showImagePreview(file)
+  })
   async function fetchCartSummary() {
     try {
       const response = await fetch('/api/cart/summary')
@@ -97,6 +187,7 @@
   }
 
   const indexPromise = loadChatIndex()
+  restoreDraft()
 
   btn.addEventListener('click', ()=>{
     panel.classList.toggle('open')
@@ -220,16 +311,33 @@
   // handle submit by sending the query to the backend chat endpoint
   form.addEventListener('submit', async (e)=>{
     e.preventDefault()
-    const text = input.value.trim(); if(!text) return
-    addMessage(text,'user')
+    const text = input.value.trim()
+    if (!text && !pendingImageFile) return
+
+    if (text) addMessage(text,'user')
+    const hasImage = !!pendingImageFile
+    if (hasImage) {
+      const previewText = text ? `${text}` : 'Ảnh món ăn'
+      addMessage(previewText + ' [Ảnh gửi kèm]', 'user')
+    }
     input.value = ''
 
     try{
       showTyping()
-      const res = await fetch('/api/chat', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({message: text})})
+      let res
+      if (hasImage) {
+        const formData = new FormData()
+        formData.append('message', text || '')
+        formData.append('image', pendingImageFile)
+        res = await fetch('/api/chat', { method: 'POST', body: formData })
+      } else {
+        res = await fetch('/api/chat', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({message: text})})
+      }
       hideTyping()
       if (!res || !res.ok) {
-        addMessage('Không thể kết nối với trợ lý. Vui lòng thử lại sau.', 'bot')
+        const payload = await res.json().catch(() => ({}))
+        addMessage(payload.reply || payload.message || 'Không thể kết nối với trợ lý. Vui lòng thử lại sau.', 'bot')
+        clearPendingImage()
         return
       }
 
@@ -237,13 +345,22 @@
       if (ct.includes('application/json')){
         const j = await res.json()
         if (j.reply) addMessage(j.reply)
+        if (j && (j.type === 'admin_food_success' || /đã thêm món|da them mon|thành công/i.test(j.reply || ''))) {
+          setTimeout(() => {
+            const target = window.location.pathname === '/foods' ? '/foods?success=created' : '/foods?success=created'
+            window.location.href = target
+          }, 500)
+        }
         if (Array.isArray(j.cards) && j.cards.length) addCards(j.cards)
       } else {
         const t = await res.text()
         addMessage(t || 'Không có phản hồi')
       }
+      clearPendingImage()
     } catch (err) {
       hideTyping()
-      addMessage('Lỗi kết nối', 'bot')      }
-    })
-  })()   
+      clearPendingImage()
+      addMessage('Lỗi kết nối', 'bot')
+    }
+  })
+})()

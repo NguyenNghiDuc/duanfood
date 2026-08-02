@@ -11,10 +11,16 @@ router.get('/categories', requireLogin, requireAdmin, adminController.showCatego
 router.post('/categories/add', requireLogin, requireAdmin, adminController.addCategory)
 router.post('/categories/delete/:id', requireLogin, requireAdmin, adminController.deleteCategory)
 router.get('/stats', requireLogin, requireAdmin, adminController.showStats)
+router.get('/foods', requireLogin, requireAdmin, adminController.listFoods)
+router.get('/foods/create', requireLogin, requireAdmin, adminController.showCreateFood)
+router.post('/foods', requireLogin, requireAdmin, adminController.createFood)
 router.get('/foods/add', requireLogin, requireAdmin, adminController.showAddFood)
 router.post('/foods/add', requireLogin, requireAdmin, adminController.addFood)
 router.post('/foods/delete/:id', requireLogin, requireAdmin, adminController.deleteFood)
+router.post('/foods/:id/delete', requireLogin, requireAdmin, adminController.deleteFood)
 router.get('/foods/edit/:id', requireLogin, requireAdmin, adminController.showEditFood)
 router.post('/foods/edit/:id', requireLogin, requireAdmin, adminController.updateFood)
+router.get('/foods/:id/edit', requireLogin, requireAdmin, adminController.showEditFood)
+router.post('/foods/:id/edit', requireLogin, requireAdmin, adminController.updateFood)
 
 module.exports = router

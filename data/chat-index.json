@@ -1,5 +1,29 @@
 [
   {
+    "id": 39,
+    "title": "Bò lúc lắc đặc biệt",
+    "description": "Món bò mới cho test\nNguyên liệu: Bò, hành, xốt",
+    "category_id": 1,
+    "category": "Đồ tươi sống",
+    "price": 99000,
+    "image": "/images/test-bo.png",
+    "url": "/foods/39",
+    "order_count": 0,
+    "text": "bo luc lac đac biet mon bo moi cho test\nnguyen lieu: bo, hanh, xot đo tuoi song 99000"
+  },
+  {
+    "id": 38,
+    "title": "Bò lúc lắc đặc biệt",
+    "description": "Món bò mới cho test\nNguyên liệu: Bò, hành, xốt",
+    "category_id": 1,
+    "category": "Đồ tươi sống",
+    "price": 99000,
+    "image": "/images/test-bo.png",
+    "url": "/foods/38",
+    "order_count": 0,
+    "text": "bo luc lac đac biet mon bo moi cho test\nnguyen lieu: bo, hanh, xot đo tuoi song 99000"
+  },
+  {
     "id": 37,
     "title": "Mì Hảo Hảo ",
     "description": "Mì Hảo Hảo là một trong những thương hiệu mì ăn liền được yêu thích nhất tại Việt Nam với hương vị thơm ngon, sợi mì dai và nước súp đậm đà. Được sản xuất trên dây chuyền hiện đại, Mì Hảo Hảo mang đến bữa ăn nhanh chóng, tiện lợi nhưng vẫn đảm bảo chất lượng và hương vị hấp dẫn.",
@@ -128,7 +152,7 @@
     "price": 80000,
     "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT63r6qFYZSeFFnHjAaGj3HBS-gKk7TUJdvXVe3xcbA2g&s=10",
     "url": "/foods/27",
-    "order_count": 0,
+    "order_count": 2,
     "text": "uc ga  uc ga mon an ua thich cua ae tap gym , nguoi đang giam can  đo tuoi song 80000"
   },
   {
