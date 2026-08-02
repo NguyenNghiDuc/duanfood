@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Xác thực OTP</title>
+    <link rel="stylesheet" href="/css/register.css" />
+  </head>
+  <body>
+    <div class="auth-container">
+      <div class="auth-card">
+        <div class="auth-header">
+          <span class="auth-icon">🔒</span>
+          <h1>Xác thực số điện thoại</h1>
+        </div>
+        <p class="auth-subtitle">Chúng tôi đã gửi mã OTP tới số <strong><%= phone %></strong>. Vui lòng nhập mã để hoàn tất đăng ký.</p>
+        <% if(error){ %>
+        <div class="error-box"><%= error %></div>
+        <% } %>
+        <form method="POST" action="/register/verify" class="auth-form">
+          <div class="form-group">
+            <label>Mã OTP</label>
+            <input type="text" name="otp" placeholder="Nhập mã OTP" required />
+          </div>
+          <button type="submit" class="btn btn-primary">Xác nhận</button>
+        </form>
+        <div class="auth-footer">
+          Nếu bạn không nhận được mã, thử đăng ký lại hoặc kiểm tra số điện thoại.
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

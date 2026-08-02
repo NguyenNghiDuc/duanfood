@@ -112,6 +112,65 @@ function redirectMenu(req, res) {
   res.redirect('/foods')
 }
 
+async function recommendFoods(req, res, next) {
+  try {
+    const id = Number(req.params.id)
+    const baseFood = await foodModel.getFoodById(id)
+
+    if (!baseFood) {
+      return res.status(404).json({ error: 'Không tìm thấy món ăn' })
+    }
+
+    const foods = await foodModel.getFoods({})
+
+    // simple content-based scoring
+    function normalize(text) {
+      return String(text || '')
+        .trim()
+        .normalize('NFD')
+        .replace(/\p{Diacritic}/gu, '')
+        .toLowerCase()
+    }
+
+    const baseWords = new Set(
+      normalize(baseFood.title + ' ' + (baseFood.description || '')).split(/\W+/).filter(Boolean)
+    )
+
+    const scored = foods
+      .filter((f) => f.id !== id)
+      .map((f) => {
+        let score = 0
+        if (f.category_id && baseFood.category_id && Number(f.category_id) === Number(baseFood.category_id)) {
+          score += 5
+        }
+
+        const words = new Set(
+          normalize(f.title + ' ' + (f.description || '')).split(/\W+/).filter(Boolean)
+        )
+        let overlap = 0
+        for (const w of words) if (baseWords.has(w)) overlap++
+        score += overlap
+
+        // small boost for closer price
+        try {
+          const p1 = Number(baseFood.price || 0)
+          const p2 = Number(f.price || 0)
+          const diff = Math.abs(p1 - p2)
+          if (!isNaN(diff)) score += Math.max(0, 2 - Math.floor(diff / 20000))
+        } catch (e) {}
+
+        return { food: f, score }
+      })
+      .sort((a, b) => b.score - a.score)
+
+    const results = scored.slice(0, 6).map((s) => s.food)
+
+    res.json({ recommendations: results })
+  } catch (error) {
+    next(error)
+  }
+}
+
 module.exports = {
   showHome,
   showFoods,
@@ -122,4 +181,5 @@ module.exports = {
   showAbout,
   showContact,
   redirectMenu
+  ,recommendFoods
 }

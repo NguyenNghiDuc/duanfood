@@ -69,6 +69,28 @@ async function getFoodById(id) {
   return rows[0] || null
 }
 
+async function getFoodOrderCounts() {
+  const [rows] = await db.query('SELECT food_id, SUM(quantity) AS order_count FROM order_items GROUP BY food_id')
+  return rows.reduce((map, row) => {
+    map[row.food_id] = Number(row.order_count || 0)
+    return map
+  }, {})
+}
+
+async function searchFoods({ keyword = '', categoryId = '', minPrice = null, maxPrice = null, excludeId = null } = {}) {
+  const foods = await getFoods({})
+  const normalizedKeyword = normalizeText(keyword)
+  return foods.filter(food => {
+    if (excludeId && Number(food.id) === Number(excludeId)) return false
+    if (categoryId && String(food.category_id) !== String(categoryId)) return false
+    if (minPrice !== null && Number(food.price || 0) < Number(minPrice)) return false
+    if (maxPrice !== null && Number(food.price || 0) > Number(maxPrice)) return false
+    if (!normalizedKeyword) return true
+    const haystack = normalizeText([food.title, food.description, food.category_name].join(' '))
+    return haystack.includes(normalizedKeyword)
+  })
+}
+
 async function createFood({ title, description, price, category_id, image, gram }) {
   const [result] = await db.query(`INSERT INTO foods (title, description, price, category_id, image, gram) VALUES (?, ?, ?, ?, ?, ?)`, [title, description, price, category_id || null, image || '', gram || 0])
   return result.insertId
@@ -113,6 +135,8 @@ module.exports = {
   getAllCategories,
   getFoods,
   getFoodById,
+  getFoodOrderCounts,
+  searchFoods,
   createFood,
   updateFood,
   deleteFood,

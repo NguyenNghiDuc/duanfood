@@ -10,7 +10,7 @@ async function showRegister(req, res) {
 
 async function register(req, res, next) {
   try {
-    const { username, password } = req.body
+    const { username, password, phone, fullname, address } = req.body
 
     const existing = await userModel.findByUsername(username)
     if (existing) {
@@ -20,14 +20,91 @@ async function register(req, res, next) {
     }
 
     const hash = await bcrypt.hash(password, 10)
+
+    // if phone provided, send OTP and store pending registration in session
+    if (phone && phone.trim()) {
+      const otp = String(Math.floor(100000 + Math.random() * 900000))
+      const expires = Date.now() + 5 * 60 * 1000 // 5 minutes
+
+      // send SMS via Twilio if configured, else log to console
+      try {
+        if (process.env.TWILIO_SID && process.env.TWILIO_TOKEN && process.env.TWILIO_FROM) {
+          const accountSid = process.env.TWILIO_SID
+          const authToken = process.env.TWILIO_TOKEN
+          const from = process.env.TWILIO_FROM
+          const to = phone
+          const url = `https://api.twilio.com/2010-04-01/Accounts/${accountSid}/Messages.json`
+          const body = new URLSearchParams({ From: from, To: to, Body: `Mã OTP của bạn là: ${otp}` })
+          await fetch(url, { method: 'POST', body, headers: { Authorization: 'Basic ' + Buffer.from(accountSid + ':' + authToken).toString('base64') } })
+        } else {
+          console.log(`SIMULATED SMS -> ${phone}: Mã OTP của bạn là ${otp}`)
+        }
+      } catch (e) {
+        console.error('SMS send error', e)
+      }
+
+      req.session.pendingRegister = {
+        username,
+        passwordHash: hash,
+        phone,
+        fullname: fullname || '',
+        address: address || '',
+        otp,
+        otpExpires: expires
+      }
+
+      return res.render('register-verify', { phone, error: null })
+    }
+
+    // no phone -> create directly
     await userModel.createUser({
       username,
-      password: hash
+      password: hash,
+      fullname: fullname || '',
+      phone: phone || '',
+      address: address || ''
     })
 
     res.redirect('/login')
   } catch (error) {
     next(error)
+  }
+}
+
+async function showVerify(req, res) {
+  const pending = req.session.pendingRegister || {}
+  if (!pending || !pending.username) return res.redirect('/register')
+  res.render('register-verify', { phone: pending.phone, error: null })
+}
+
+async function verifyRegister(req, res, next) {
+  try {
+    const { otp } = req.body
+    const pending = req.session.pendingRegister
+    if (!pending) return res.redirect('/register')
+
+    if (Date.now() > (pending.otpExpires || 0)) {
+      req.session.pendingRegister = null
+      return res.render('register-verify', { phone: pending.phone, error: 'Mã OTP đã hết hạn. Vui lòng đăng ký lại.' })
+    }
+
+    if (String(otp).trim() !== String(pending.otp).trim()) {
+      return res.render('register-verify', { phone: pending.phone, error: 'Mã OTP không chính xác' })
+    }
+
+    // create user
+    await userModel.createUser({
+      username: pending.username,
+      password: pending.passwordHash,
+      fullname: pending.fullname || '',
+      phone: pending.phone || '',
+      address: pending.address || ''
+    })
+
+    req.session.pendingRegister = null
+    res.redirect('/login')
+  } catch (err) {
+    next(err)
   }
 }
 
@@ -283,5 +360,7 @@ module.exports = {
   showProfile,
   showEditProfile,
   updateProfile,
-  walletTopUp
+  walletTopUp,
+  showVerify,
+  verifyRegister
 }

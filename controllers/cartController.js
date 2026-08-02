@@ -28,6 +28,30 @@ async function addToCart(req, res, next) {
   }
 }
 
+async function addToCartApi(req, res, next) {
+  try {
+    const food = await foodModel.getFoodById(req.params.id)
+    if (!food) return res.status(404).json({ error: 'Không tìm thấy món ăn' })
+    const cart = getCart(req)
+    const existing = cart.find(item => item.foodId === food.id)
+    if (existing) existing.quantity += 1
+    else cart.push({ foodId: food.id, title: food.title, price: food.price, quantity: 1, image: food.image })
+    req.session.cart = cart
+    res.json({ ok: true, cart, count: cart.reduce((sum, item) => sum + item.quantity, 0), total: getCartTotal(cart) })
+  } catch (error) {
+    next(error)
+  }
+}
+
+function getCartSummaryApi(req, res, next) {
+  try {
+    const cart = getCart(req)
+    res.json({ ok: true, cart, count: cart.reduce((sum, item) => sum + item.quantity, 0), total: getCartTotal(cart) })
+  } catch (error) {
+    next(error)
+  }
+}
+
 function updateCart(req, res, next) {
   try {
     const quantity = Number(req.body.quantity || 0)
@@ -156,6 +180,8 @@ async function listOrders(req, res, next) {
 module.exports = {
   showCart,
   addToCart,
+  addToCartApi,
+  getCartSummaryApi,
   updateCart,
   removeFromCart,
   showCheckout,

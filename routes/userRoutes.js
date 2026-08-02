@@ -6,6 +6,8 @@ const { registerValidation, loginValidation, handleValidationErrors } = require(
 
 router.get('/register', userController.showRegister)
 router.post('/register', registerValidation, handleValidationErrors, userController.register)
+router.get('/register/verify', userController.showVerify)
+router.post('/register/verify', userController.verifyRegister)
 router.get('/login', userController.showLogin)
 router.post('/login', loginValidation, handleValidationErrors, userController.login)
 router.get('/logout', userController.logout)

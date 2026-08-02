@@ -2,7 +2,8 @@ const { body, validationResult } = require('express-validator')
 
 const registerValidation = [
   body('username').trim().notEmpty().withMessage('Username không được trống'),
-  body('password').trim().isLength({ min: 6 }).withMessage('Password phải có ít nhất 6 ký tự')
+  body('password').trim().isLength({ min: 6 }).withMessage('Password phải có ít nhất 6 ký tự'),
+  body('phone').trim().notEmpty().withMessage('Số điện thoại không được để trống')
 ]
 
 const loginValidation = [

@@ -8,7 +8,11 @@ const orderRoutes = require('./orderRoutes')
 const postRoutes = require('./postRoutes')
 const adminRoutes = require('./adminRoutes')
 const addressRoutes = require('./addressRoutes')
+const apiRoutes = require('./apiRoutes')
+const chatController = require('../controllers/chatController')
 
+// lightweight chat endpoint (for client widget)
+router.post('/chat', express.json(), chatController.chat)
 router.use('/', foodRoutes)
 router.use('/', userRoutes)
 router.use('/', cartRoutes)
@@ -16,5 +20,6 @@ router.use('/', orderRoutes)
 router.use('/', postRoutes)
 router.use('/', addressRoutes)
 router.use('/admin', adminRoutes)
+router.use('/api', apiRoutes)
 
 module.exports = router

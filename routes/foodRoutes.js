@@ -7,6 +7,7 @@ const { requireAdmin } = require('../middleware/admin')
 router.get('/', foodController.showHome)
 router.get('/foods', foodController.showFoods)
 router.get('/foods/:id', foodController.showFoodDetail)
+router.get('/api/recommendations/:id', foodController.recommendFoods)
 router.post(
   '/foods/:id/review',
   requireLogin,
