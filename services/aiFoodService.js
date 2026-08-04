@@ -573,12 +573,49 @@ async function suggestCombos(budget, people = 1, options = {}) {
   // filter mains to exclude drinks category
   const mainsFiltered = mains.filter(f => String(f.category_name || '').toLowerCase() !== 'đồ uống');
 
+  // Fallback strategies for drinks/desserts:
+  // 1) if category lists empty, try matching by common keywords (title/ingredients)
+  // 2) otherwise fallback to cheapest items
+  const allCheapest = await foodModel.searchFoodsSmart({ sort: 'price_asc', limit: 50 });
+
+  const drinksKeywords = ['sua','milk','tra','trasua','tra sua','nuoc','nuoc ngot','juice','coffee','ca phe','cafe','pepsi','cola','nước','matcha','milkshake','soda','cafe'];
+  const dessertsKeywords = ['banh','kem','che','chế','trang mieng','banh keo','banh mi','banhngot','dessert','tráng miệng','pudding','cookie','cake','tiramisu'];
+
+  let drinksFinal = (drinks && drinks.length) ? drinks : [];
+  if (drinksFinal.length === 0) {
+    const seen = new Set();
+    for (const kw of drinksKeywords) {
+      const res = await foodModel.searchFoodsSmart({ keyword: kw, sort: 'price_asc', limit: 20 });
+      for (const r of res) {
+        if (!seen.has(r.id)) { drinksFinal.push(r); seen.add(r.id); }
+        if (drinksFinal.length >= 20) break;
+      }
+      if (drinksFinal.length >= 20) break;
+    }
+  }
+
+  let dessertsFinal = (desserts && desserts.length) ? desserts : [];
+  if (dessertsFinal.length === 0) {
+    const seen2 = new Set();
+    for (const kw of dessertsKeywords) {
+      const res = await foodModel.searchFoodsSmart({ keyword: kw, sort: 'price_asc', limit: 20 });
+      for (const r of res) {
+        if (!seen2.has(r.id)) { dessertsFinal.push(r); seen2.add(r.id); }
+        if (dessertsFinal.length >= 20) break;
+      }
+      if (dessertsFinal.length >= 20) break;
+    }
+  }
+
+  if (drinksFinal.length === 0) drinksFinal = allCheapest.slice(0,20);
+  if (dessertsFinal.length === 0) dessertsFinal = allCheapest.slice(0,20);
+
   const combos = [];
 
-  // Try combos main + drink + dessert
+  // Try combos main + drink + dessert (use fallback lists)
   for (const main of mainsFiltered.slice(0, 20)) {
-    for (const drink of drinks.slice(0, 10)) {
-      for (const dessert of desserts.slice(0, 6)) {
+    for (const drink of drinksFinal.slice(0, 10)) {
+      for (const dessert of dessertsFinal.slice(0, 6)) {
         const total = Number(main.price || 0) + Number(drink.price || 0) + Number(dessert.price || 0);
         if (total <= targetBudget) {
           combos.push({ items: [main, drink, dessert], total, score: total });

@@ -45,6 +45,40 @@ async function initFoodSchema() {
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     )
   `).catch(() => {});
+
+    // Seed default categories and sample drinks/desserts if missing
+    const [catRows] = await db.query(`SELECT COUNT(*) AS total FROM categories`);
+    const catCount = catRows[0] ? catRows[0].total : 0;
+
+    if (catCount === 0) {
+      await db.query(`INSERT INTO categories (name) VALUES (?), (?), (?), (?)`, [
+        'Đồ uống', 'Bánh kẹo', 'Đồ ăn', 'Trái cây'
+      ]).catch(() => {});
+    }
+
+    const [foodRows] = await db.query(`SELECT COUNT(*) AS total FROM foods`);
+    const foodCount = foodRows[0] ? foodRows[0].total : 0;
+
+    if (foodCount === 0) {
+      // find category ids
+      const [cats] = await db.query(`SELECT id, name FROM categories`);
+      const map = {};
+      for (const c of cats) map[c.name] = c.id;
+
+      const samples = [
+        ['Trà sữa trân châu', 'Trà sữa thơm béo, topping trân châu', 35000, map['Đồ uống'] || null, ''],
+        ['Nước cam tươi', 'Nước cam ép tươi', 30000, map['Đồ uống'] || null, ''],
+        ['Kem vani', 'Kem mát lạnh vị vani', 25000, map['Bánh kẹo'] || null, ''],
+        ['Bánh flan', 'Bánh flan caramel mềm mịn', 20000, map['Bánh kẹo'] || null, ''],
+        ['Bánh quy socola', 'Bánh quy giòn vị socola', 15000, map['Bánh kẹo'] || null, '']
+      ];
+
+      for (const s of samples) {
+        await db.query(`INSERT INTO foods (title, description, price, category_id, image, gram, ingredients) VALUES (?, ?, ?, ?, ?, ?, ?)`, [
+          s[0], s[1], s[2], s[3], s[4], 0, ''
+        ]).catch(() => {});
+      }
+    }
 }
 
 /* ================================
