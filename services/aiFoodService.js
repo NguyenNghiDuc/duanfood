@@ -1,4 +1,4 @@
-const foodModel = require("../models/foodModel");
+const foodModel = require("../models/foodModels");
 
 function normalize(text) {
   return String(text || "")
@@ -271,6 +271,21 @@ function analyzeQuestion(text) {
 
   const price = detectPrice(normalized);
 
+  // detect budget like "100k" and people like "2 nguoi" separately
+  const budgetMatch = normalized.match(/(\d+(?:[.,]\d+)?\s*(k|nghin|ngan|000)?)/);
+  const peopleMatch = normalized.match(/\b(\d+)\s*(?:nguoi|ng|nguoỉ|người)\b/);
+
+  let budget = null;
+  let people = null;
+
+  if (budgetMatch) {
+    budget = moneyToNumber(budgetMatch[1] || null);
+  }
+
+  if (peopleMatch) {
+    people = Number(peopleMatch[1]) || null;
+  }
+
   return {
     original: text,
     normalized,
@@ -287,8 +302,181 @@ function analyzeQuestion(text) {
 
     maxPrice: price.maxPrice,
 
-    sort: price.sort
+    sort: price.sort,
+
+    budget,
+
+    people
   };
+}
+
+/* =================================
+   FUZZY MATCH / TYPO HANDLING
+================================= */
+
+function levenshtein(a, b) {
+  if (!a) return b ? b.length : 0;
+  if (!b) return a.length;
+  const matrix = [];
+  const alen = a.length;
+  const blen = b.length;
+  for (let i = 0; i <= blen; i++) {
+    matrix[i] = [i];
+  }
+  for (let j = 0; j <= alen; j++) {
+    matrix[0][j] = j;
+  }
+  for (let i = 1; i <= blen; i++) {
+    for (let j = 1; j <= alen; j++) {
+      if (b.charAt(i - 1) === a.charAt(j - 1)) {
+        matrix[i][j] = matrix[i - 1][j - 1];
+      } else {
+        matrix[i][j] = Math.min(
+          matrix[i - 1][j] + 1,
+          matrix[i][j - 1] + 1,
+          matrix[i - 1][j - 1] + 1
+        );
+      }
+    }
+  }
+  return matrix[blen][alen];
+}
+
+async function fuzzySearch(keyword, limit = 10) {
+  if (!keyword) return [];
+  // fetch foods and score by similarity
+  const foods = await foodModel.getFoods();
+  const k = normalize(keyword);
+  const scored = foods.map(f => {
+    const title = normalize(f.title || "");
+    const ing = normalize(f.ingredients || "");
+    const desc = normalize(f.description || "");
+    const tgt = title + " " + ing + " " + desc;
+    const distance = levenshtein(k, title);
+    const contains = tgt.includes(k) ? 0 : distance;
+    // small score combining contains + distance and rating
+    const score = (tgt.includes(k) ? 1000 : Math.max(0, 200 - contains)) + (Number(f.avg_rating || 0) * 10);
+    return { food: f, score };
+  });
+
+  scored.sort((a, b) => b.score - a.score);
+
+  return scored.slice(0, limit).map(s => s.food);
+}
+
+/* =================================
+   ALTERNATIVES
+================================= */
+
+async function suggestAlternatives(foodId, limit = 6) {
+  const target = await foodModel.getFoodById(foodId);
+  if (!target) return [];
+
+  const price = Number(target.price || 0);
+  const low = Math.max(0, price * 0.8);
+  const high = price * 1.2;
+
+  // search same category first
+  let candidates = await foodModel.searchFoodsSmart({ category: target.category_name || '', minPrice: low, maxPrice: high, limit: 50 });
+
+  // exclude itself
+  candidates = candidates.filter(f => f.id !== target.id);
+
+  // boost similarity by shared ingredients
+  const targIng = normalize(target.ingredients || '');
+
+  const scored = candidates.map(f => {
+    let score = 0;
+    if (f.category_name === target.category_name) score += 20;
+    const common = (normalize(f.ingredients || '') + ' ' + normalize(f.title || '')).split(' ').filter(Boolean).filter(w => targIng.includes(w));
+    score += common.length * 5;
+    score += Number(f.avg_rating || 0) * 5;
+    // closer price better
+    score += Math.max(0, 10 - Math.abs(Number(f.price || 0) - price) / (price || 1) * 10);
+    return { food: f, score };
+  });
+
+  scored.sort((a, b) => b.score - a.score);
+
+  return scored.slice(0, limit).map(s => s.food);
+}
+
+/* =================================
+   REVIEW ANALYSIS
+================================= */
+
+function tokenizeWords(text) {
+  return String(text || '').toLowerCase().replace(/[^a-z0-9\s\p{L}]/gu, ' ').split(/\s+/).filter(Boolean);
+}
+
+async function analyzeReviews(foodId) {
+  const reviews = await foodModel.getReviewsByFoodId(foodId);
+  const summary = {
+    reviewCount: reviews.length,
+    avgRating: 0,
+    positives: [],
+    negatives: []
+  };
+
+  if (!reviews.length) return summary;
+
+  const stopwords = new Set(['la', 'rat', 'khong', 'ko', 'không', 'va', 'và', 'that', 'nhieu', 'nhung', 'giu']);
+
+  let total = 0;
+  const posFreq = {};
+  const negFreq = {};
+
+  for (const r of reviews) {
+    const rating = Number(r.rating || 0);
+    total += rating;
+    const tokens = tokenizeWords(r.comment || '');
+    for (const t of tokens) {
+      if (stopwords.has(t) || t.length < 2) continue;
+      if (rating >= 4) posFreq[t] = (posFreq[t] || 0) + 1;
+      if (rating <= 2) negFreq[t] = (negFreq[t] || 0) + 1;
+    }
+  }
+
+  summary.avgRating = total / reviews.length;
+
+  const top = (freq) => Object.entries(freq).sort((a,b)=>b[1]-a[1]).slice(0,6).map(([k,v])=>({word:k,count:v}));
+
+  summary.positives = top(posFreq);
+  summary.negatives = top(negFreq);
+
+  return summary;
+}
+
+/* =================================
+   CART CALCULATION
+================================= */
+
+async function calculateCart(items = [], deliveryCompanyId = null) {
+  // items: [{foodId, quantity}]
+  let subtotal = 0;
+  const details = [];
+
+  for (const it of items) {
+    const f = await foodModel.getFoodById(it.foodId);
+    if (!f) continue;
+    const qty = Number(it.quantity || 1);
+    const line = Number(f.price || 0) * qty;
+    subtotal += line;
+    details.push({ food: f, quantity: qty, line });
+  }
+
+  const companies = await foodModel.getDeliveryCompanies();
+  let fee = 0;
+  if (deliveryCompanyId) {
+    const sel = companies.find(c => String(c.id) === String(deliveryCompanyId));
+    if (sel) fee = Number(sel.fee || 0);
+  } else if (companies && companies.length) {
+    fee = Number(companies[0].fee || 0);
+  }
+
+  const total = subtotal + fee;
+
+  return { subtotal, fee, total, details };
 }
 
 /* =================================
@@ -297,6 +485,17 @@ function analyzeQuestion(text) {
 
 async function findFoods(text) {
   const analysis = analyzeQuestion(text);
+
+  // If user provided a budget, return combos instead of single-food list
+  if (analysis.budget) {
+    const combos = await suggestCombos(analysis.budget, analysis.people || 1);
+
+    return {
+      analysis,
+      foods: [],
+      combos
+    };
+  }
 
   let foods = await foodModel.searchFoodsSmart({
     category: analysis.category,
@@ -322,10 +521,107 @@ async function findFoods(text) {
     });
   }
 
+  // Fallback: nếu vẫn không có kết quả, thử tách các token và tìm theo từng token
+  if (foods.length === 0 && analysis.normalized) {
+    const tokens = analysis.normalized.split(" ").filter(Boolean);
+
+    for (const token of tokens) {
+      const partial = await foodModel.searchFoodsSmart({
+        keyword: token,
+        sort: analysis.sort,
+        limit: 10
+      });
+
+      if (partial.length) {
+        // merge unique by id
+        const ids = new Set(foods.map(f => f.id));
+        for (const f of partial) if (!ids.has(f.id)) { foods.push(f); ids.add(f.id); }
+      }
+
+      if (foods.length >= 10) break;
+    }
+  }
+
+    // If still no foods, try fuzzy search
+    if (foods.length === 0 && analysis.normalized) {
+      const fuzzy = await fuzzySearch(analysis.normalized, 10);
+      if (fuzzy.length) foods = fuzzy;
+    }
+
   return {
-    analysis,
-    foods
+      analysis,
+      foods
   };
+}
+
+/* =================================
+   GỢI Ý COMBO THEO NGÂN SÁCH
+================================= */
+
+async function suggestCombos(budget, people = 1, options = {}) {
+  // budget in VND
+  const perPerson = Math.max(1, Number(budget || 0) / Math.max(1, people));
+
+  // If group (people>1), we build combos per person and scale totals later
+  const targetBudget = people > 1 ? perPerson : Number(budget || 0);
+
+  // fetch candidate mains (exclude drinks), drinks, desserts
+  const mains = await foodModel.searchFoodsSmart({ sort: 'price_asc', limit: 30 });
+  const drinks = await foodModel.searchFoodsSmart({ category: 'Đồ uống', sort: 'price_asc', limit: 20 });
+  const desserts = await foodModel.searchFoodsSmart({ category: 'Bánh kẹo', sort: 'price_asc', limit: 20 });
+
+  // filter mains to exclude drinks category
+  const mainsFiltered = mains.filter(f => String(f.category_name || '').toLowerCase() !== 'đồ uống');
+
+  const combos = [];
+
+  // Try combos main + drink + dessert
+  for (const main of mainsFiltered.slice(0, 20)) {
+    for (const drink of drinks.slice(0, 10)) {
+      for (const dessert of desserts.slice(0, 6)) {
+        const total = Number(main.price || 0) + Number(drink.price || 0) + Number(dessert.price || 0);
+        if (total <= targetBudget) {
+          combos.push({ items: [main, drink, dessert], total, score: total });
+        }
+      }
+
+      // also try main + drink only
+      const total2 = Number(main.price || 0) + Number(drink.price || 0);
+      if (total2 <= targetBudget) {
+        combos.push({ items: [main, drink], total: total2, score: total2 });
+      }
+    }
+  }
+
+  // if no combos found, try two-item combos (main + dessert)
+  if (combos.length === 0) {
+    for (const main of mainsFiltered.slice(0, 30)) {
+      for (const dessert of desserts.slice(0, 10)) {
+        const total = Number(main.price || 0) + Number(dessert.price || 0);
+        if (total <= targetBudget) combos.push({ items: [main, dessert], total, score: total });
+      }
+    }
+  }
+
+  // sort combos by score descending (closer to budget first), then by avg rating
+  combos.sort((a, b) => {
+    if (b.total !== a.total) return b.total - a.total;
+    const ra = (b.items[0]?.avg_rating || 0) - (a.items[0]?.avg_rating || 0);
+    return ra;
+  });
+
+  let results = combos.slice(0, 12);
+
+  if (people > 1) {
+    // scale totals for group and annotate quantities
+    results = results.map(r => ({
+      items: r.items.map(i => ({ ...i, quantity: people })),
+      total: r.total * people,
+      score: r.score
+    }));
+  }
+
+  return results;
 }
 
 /* =================================
@@ -345,6 +641,19 @@ function buildAnswer(data) {
     analysis,
     foods
   } = data;
+
+  const combos = data.combos || null;
+
+  if (combos && combos.length) {
+    let intro = `Mình gợi ý một số combo phù hợp với ngân sách ${formatMoney(analysis.budget || 0)}:`;
+
+    const lines = combos.slice(0, 10).map((c, idx) => {
+      const titles = c.items.map(i => i.title).join(' + ');
+      return `${idx + 1}. ${titles} — Tổng: ${formatMoney(c.total)}`;
+    });
+
+    return `${intro}\n\n${lines.join('\n')}\n\nBạn muốn xem chi tiết combo nào?`;
+  }
 
   if (!foods.length) {
     if (analysis.maxPrice !== null) {
@@ -422,6 +731,11 @@ module.exports = {
   detectIntent,
   analyzeQuestion,
   findFoods,
+  suggestCombos,
+  fuzzySearch,
+  suggestAlternatives,
+  analyzeReviews,
+  calculateCart,
   buildAnswer,
   askFoodAI
 };
