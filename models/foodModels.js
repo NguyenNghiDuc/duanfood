@@ -1,148 +1,451 @@
-const db = require('../config/db')
+const db = require("../config/db");
 
 async function initFoodSchema() {
-  const [existingCategories] = await db.query('SELECT COUNT(*) AS total FROM categories')
-  if (existingCategories[0].total === 0) {
-    await db.query("INSERT INTO categories (name) VALUES ('Đồ tươi sống'), ('Rau củ'), ('Trái cây'), ('Hải sản'), ('Gạo - Mì'), ('Sữa và sản phẩm từ sữa'), ('Thực phẩm đông lạnh'), ('Thực phẩm khô'), ('Gia vị'), ('Đồ uống'), ('Bánh kẹo'), ('Bánh mì'), ('Đồ gia dụng')")
-  }
+  await db.ready();
 
-  const [existingDelivery] = await db.query('SELECT COUNT(*) AS total FROM delivery_companies')
-  if (existingDelivery[0].total === 0) {
-    await db.query(`INSERT INTO delivery_companies (name, fee) VALUES ('Giao hàng tiêu chuẩn', 15000), ('Giao hàng nhanh', 25000), ('Giao hàng tiết kiệm', 10000)`) }
+  // SQLite đã tạo schema trong db.js.
+  // Các lệnh này chỉ đảm bảo bảng tồn tại nếu dùng MySQL.
+
+  await db.query(`
+    CREATE TABLE IF NOT EXISTS delivery_companies (
+      id INTEGER PRIMARY KEY,
+      name VARCHAR(255) NOT NULL,
+      fee DECIMAL(10,2) NOT NULL DEFAULT 0
+    )
+  `).catch(() => {});
+
+  await db.query(`
+    CREATE TABLE IF NOT EXISTS categories (
+      id INTEGER PRIMARY KEY,
+      name VARCHAR(100) NOT NULL UNIQUE
+    )
+  `).catch(() => {});
+
+  await db.query(`
+    CREATE TABLE IF NOT EXISTS foods (
+      id INTEGER PRIMARY KEY,
+      title VARCHAR(255) NOT NULL,
+      description TEXT,
+      price DECIMAL(10,2) NOT NULL DEFAULT 0,
+      category_id INTEGER,
+      image VARCHAR(255) DEFAULT '',
+      gram INTEGER DEFAULT 0,
+      ingredients TEXT DEFAULT '',
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+  `).catch(() => {});
+
+  await db.query(`
+    CREATE TABLE IF NOT EXISTS reviews (
+      id INTEGER PRIMARY KEY,
+      food_id INTEGER NOT NULL,
+      username VARCHAR(255) NOT NULL,
+      rating INTEGER NOT NULL DEFAULT 5,
+      comment TEXT,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+  `).catch(() => {});
 }
 
-async function getDeliveryCompanies() {
-  const [rows] = await db.query('SELECT * FROM delivery_companies ORDER BY fee ASC')
-  return rows
-}
-
-async function getAllCategories() {
-  const [rows] = await db.query('SELECT * FROM categories ORDER BY id ASC')
-  return rows
-}
+/* ================================
+   CHUẨN HÓA TIẾNG VIỆT
+================================ */
 
 function normalizeText(text) {
-  return String(text || '')
-    .trim()
-    .normalize('NFD')
-    .replace(/\p{Diacritic}/gu, '')
+  return String(text || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase()
+    .replace(/đ/g, "d")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
-async function getFoods({ keyword = '', categoryId = '', sort = 'new' } = {}) {
-  let sql = `SELECT f.*, c.name AS category_name FROM foods f LEFT JOIN categories c ON c.id = f.category_id WHERE 1=1`
-  const params = []
+/* ================================
+   LẤY CATEGORY
+================================ */
+
+async function getAllCategories() {
+  await db.ready();
+
+  const [rows] = await db.query(`
+    SELECT *
+    FROM categories
+    ORDER BY id ASC
+  `);
+
+  return rows;
+}
+
+/* ================================
+   LẤY FOOD
+================================ */
+
+async function getFoods({
+  keyword = "",
+  categoryId = "",
+  minPrice = null,
+  maxPrice = null,
+  sort = "newest",
+  limit = 50
+} = {}) {
+
+  await db.ready();
+
+  let sql = `
+    SELECT
+      f.*,
+      c.name AS category_name,
+      COALESCE(
+        (SELECT AVG(r.rating)
+         FROM reviews r
+         WHERE r.food_id = f.id),
+        0
+      ) AS avg_rating,
+      COALESCE(
+        (SELECT COUNT(*)
+         FROM reviews r
+         WHERE r.food_id = f.id),
+        0
+      ) AS review_count
+    FROM foods f
+    LEFT JOIN categories c
+      ON c.id = f.category_id
+    WHERE 1 = 1
+  `;
+
+  const params = [];
+
+  if (keyword) {
+    const key = `%${normalizeText(keyword)}%`;
+
+    sql += `
+      AND (
+        LOWER(f.title) LIKE ?
+        OR LOWER(f.description) LIKE ?
+        OR LOWER(COALESCE(f.ingredients, '')) LIKE ?
+        OR LOWER(c.name) LIKE ?
+      )
+    `;
+
+    params.push(key, key, key, key);
+  }
 
   if (categoryId) {
-    sql += ' AND f.category_id = ?'
-    params.push(categoryId)
+    sql += ` AND f.category_id = ?`;
+    params.push(categoryId);
+  }
+
+  if (minPrice !== null) {
+    sql += ` AND f.price >= ?`;
+    params.push(minPrice);
+  }
+
+  if (maxPrice !== null) {
+    sql += ` AND f.price <= ?`;
+    params.push(maxPrice);
   }
 
   switch (sort) {
-    case 'priceLow':
-      sql += ' ORDER BY f.price ASC'
-      break
-    case 'priceHigh':
-      sql += ' ORDER BY f.price DESC'
-      break
+    case "price_asc":
+      sql += ` ORDER BY f.price ASC`;
+      break;
+
+    case "price_desc":
+      sql += ` ORDER BY f.price DESC`;
+      break;
+
+    case "rating":
+      sql += ` ORDER BY avg_rating DESC, review_count DESC`;
+      break;
+
+    case "popular":
+      sql += ` ORDER BY review_count DESC, avg_rating DESC`;
+      break;
+
     default:
-      sql += ' ORDER BY f.id DESC'
+      sql += ` ORDER BY f.id DESC`;
   }
 
-  const [rows] = await db.query(sql, params)
+  sql += ` LIMIT ${Math.min(Number(limit) || 50, 100)}`;
 
-  const normalizedKeyword = normalizeText(keyword)
-  if (!normalizedKeyword) {
-    return rows
-  }
+  const [rows] = await db.query(sql, params);
 
-  return rows.filter((food) => {
-    return (
-      normalizeText(food.title).includes(normalizedKeyword) ||
-      normalizeText(food.description).includes(normalizedKeyword)
-    )
-  })
+  return rows;
 }
+
+/* ================================
+   LẤY FOOD ID
+================================ */
 
 async function getFoodById(id) {
-  const [rows] = await db.query(`SELECT f.*, c.name AS category_name FROM foods f LEFT JOIN categories c ON c.id = f.category_id WHERE f.id = ?`, [id])
-  return rows[0] || null
+  await db.ready();
+
+  const [rows] = await db.query(`
+    SELECT
+      f.*,
+      c.name AS category_name,
+      COALESCE(
+        (SELECT AVG(r.rating)
+         FROM reviews r
+         WHERE r.food_id = f.id),
+        0
+      ) AS avg_rating,
+      COALESCE(
+        (SELECT COUNT(*)
+         FROM reviews r
+         WHERE r.food_id = f.id),
+        0
+      ) AS review_count
+    FROM foods f
+    LEFT JOIN categories c
+      ON c.id = f.category_id
+    WHERE f.id = ?
+  `, [id]);
+
+  return rows[0] || null;
 }
 
-async function getFoodOrderCounts() {
-  const [rows] = await db.query('SELECT food_id, SUM(quantity) AS order_count FROM order_items GROUP BY food_id')
-  return rows.reduce((map, row) => {
-    map[row.food_id] = Number(row.order_count || 0)
-    return map
-  }, {})
+/* ================================
+   TÌM FOOD THÔNG MINH
+================================ */
+
+async function searchFoodsSmart({
+  keyword = "",
+  category = "",
+  ingredient = "",
+  minPrice = null,
+  maxPrice = null,
+  minRating = null,
+  sort = "newest",
+  limit = 10
+} = {}) {
+
+  await db.ready();
+
+  let sql = `
+    SELECT
+      f.*,
+      c.name AS category_name,
+      COALESCE(
+        (SELECT AVG(r.rating)
+         FROM reviews r
+         WHERE r.food_id = f.id),
+        0
+      ) AS avg_rating,
+      COALESCE(
+        (SELECT COUNT(*)
+         FROM reviews r
+         WHERE r.food_id = f.id),
+        0
+      ) AS review_count
+    FROM foods f
+    LEFT JOIN categories c
+      ON c.id = f.category_id
+    WHERE 1=1
+  `;
+
+  const params = [];
+
+  if (keyword) {
+    const k = `%${normalizeText(keyword)}%`;
+
+    sql += `
+      AND (
+        LOWER(f.title) LIKE ?
+        OR LOWER(f.description) LIKE ?
+        OR LOWER(COALESCE(f.ingredients,'')) LIKE ?
+        OR LOWER(c.name) LIKE ?
+      )
+    `;
+
+    params.push(k, k, k, k);
+  }
+
+  if (category) {
+    const k = `%${normalizeText(category)}%`;
+
+    sql += `
+      AND LOWER(c.name) LIKE ?
+    `;
+
+    params.push(k);
+  }
+
+  if (ingredient) {
+    const k = `%${normalizeText(ingredient)}%`;
+
+    sql += `
+      AND (
+        LOWER(f.title) LIKE ?
+        OR LOWER(f.description) LIKE ?
+        OR LOWER(COALESCE(f.ingredients,'')) LIKE ?
+      )
+    `;
+
+    params.push(k, k, k);
+  }
+
+  if (minPrice !== null) {
+    sql += ` AND f.price >= ?`;
+    params.push(minPrice);
+  }
+
+  if (maxPrice !== null) {
+    sql += ` AND f.price <= ?`;
+    params.push(maxPrice);
+  }
+
+  if (minRating !== null) {
+    sql += `
+      AND COALESCE(
+        (SELECT AVG(r.rating)
+         FROM reviews r
+         WHERE r.food_id = f.id),
+        0
+      ) >= ?
+    `;
+
+    params.push(minRating);
+  }
+
+  if (sort === "price_asc") {
+    sql += ` ORDER BY f.price ASC`;
+  } else if (sort === "price_desc") {
+    sql += ` ORDER BY f.price DESC`;
+  } else if (sort === "rating") {
+    sql += ` ORDER BY avg_rating DESC, review_count DESC`;
+  } else if (sort === "popular") {
+    sql += ` ORDER BY review_count DESC, avg_rating DESC`;
+  } else {
+    sql += ` ORDER BY f.id DESC`;
+  }
+
+  sql += ` LIMIT ${Math.min(Number(limit) || 10, 30)}`;
+
+  const [rows] = await db.query(sql, params);
+
+  return rows;
 }
 
-async function searchFoods({ keyword = '', categoryId = '', minPrice = null, maxPrice = null, excludeId = null } = {}) {
-  const foods = await getFoods({})
-  const normalizedKeyword = normalizeText(keyword)
-  return foods.filter(food => {
-    if (excludeId && Number(food.id) === Number(excludeId)) return false
-    if (categoryId && String(food.category_id) !== String(categoryId)) return false
-    if (minPrice !== null && Number(food.price || 0) < Number(minPrice)) return false
-    if (maxPrice !== null && Number(food.price || 0) > Number(maxPrice)) return false
-    if (!normalizedKeyword) return true
-    const haystack = normalizeText([food.title, food.description, food.category_name].join(' '))
-    return haystack.includes(normalizedKeyword)
-  })
-}
-
-async function createFood({ title, description, price, category_id, image, gram }) {
-  const [result] = await db.query(`INSERT INTO foods (title, description, price, category_id, image, gram) VALUES (?, ?, ?, ?, ?, ?)`, [title, description, price, category_id || null, image || '', gram || 0])
-  return result.insertId
-}
-
-async function updateFood({ id, title, description, price, category_id, image, gram }) {
-  await db.query('UPDATE foods SET title = ?, description = ?, price = ?, category_id = ?, image = ?, gram = ? WHERE id = ?', [title, description, price, category_id || null, image || '', gram || 0, id])
-}
-
-async function deleteFood(id) {
-  await db.query('DELETE FROM foods WHERE id = ?', [id])
-}
-
-async function addCategory(name) {
-  await db.query('INSERT INTO categories(name) VALUES (?)', [name])
-}
-
-async function deleteCategory(id) {
-  await db.query('DELETE FROM categories WHERE id = ?', [id])
-}
+/* ================================
+   REVIEW
+================================ */
 
 async function getReviewsByFoodId(foodId) {
-  const [rows] = await db.query('SELECT * FROM reviews WHERE food_id = ? ORDER BY created_at DESC', [foodId])
-  return rows
+  await db.ready();
+
+  const [rows] = await db.query(`
+    SELECT *
+    FROM reviews
+    WHERE food_id = ?
+    ORDER BY created_at DESC
+  `, [foodId]);
+
+  return rows;
 }
 
 async function addReview(foodId, username, rating, comment) {
-  await db.query('INSERT INTO reviews (food_id, username, rating, comment) VALUES (?, ?, ?, ?)', [foodId, username, rating, comment])
+  await db.ready();
+
+  await db.query(`
+    INSERT INTO reviews
+    (food_id, username, rating, comment)
+    VALUES (?, ?, ?, ?)
+  `, [
+    foodId,
+    username,
+    rating,
+    comment
+  ]);
 }
 
 async function getFoodRatingSummary(foodId) {
-  const [[summary]] = await db.query('SELECT COUNT(*) AS reviewCount, AVG(rating) AS avgRating FROM reviews WHERE food_id = ?', [foodId])
+  await db.ready();
+
+  const [rows] = await db.query(`
+    SELECT
+      COUNT(*) AS reviewCount,
+      AVG(rating) AS avgRating
+    FROM reviews
+    WHERE food_id = ?
+  `, [foodId]);
+
+  const summary = rows[0] || {};
+
   return {
     reviewCount: Number(summary.reviewCount || 0),
     avgRating: Number(summary.avgRating || 0)
-  }
+  };
+}
+
+/* ================================
+   DELIVERY
+================================ */
+
+async function getDeliveryCompanies() {
+  await db.ready();
+
+  const [rows] = await db.query(`
+    SELECT *
+    FROM delivery_companies
+    ORDER BY fee ASC
+  `);
+
+  return rows;
+}
+
+/* ================================
+   CREATE FOOD
+================================ */
+
+async function createFood({
+  title,
+  description,
+  price,
+  category_id,
+  image,
+  gram = 0,
+  ingredients = ""
+}) {
+
+  await db.ready();
+
+  const [result] = await db.query(`
+    INSERT INTO foods
+    (
+      title,
+      description,
+      price,
+      category_id,
+      image,
+      gram,
+      ingredients
+    )
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+  `, [
+    title,
+    description || "",
+    Number(price || 0),
+    category_id || null,
+    image || "",
+    Number(gram || 0),
+    ingredients || ""
+  ]);
+
+  return result.insertId;
 }
 
 module.exports = {
   initFoodSchema,
-  getDeliveryCompanies,
+  normalizeText,
   getAllCategories,
   getFoods,
   getFoodById,
-  getFoodOrderCounts,
-  searchFoods,
+  searchFoodsSmart,
   createFood,
-  updateFood,
-  deleteFood,
-  addCategory,
-  deleteCategory,
   getReviewsByFoodId,
   addReview,
-  getFoodRatingSummary
-}
+  getFoodRatingSummary,
+  getDeliveryCompanies
+};
