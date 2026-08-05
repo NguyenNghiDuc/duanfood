@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AI Chat - Trợ lý món ăn | Mini Food</title>
+
+    <!-- CSS chung -->
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- CSS riêng AI Chat -->
+    <link rel="stylesheet" href="/css/ai-chat.css">
+</head>
+
+<body>
+
+    <!-- ================= HEADER ================= -->
+
+    <header class="topbar">
+        <div class="container topbar-inner">
+
+            <!-- LOGO -->
+            <a href="/" class="brand">
+                <div class="brand-badge">
+                    <img
+                        src="/images/anh.png"
+                        alt="Mini Food"
+                        class="brand-logo"
+                    >
+                </div>
+
+                <div class="brand-copy">
+                    <span class="brand-text">Mini Food</span>
+                    <span class="brand-subtitle">
+                        Đặt món ngon mỗi ngày
+                    </span>
+                </div>
+            </a>
+
+            <!-- MENU -->
+            <nav class="header-nav">
+
+                <a href="/">
+                    Trang chủ
+                </a>
+
+                <a href="/foods">
+                    Món ăn
+                </a>
+
+                <a href="/ai" class="active">
+                    🤖 AI Chat
+                </a>
+
+                <a href="/news">
+                    Tin tức
+                </a>
+
+                <a href="/contact">
+                    Liên hệ
+                </a>
+
+            </nav>
+
+            <!-- ACTION -->
+            <div class="topbar-actions">
+
+                <% if (user) { %>
+
+                    <!-- Giỏ hàng -->
+                    <a href="/cart" class="cart-btn">
+                        🛒
+
+                        <% if (typeof cartCount !== 'undefined' && cartCount > 0) { %>
+                            <span class="cart-count">
+                                <%= cartCount %>
+                            </span>
+                        <% } %>
+                    </a>
+
+                    <!-- User -->
+                    <div class="auth-group">
+
+                        <a href="/profile" class="username-highlight">
+                            👤 <%= user.username %>
+                        </a>
+
+                        <a href="/logout" class="logout-btn">
+                            Đăng xuất
+                        </a>
+
+                    </div>
+
+                <% } else { %>
+
+                    <div class="auth-group">
+
+                        <a href="/login" class="login-btn">
+                            Đăng nhập
+                        </a>
+
+                        <a href="/register" class="register-btn">
+                            Đăng ký
+                        </a>
+
+                    </div>
+
+                <% } %>
+
+            </div>
+
+        </div>
+    </header>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main class="ai-chat-container">
+
+        <!-- Tiêu đề -->
+        <div class="ai-header">
+
+            <span class="ai-badge">
+                🤖 AI FOOD ASSISTANT
+            </span>
+
+            <h1>
+                Trợ lý AI Mini Food
+            </h1>
+
+            <p>
+                Hỏi AI để tìm món ăn, lọc theo giá hoặc nhận gợi ý
+                món phù hợp với bạn.
+            </p>
+
+        </div>
+
+
+        <!-- ================= QUICK ACTION ================= -->
+
+        <div class="quick-actions">
+
+            <button
+                type="button"
+                class="quick-btn"
+                data-message="Gợi ý cho tôi một món ngon"
+            >
+                🍔 Gợi ý món
+            </button>
+
+            <button
+                type="button"
+                class="quick-btn"
+                data-message="Tìm món dưới 50k"
+            >
+                💰 Dưới 50k
+            </button>
+
+            <button
+                type="button"
+                class="quick-btn"
+                data-message="Tìm món cay"
+            >
+                🌶️ Món cay
+            </button>
+
+            <button
+                type="button"
+                class="quick-btn"
+                data-message="Tìm món có thịt bò"
+            >
+                🥩 Món bò
+            </button>
+
+            <button
+                type="button"
+                class="quick-btn"
+                data-message="Gợi ý món ăn nhẹ"
+            >
+                🥗 Ăn nhẹ
+            </button>
+
+        </div>
+
+
+        <!-- ================= CHAT ================= -->
+
+        <section class="chat-card">
+
+            <!-- Chat header -->
+            <div class="chat-header">
+
+                <div class="chat-avatar">
+                    🤖
+                </div>
+
+                <div>
+                    <h2>
+                        AI Food Assistant
+                    </h2>
+
+                    <span class="online-status">
+                        ● Đang hoạt động
+                    </span>
+                </div>
+
+            </div>
+
+
+            <!-- Messages -->
+
+            <div
+                class="messages"
+                id="messages"
+                aria-live="polite"
+            >
+
+                <!-- Tin nhắn chào sẽ được JS thêm -->
+
+            </div>
+
+
+            <!-- Input -->
+
+            <div class="ai-input">
+
+                <textarea
+                    id="messageInput"
+                    rows="2"
+                    maxlength="1000"
+                    placeholder="Ví dụ: Tìm món bò dưới 50k..."
+                    aria-label="Nhập câu hỏi"
+                ></textarea>
+
+                <button
+                    type="button"
+                    id="sendBtn"
+                    class="btn btn-primary"
+                >
+                    Gửi
+                </button>
+
+            </div>
+
+
+            <!-- Gợi ý -->
+
+            <div class="chat-hint">
+                💡 Bạn có thể hỏi:
+                <strong>
+                    món theo giá, danh mục, nguyên liệu hoặc món tương tự.
+                </strong>
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer class="footer">
+
+        <div class="container">
+
+            <div class="footer-grid">
+
+                <div>
+                    <h3>Mini Food</h3>
+
+                    <p>
+                        Đặt món ăn yêu thích nhanh chóng,
+                        tiện lợi và dễ dàng.
+                    </p>
+                </div>
+
+                <div>
+                    <h3>Liên kết</h3>
+
+                    <ul>
+                        <li>
+                            <a href="/">
+                                Trang chủ
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="/foods">
+                                Món ăn
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="/ai">
+                                AI Chat
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="/news">
+                                Tin tức
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3>Hỗ trợ</h3>
+
+                    <ul>
+                        <li>
+                            <a href="/contact">
+                                Liên hệ
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="/orders">
+                                Đơn hàng
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="/profile">
+                                Tài khoản
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <div class="footer-bottom">
+                © <%= new Date().getFullYear() %> Mini Food.
+                All rights reserved.
+            </div>
+
+        </div>
+
+    </footer>
+
+
+    <!-- ================= JS ================= -->
+
+    <script src="/js/ai-chat.js"></script>
+
+    <!-- Quick actions -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+
+            const input = document.getElementById("messageInput");
+            const sendBtn = document.getElementById("sendBtn");
+
+            document.querySelectorAll(".quick-btn").forEach(button => {
+
+                button.addEventListener("click", () => {
+
+                    const message = button.dataset.message;
+
+                    input.value = message;
+                    input.focus();
+
+                    sendBtn.click();
+
+                });
+
+            });
+
+        });
+    </script>
+
+</body>
+</html>

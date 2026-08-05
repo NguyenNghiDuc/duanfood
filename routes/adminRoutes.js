@@ -4,6 +4,7 @@ const adminController = require('../controllers/adminController')
 const { requireLogin } = require('../middleware/auth')
 const { requireAdmin } = require('../middleware/admin')
 
+router.get('/', requireLogin, requireAdmin, adminController.showAdminHome)
 router.get('/orders', requireLogin, requireAdmin, adminController.listOrders)
 router.get('/orders/update/:id', requireLogin, requireAdmin, (req, res) => res.redirect('/admin/orders'))
 router.post('/orders/update/:id', requireLogin, requireAdmin, adminController.updateOrderStatus)

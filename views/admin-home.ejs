@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      Admin Home - Quản trị
+    </title>
+    <link rel="stylesheet" href="/css/admin-stats.css" />
+  </head>
+  <body>
+    <div class="admin-dashboard">
+      <aside class="sidebar">
+        <div class="brand">
+          <span class="brand-logo">
+            F
+          </span>
+          <div>
+            <h1>
+              Food Admin
+            </h1>
+            <p>
+              Quản trị hệ thống
+            </p>
+          </div>
+        </div>
+        <nav class="sidebar-nav">
+          <a class="active" href="/admin">
+            Trang quản trị
+          </a>
+          <a href="/">Trang chủ</a>
+          <a href="/admin/stats">
+            Dashboard
+          </a>
+          <a href="/ai">
+            AI Chat
+          </a>
+          <a href="/admin/orders">
+            Đơn hàng
+          </a>
+          <a href="/admin/categories">
+            Danh mục
+          </a>
+          <a href="/foods">
+            Sản phẩm
+          </a>
+          <a href="/logout" class="logout-link">
+            Đăng xuất
+          </a>
+        </nav>
+      </aside>
+      <main class="dashboard-content">
+        <header class="dashboard-header">
+          <div>
+            <p class="subtitle">
+              Chào mừng quản trị viên
+            </p>
+            <h1>
+              Trang quản trị riêng
+            </h1>
+          </div>
+        </header>
+        <section class="summary-grid">
+          <article class="summary-card">
+            <p class="summary-label">
+              Tổng đơn hàng
+            </p>
+            <h2>
+              <%= (typeof totalOrders !== 'undefined' ? totalOrders : 0) %>
+            </h2>
+            <span>
+              Đơn mới và đang xử lý
+            </span>
+          </article>
+          <article class="summary-card highlight">
+            <p class="summary-label">
+              Doanh thu
+            </p>
+            <h2>
+              <%= (typeof totalRevenue !== 'undefined' ? Number(totalRevenue).toLocaleString('vi-VN') : '0') %> ₫
+            </h2>
+            <span>
+              Doanh thu hệ thống
+            </span>
+          </article>
+          <article class="summary-card">
+            <p class="summary-label">
+              Sản phẩm
+            </p>
+            <h2>
+              <%= (typeof foodCount !== 'undefined' ? foodCount : 0) %>
+            </h2>
+            <span>
+              Số món hiện có
+            </span>
+          </article>
+          <article class="summary-card">
+            <p class="summary-label">
+              Danh mục
+            </p>
+            <h2>
+              <%= (typeof categoryCount !== 'undefined' ? categoryCount : 0) %>
+            </h2>
+            <span>
+              Danh mục đang quản lý
+            </span>
+          </article>
+        </section>
+        <section class="dashboard-panels">
+          <div class="panel chart-panel">
+            <div class="panel-header">
+              <h2>
+                Hotline admin
+              </h2>
+              <span>
+                Kiểm tra hệ thống
+              </span>
+            </div>
+            <div class="chart-placeholder">
+              <span>
+                Hiện tại đây là trang quản trị riêng của bạn.
+              </span>
+            </div>
+          </div>
+          <div class="panel best-panel">
+            <div class="panel-header">
+              <h2>
+                Liên kết nhanh
+              </h2>
+            </div>
+            <ul class="best-list">
+              <li>
+                <a href="/admin/stats">Dashboard</a>
+              </li>
+              <li>
+                <a href="/admin/orders">Đơn hàng</a>
+              </li>
+              <li>
+                <a href="/admin/categories">Danh mục</a>
+              </li>
+              <li>
+                <a href="/foods">Sản phẩm</a>
+              </li>
+            </ul>
+          </div>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

@@ -1,5 +1,53 @@
 [
   {
+    "id": 54,
+    "title": "Kem vani",
+    "description": "Kem mát lạnh vị vani",
+    "category_id": 11,
+    "category": "Bánh kẹo",
+    "price": 25000,
+    "image": "",
+    "url": "/foods/54",
+    "order_count": 0,
+    "text": "kem vani kem mat lanh vi vani banh keo 25000"
+  },
+  {
+    "id": 53,
+    "title": "Cà phê sữa đá",
+    "description": "Cà phê phin pha sữa",
+    "category_id": 10,
+    "category": "Đồ uống",
+    "price": 25000,
+    "image": "",
+    "url": "/foods/53",
+    "order_count": 0,
+    "text": "ca phe sua đa ca phe phin pha sua đo uong 25000"
+  },
+  {
+    "id": 52,
+    "title": "Nước cam tươi",
+    "description": "Nước cam ép tươi",
+    "category_id": 10,
+    "category": "Đồ uống",
+    "price": 30000,
+    "image": "",
+    "url": "/foods/52",
+    "order_count": 0,
+    "text": "nuoc cam tuoi nuoc cam ep tuoi đo uong 30000"
+  },
+  {
+    "id": 51,
+    "title": "Trà sữa trân châu",
+    "description": "Trà sữa thơm béo, topping trân châu",
+    "category_id": 10,
+    "category": "Đồ uống",
+    "price": 35000,
+    "image": "",
+    "url": "/foods/51",
+    "order_count": 0,
+    "text": "tra sua tran chau tra sua thom beo, topping tran chau đo uong 35000"
+  },
+  {
     "id": 39,
     "title": "Bò lúc lắc đặc biệt",
     "description": "Món bò mới cho test\nNguyên liệu: Bò, hành, xốt",
@@ -32,7 +80,7 @@
     "price": 115000,
     "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVEkbsPDS7QfH0B0tPKn2zq9GEnB61cFSrdOpzwCy_gQ&s=10",
     "url": "/foods/37",
-    "order_count": 0,
+    "order_count": 1000,
     "text": "mi hao hao  mi hao hao la mot trong nhung thuong hieu mi an lien đuoc yeu thich nhat tai viet nam voi huong vi thom ngon, soi mi dai va nuoc sup đam đa. đuoc san xuat tren day chuyen hien đai, mi hao hao mang đen bua an nhanh chong, tien loi nhung van đam bao chat luong va huong vi hap dan. thuc pham kho 115000"
   },
   {
@@ -92,7 +140,7 @@
     "price": 112000,
     "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTdmz6ztrRNRabOcnwd4NHE1xR22GVczaYlc287EF7kBg&s=10",
     "url": "/foods/32",
-    "order_count": 0,
+    "order_count": 1,
     "text": "cam ngot qua cam la mot trong nhung loai trai cay thuoc ho cam chanh (rutaceae) pho bien va đuoc yeu thich nhat tren toan the gioi. voi huong vi chua ngot thanh mat, mong nuoc va huong thom tu nhien de chiu, qua cam khong chi la mot mon an trang mieng tuyet voi ma con la bieu tuong cua nguon nang luong lanh manh. trai cay 112000"
   },
   {
@@ -248,7 +296,7 @@
     "price": 150000,
     "image": "https://i.ibb.co/dw6PFk2w/Screenshot-2026-06-25-233725.png                        ",
     "url": "/foods/12",
-    "order_count": 0,
+    "order_count": 1,
     "text": "pizza vi truyen thong                                                      pizza hawaii mang đen huong vi mua he tuoi mat tu vi dua (thom) đac trung cung thit dam bong man va xot ca chua, pho mai thom beo an tuong.\r\n\r\n\r\n            \r\n             pizza 150000"
   },
   {

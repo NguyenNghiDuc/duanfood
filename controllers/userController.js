@@ -141,7 +141,7 @@ async function login(req, res, next) {
       fullname: user.fullname || ''
     }
 
-    res.redirect('/')
+    res.redirect(isAdmin ? '/admin' : '/')
   } catch (error) {
     next(error)
   }

@@ -1,202 +1,767 @@
 <!DOCTYPE html>
 <html lang="vi">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>
-      Dashboard - Quản trị
-    </title>
-    <link rel="stylesheet" href="/css/admin-stats.css" />
-  </head>
-  <body>
-    <div class="admin-dashboard">
-      <aside class="sidebar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard - Food Admin</title>
+
+    <link rel="stylesheet" href="/css/admin-stats.css">
+</head>
+
+<body>
+
+<div class="admin-dashboard">
+
+    <!-- ================= SIDEBAR ================= -->
+    <aside class="sidebar">
+
         <div class="brand">
-          <span class="brand-logo">
-            F
-          </span>
-          <div>
-            <h1>
-              Food Admin
-            </h1>
-            <p>
-              Quản trị hệ thống
-            </p>
-          </div>
+            <div class="brand-logo">F</div>
+
+            <div class="brand-info">
+                <h1>Food Admin</h1>
+                <p>Quản trị hệ thống</p>
+            </div>
         </div>
+
         <nav class="sidebar-nav">
-          <a class="active" href="/admin/stats">
-            Dashboard
-          </a
-          >
-          <a href="/admin/orders">
-            Quản lý đơn hàng
-          </a
-          >
-          <a href="/admin/categories">
-            Quản lý danh mục
-          </a
-          >
-          <a href="/foods">
-            Quản lý sản phẩm
-          </a>
-          <a href="/">
-            Trang chủ
-          </a
-          >
-          <a href="/logout" class="logout-link">
-            Đăng xuất
-          </a>
-        </nav>
-      </aside>
-      <main class="dashboard-content">
-        <header class="dashboard-header">
-          <div>
-            <p class="subtitle">
-              Bảng điều khiển
-            </p>
-            <h1>
-              Quản lý hệ thống
-            </h1>
-          </div>
-        </header>
-        <section class="summary-grid">
-          <article class="summary-card">
-            <p class="summary-label">
-              Đơn hàng
-            </p>
-            <h2>
-              <%= totalOrders %>
-            </h2>
-            <span>
-              Đơn mới và đang xử lý
-            </span>
-          </article>
-          <article class="summary-card highlight">
-            <p class="summary-label">
-              Doanh thu
-            </p>
-            <h2>
-              <%= Number(totalRevenue).toLocaleString('vi-VN') %>
-              ₫
-            </h2>
-            <span>
-              Tổng doanh thu hệ thống
-            </span>
-          </article>
-          <article class="summary-card">
-            <p class="summary-label">
-              Đơn mới
-            </p>
-            <h2>
-              <%= recentOrders ? recentOrders.length : 0 %>
-            </h2>
-            <span>
-              Đơn hàng gần đây
-            </span>
-          </article>
-          <article class="summary-card">
-            <p class="summary-label">
-              Khách hàng
-            </p>
-            <h2>
-              3
-            </h2>
-            <span>
-              Khách mới tuần này
-            </span>
-          </article>
-        </section>
-        <section class="dashboard-panels">
-          <div class="panel chart-panel">
-            <div class="panel-header">
-              <h2>
-                Biểu đồ doanh thu
-              </h2>
-              <span>
-                1 tuần gần nhất
-              </span>
-            </div>
-            <div class="chart-placeholder">
-              <span>
-                Biểu đồ doanh thu sẽ hiển thị tại đây
-              </span>
-            </div>
-          </div>
-          <div class="panel best-panel">
-            <div class="panel-header">
-              <h2>
-                Danh mục bán chạy
-              </h2>
-            </div>
-            <ul class="best-list">
-              <li>
-                Đồ tươi sống
-              </li>
-              <li>
-                Rau củ
-              </li>
-              <li>
-                Trái cây
-              </li>
-              <li>
-                Đồ uống
-              </li>
-            </ul>
-          </div>
-        </section>
-        <section class="recent-section">
-          <div class="section-header">
-            <h2>
-              Đơn hàng mới
-            </h2>
-            <a href="/admin/orders">
-              Xem tất cả
+
+            <a href="/admin/stats" class="active">
+                <span>📊</span>
+                <span>Dashboard</span>
             </a>
-          </div>
-          <% if (recentOrders && recentOrders.length) { %>
-          <div class="order-grid">
-            <% recentOrders.forEach(order => { %>
-            <article class="order-card">
-              <div class="order-head">
-                <h3>
-                  Đơn #
-                  <%= order.id %>
-                </h3>
-                <span class="status">
-                  <%= order.status %>
-                </span>
-              </div>
-              <p>
-                <strong>
-                  Khách hàng:
-                </strong>
-                <%= order.username %>
-              </p>
-              <p>
-                <strong>
-                  Thanh toán:
-                </strong>
-                <%= order.payment_method %>
-              </p>
-              <p>
-                <strong>
-                  Tổng:
-                </strong>
-                <%= Number(order.total +
-                order.shipping_fee).toLocaleString('vi-VN') %>
-                ₫
-              </p>
+
+            <a href="/admin/orders">
+                <span>📦</span>
+                <span>Quản lý đơn hàng</span>
+            </a>
+
+            <a href="/admin/categories">
+                <span>🗂️</span>
+                <span>Quản lý danh mục</span>
+            </a>
+
+            <a href="/foods">
+                <span>🍔</span>
+                <span>Món ăn</span>
+            </a>
+
+            <a href="/foods">
+                <span>🛒</span>
+                <span>Quản lý sản phẩm</span>
+            </a>
+
+            <a href="/">
+                <span>🏠</span>
+                <span>Trang chủ</span>
+            </a>
+
+            <div class="nav-divider"></div>
+
+            <a href="/logout" class="logout-link">
+                <span>🚪</span>
+                <span>Đăng xuất</span>
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+    <!-- ================= MAIN ================= -->
+    <main class="dashboard-content">
+
+        <!-- HEADER -->
+        <header class="dashboard-header">
+
+            <div>
+                <p class="subtitle">
+                    Bảng điều khiển
+                </p>
+
+                <h1>
+                    Quản lý hệ thống
+                </h1>
+
+                <p class="header-description">
+                    Theo dõi hoạt động và tình hình kinh doanh của Mini Food.
+                </p>
+            </div>
+
+            <div class="header-date">
+                <span>📅</span>
+                <span id="currentDate"></span>
+            </div>
+
+        </header>
+
+
+        <!-- ================= SUMMARY ================= -->
+        <section class="summary-grid">
+
+            <!-- ĐƠN HÀNG -->
+            <article class="summary-card">
+
+                <div class="summary-icon">
+                    📦
+                </div>
+
+                <div class="summary-content">
+
+                    <p class="summary-label">
+                        Đơn hàng
+                    </p>
+
+                    <h2>
+                        <%= Number(totalOrders || 0).toLocaleString('vi-VN') %>
+                    </h2>
+
+                    <span>
+                        Tổng số đơn hàng
+                    </span>
+
+                </div>
+
             </article>
-            <% }) %>
-          </div>
-          <% } else { %>
-          <p class="empty-state">
-            Chưa có đơn mới.
-          </p>
-          <% } %>
+
+
+            <!-- DOANH THU -->
+            <article class="summary-card highlight">
+
+                <div class="summary-icon">
+                    💰
+                </div>
+
+                <div class="summary-content">
+
+                    <p class="summary-label">
+                        Doanh thu
+                    </p>
+
+                    <h2>
+                        <%= Number(totalRevenue || 0).toLocaleString('vi-VN') %> ₫
+                    </h2>
+
+                    <span>
+                        Tổng doanh thu hệ thống
+                    </span>
+
+                </div>
+
+            </article>
+
+
+            <!-- ĐƠN GẦN ĐÂY -->
+            <article class="summary-card">
+
+                <div class="summary-icon">
+                    🔔
+                </div>
+
+                <div class="summary-content">
+
+                    <p class="summary-label">
+                        Đơn gần đây
+                    </p>
+
+                    <h2>
+                        <%= recentOrders ? recentOrders.length : 0 %>
+                    </h2>
+
+                    <span>
+                        Đơn hàng mới
+                    </span>
+
+                </div>
+
+            </article>
+
+
+            <!-- KHÁCH HÀNG -->
+            <article class="summary-card">
+
+                <div class="summary-icon">
+                    👥
+                </div>
+
+                <div class="summary-content">
+
+                    <p class="summary-label">
+                        Khách hàng
+                    </p>
+
+                    <h2>
+                        <%= Number(totalCustomers || 0).toLocaleString('vi-VN') %>
+                    </h2>
+
+                    <span>
+                        Tổng khách hàng
+                    </span>
+
+                </div>
+
+            </article>
+
         </section>
-      </main>
-    </div>
-  </body>
+
+
+        <!-- ================= EXTRA STATS ================= -->
+        <section class="mini-stats">
+
+            <div class="mini-stat">
+                <span class="mini-icon">🍔</span>
+
+                <div>
+                    <strong>
+                        <%= Number(totalFoods || 0).toLocaleString('vi-VN') %>
+                    </strong>
+
+                    <small>
+                        Món ăn
+                    </small>
+                </div>
+            </div>
+
+
+            <div class="mini-stat">
+                <span class="mini-icon">🗂️</span>
+
+                <div>
+                    <strong>
+                        <%= Number(totalCategories || 0).toLocaleString('vi-VN') %>
+                    </strong>
+
+                    <small>
+                        Danh mục
+                    </small>
+                </div>
+            </div>
+
+
+            <div class="mini-stat">
+                <span class="mini-icon">⭐</span>
+
+                <div>
+                    <strong>
+                        <%= Number(totalReviews || 0).toLocaleString('vi-VN') %>
+                    </strong>
+
+                    <small>
+                        Đánh giá
+                    </small>
+                </div>
+            </div>
+
+
+            <div class="mini-stat">
+                <span class="mini-icon">🚚</span>
+
+                <div>
+                    <strong>
+                        <%= Number(totalDelivery || 0).toLocaleString('vi-VN') %>
+                    </strong>
+
+                    <small>
+                        Đơn giao hàng
+                    </small>
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- ================= CHART + BEST CATEGORY ================= -->
+        <section class="dashboard-panels">
+
+
+            <!-- BIỂU ĐỒ -->
+            <div class="panel chart-panel">
+
+                <div class="panel-header">
+
+                    <div>
+                        <h2>
+                            Biểu đồ doanh thu
+                        </h2>
+
+                        <p>
+                            Doanh thu trong 7 ngày gần nhất
+                        </p>
+                    </div>
+
+                    <span class="chart-badge">
+                        7 ngày
+                    </span>
+
+                </div>
+
+                <div class="chart-placeholder">
+
+                    <canvas id="revenueChart"></canvas>
+
+                    <div
+                        class="chart-empty"
+                        id="chartEmpty"
+                        style="display:none;"
+                    >
+                        Chưa có dữ liệu doanh thu.
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- DANH MỤC BÁN CHẠY -->
+            <div class="panel best-panel">
+
+                <div class="panel-header">
+
+                    <div>
+                        <h2>
+                            Danh mục bán chạy
+                        </h2>
+
+                        <p>
+                            Theo số lượng đơn hàng
+                        </p>
+                    </div>
+
+                    <span>
+                        🏆
+                    </span>
+
+                </div>
+
+
+                <% if (bestCategories && bestCategories.length) { %>
+
+                    <ul class="best-list">
+
+                        <% bestCategories.forEach((category, index) => { %>
+
+                            <li>
+
+                                <div class="rank">
+                                    <%= index + 1 %>
+                                </div>
+
+                                <div class="category-info">
+
+                                    <strong>
+                                        <%= category.name || category.category_name || 'Không xác định' %>
+                                    </strong>
+
+                                    <span>
+                                        <%= Number(category.total || category.totalSold || 0).toLocaleString('vi-VN') %>
+                                        sản phẩm
+                                    </span>
+
+                                </div>
+
+                            </li>
+
+                        <% }) %>
+
+                    </ul>
+
+                <% } else { %>
+
+                    <div class="empty-state small">
+                        Chưa có dữ liệu danh mục bán chạy.
+                    </div>
+
+                <% } %>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= RECENT ORDERS ================= -->
+        <section class="recent-section">
+
+            <div class="section-header">
+
+                <div>
+
+                    <p class="subtitle">
+                        Hoạt động gần đây
+                    </p>
+
+                    <h2>
+                        Đơn hàng mới
+                    </h2>
+
+                </div>
+
+                <a href="/admin/orders" class="view-all">
+                    Xem tất cả →
+                </a>
+
+            </div>
+
+
+            <% if (recentOrders && recentOrders.length) { %>
+
+                <div class="order-grid">
+
+                    <% recentOrders.forEach(order => { %>
+
+                        <article class="order-card">
+
+                            <div class="order-head">
+
+                                <div>
+
+                                    <span class="order-label">
+                                        Đơn hàng
+                                    </span>
+
+                                    <h3>
+                                        #<%= order.id %>
+                                    </h3>
+
+                                </div>
+
+                                <span class="status">
+                                    <%= order.status || 'Chờ xác nhận' %>
+                                </span>
+
+                            </div>
+
+
+                            <div class="order-info">
+
+                                <p>
+
+                                    <span>
+                                        👤 Khách hàng
+                                    </span>
+
+                                    <strong>
+                                        <%= order.username || 'Khách' %>
+                                    </strong>
+
+                                </p>
+
+
+                                <p>
+
+                                    <span>
+                                        💳 Thanh toán
+                                    </span>
+
+                                    <strong>
+                                        <%= order.payment_method || 'COD' %>
+                                    </strong>
+
+                                </p>
+
+
+                                <p>
+
+                                    <span>
+                                        🚚 Giao hàng
+                                    </span>
+
+                                    <strong>
+                                        <%= order.delivery_company || 'Tiêu chuẩn' %>
+                                    </strong>
+
+                                </p>
+
+
+                                <p>
+
+                                    <span>
+                                        💰 Tổng tiền
+                                    </span>
+
+                                    <strong class="order-total">
+
+                                        <%
+                                            const orderTotal = Number(order.total || 0);
+                                            const shippingFee = Number(order.shipping_fee || 0);
+                                            const finalTotal = orderTotal + shippingFee;
+                                        %>
+
+                                        <%= finalTotal.toLocaleString('vi-VN') %> ₫
+
+                                    </strong>
+
+                                </p>
+
+                            </div>
+
+
+                            <div class="order-footer">
+
+                                <span>
+                                    <%= order.created_at
+                                        ? new Date(order.created_at).toLocaleString('vi-VN')
+                                        : 'Chưa xác định'
+                                    %>
+                                </span>
+
+                                <a href="/admin/orders">
+                                    Chi tiết →
+                                </a>
+
+                            </div>
+
+                        </article>
+
+                    <% }) %>
+
+                </div>
+
+            <% } else { %>
+
+                <div class="empty-state">
+
+                    <div class="empty-icon">
+                        📦
+                    </div>
+
+                    <h3>
+                        Chưa có đơn hàng
+                    </h3>
+
+                    <p>
+                        Khi khách hàng đặt món, đơn hàng sẽ xuất hiện ở đây.
+                    </p>
+
+                </div>
+
+            <% } %>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- ================= CHART.JS ================= -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+    /* ================= NGÀY HIỆN TẠI ================= */
+
+    const currentDate = document.getElementById('currentDate');
+
+    if (currentDate) {
+
+        const today = new Date();
+
+        currentDate.textContent =
+            today.toLocaleDateString('vi-VN', {
+                weekday: 'long',
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            });
+
+    }
+
+
+    /* ================= DOANH THU ================= */
+
+    const revenueByDay = <%- JSON.stringify(
+        typeof revenueByDay !== 'undefined'
+            ? revenueByDay
+            : []
+    ) %> ;
+
+
+    function formatDateLabel(value) {
+
+        if (!value) return '';
+
+        const date = new Date(value + 'T00:00:00');
+
+        if (Number.isNaN(date.getTime())) {
+            return value;
+        }
+
+        return date.toLocaleDateString('vi-VN', {
+            day: '2-digit',
+            month: '2-digit'
+        });
+
+    }
+
+
+    const chartLabels = revenueByDay.map(item =>
+        formatDateLabel(item.date)
+    );
+
+
+    const chartData = revenueByDay.map(item =>
+        Number(item.revenue || 0)
+    );
+
+
+    const chartCanvas =
+        document.getElementById('revenueChart');
+
+    const chartEmpty =
+        document.getElementById('chartEmpty');
+
+
+    if (chartCanvas) {
+
+        if (!chartData.length) {
+
+            chartCanvas.style.display = 'none';
+
+            if (chartEmpty) {
+                chartEmpty.style.display = 'flex';
+            }
+
+        } else {
+
+            new Chart(chartCanvas, {
+
+                type: 'line',
+
+                data: {
+
+                    labels: chartLabels,
+
+                    datasets: [
+
+                        {
+
+                            label: 'Doanh thu',
+
+                            data: chartData,
+
+                            fill: true,
+
+                            tension: 0.35,
+
+                            borderWidth: 3,
+
+                            backgroundColor:
+                                'rgba(255, 107, 53, 0.12)',
+
+                            borderColor:
+                                '#ff6b35',
+
+                            pointBackgroundColor:
+                                '#ffffff',
+
+                            pointBorderColor:
+                                '#ff6b35',
+
+                            pointBorderWidth: 3,
+
+                            pointRadius: 4,
+
+                            pointHoverRadius: 6
+
+                        }
+
+                    ]
+
+                },
+
+
+                options: {
+
+                    responsive: true,
+
+                    maintainAspectRatio: false,
+
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
+                    },
+
+
+                    plugins: {
+
+                        legend: {
+                            display: false
+                        },
+
+
+                        tooltip: {
+
+                            callbacks: {
+
+                                label: function(context) {
+
+                                    const value =
+                                        Number(context.parsed.y || 0);
+
+                                    return ' ' +
+                                        value.toLocaleString('vi-VN') +
+                                        ' ₫';
+
+                                }
+
+                            }
+
+                        }
+
+                    },
+
+
+                    scales: {
+
+                        x: {
+
+                            grid: {
+                                display: false
+                            },
+
+                            ticks: {
+                                color: '#64748b'
+                            }
+
+                        },
+
+
+                        y: {
+
+                            beginAtZero: true,
+
+                            grid: {
+                                color: 'rgba(148, 163, 184, 0.12)'
+                            },
+
+                            ticks: {
+
+                                color: '#64748b',
+
+                                callback: function(value) {
+
+                                    return Number(value)
+                                        .toLocaleString('vi-VN') +
+                                        ' ₫';
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            });
+
+        }
+
+    }
+
+</script>
+
+</body>
 </html>

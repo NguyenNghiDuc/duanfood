@@ -1,6 +1,7 @@
 const foodModel = require('../models/foodModels')
 const orderModel = require('../models/orderModels')
 const chatIndex = require('../lib/chatIndex')
+const db = require('../config/db')
 
 function normalizePrice(price) {
   const value = Number(String(price || '').replace(/[^0-9.-]/g, ''))
@@ -172,7 +173,32 @@ async function updateOrderStatus(req, res, next) {
 async function showStats(req, res, next) {
   try {
     const stats = await orderModel.getStats()
-    res.render('admin-stats', { totalRevenue: stats.totalRevenue, totalOrders: stats.totalOrders, recentOrders: stats.recentOrders, user: req.session.user })
+    const revenueByDay = await orderModel.getRevenueByDay(7)
+    res.render('admin-stats', {
+      totalRevenue: stats.totalRevenue,
+      totalOrders: stats.totalOrders,
+      recentOrders: stats.recentOrders,
+      revenueByDay,
+      user: req.session.user
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
+async function showAdminHome(req, res, next) {
+  try {
+    const stats = await orderModel.getStats()
+    const foodCount = await foodModel.getFoodCount()
+    const categories = await foodModel.getAllCategories()
+
+    res.render('admin-home', {
+      user: req.session.user,
+      totalOrders: stats.totalOrders,
+      totalRevenue: stats.totalRevenue,
+      foodCount,
+      categoryCount: categories.length
+    })
   } catch (error) {
     next(error)
   }
@@ -350,6 +376,7 @@ module.exports = {
   showAddFood,
   addFood,
   deleteFood,
+  showAdminHome,
   showEditFood,
   updateFood
 }

@@ -41,6 +41,38 @@ async function getStats() {
   }
 }
 
+async function getRevenueByDay(days = 7) {
+  const endDate = new Date()
+  const startDate = new Date(endDate)
+  startDate.setDate(startDate.getDate() - (days - 1))
+
+  const from = startDate.toISOString().slice(0, 10)
+  const to = endDate.toISOString().slice(0, 10)
+
+  const [rows] = await db.query(
+    `SELECT DATE(created_at) AS date,
+            SUM(total + shipping_fee) AS revenue
+     FROM orders
+     WHERE DATE(created_at) BETWEEN ? AND ?
+     GROUP BY DATE(created_at)
+     ORDER BY DATE(created_at) ASC`,
+    [from, to]
+  )
+
+  const revenueMap = new Map(rows.map((row) => [row.date, Number(row.revenue || 0)]))
+  const result = []
+
+  for (let date = new Date(startDate); date <= endDate; date.setDate(date.getDate() + 1)) {
+    const key = date.toISOString().slice(0, 10)
+    result.push({
+      date: key,
+      revenue: revenueMap.get(key) || 0
+    })
+  }
+
+  return result
+}
+
 module.exports = {
   createOrder,
   createOrderItems,
@@ -48,5 +80,6 @@ module.exports = {
   getAllOrders,
   updateOrderStatus,
   updateOrderStatusForUser,
-  getStats
+  getStats,
+  getRevenueByDay
 }

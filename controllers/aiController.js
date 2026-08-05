@@ -89,6 +89,15 @@ async function chat(req, res) {
   }
 }
 
+async function showChat(req, res) {
+  try {
+    return res.render('ai-chat', { user: req.session && req.session.user ? req.session.user : null });
+  } catch (error) {
+    console.error('showChat error', error);
+    return res.status(500).send('Không thể hiển thị trang chat.');
+  }
+}
+
 /* =================================
    FEEDBACK
 ================================= */
@@ -163,7 +172,8 @@ module.exports = {
   parse,
   cartCalc,
   alternatives,
-  reviewAnalysis
+  reviewAnalysis,
+  showChat
 };
 
 async function cartCalc(req, res) {

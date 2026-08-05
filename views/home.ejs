@@ -47,6 +47,14 @@
           <a href="/contact">
             Liên hệ
           </a>
+          <a href="/ai">
+            FOOD AI
+          </a>
+          <% if (user && user.role === 'admin') { %>
+          <a href="/admin">
+            Admin
+          </a>
+          <% } %>
         </nav>
         <div class="topbar-actions">
           <form action="/foods" method="GET" class="search-form">

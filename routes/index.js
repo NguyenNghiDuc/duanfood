@@ -10,6 +10,7 @@ const adminRoutes = require('./adminRoutes')
 const addressRoutes = require('./addressRoutes')
 const apiRoutes = require('./apiRoutes')
 const chatController = require('../controllers/chatController')
+const aiRoutes = require('./aiRoutes')
 
 // lightweight chat endpoint (for client widget)
 router.post('/chat', express.json(), chatController.chat)
@@ -21,5 +22,6 @@ router.use('/', postRoutes)
 router.use('/', addressRoutes)
 router.use('/admin', adminRoutes)
 router.use('/api', apiRoutes)
+router.use('/ai', aiRoutes)
 
 module.exports = router

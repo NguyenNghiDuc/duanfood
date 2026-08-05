@@ -55,9 +55,10 @@ app.use((req, res, next) => {
 
     try {
       if (typeof options === 'function') {
-        oldRender.call(res, view, done)
+        oldRender.call(res, view, options)
       } else {
-        oldRender.call(res, view, options, done)
+        const renderOptions = Object.assign({}, res.locals, options || {})
+        oldRender.call(res, view, renderOptions, done)
       }
     } catch (e) {
       next(e)

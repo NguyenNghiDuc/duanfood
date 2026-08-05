@@ -429,6 +429,34 @@ async function getDeliveryCompanies() {
   return rows;
 }
 
+async function getFoodOrderCounts() {
+  await db.ready();
+
+  const [rows] = await db.query(`
+    SELECT food_id, SUM(quantity) AS count
+    FROM order_items
+    GROUP BY food_id
+  `);
+
+  const counts = {}
+  for (const row of rows) {
+    counts[row.food_id] = Number(row.count || 0)
+  }
+
+  return counts;
+}
+
+async function getFoodCount() {
+  await db.ready();
+
+  const [rows] = await db.query(`
+    SELECT COUNT(*) AS total
+    FROM foods
+  `);
+
+  return Number(rows[0]?.total || 0);
+}
+
 /* ================================
    CREATE FOOD
 ================================ */
@@ -470,6 +498,11 @@ async function createFood({
   return result.insertId;
 }
 
+async function deleteFood(id) {
+  await db.ready();
+  await db.query(`DELETE FROM foods WHERE id = ?`, [Number(id)]);
+}
+
 module.exports = {
   initFoodSchema,
   normalizeText,
@@ -478,8 +511,11 @@ module.exports = {
   getFoodById,
   searchFoodsSmart,
   createFood,
+  deleteFood,
   getReviewsByFoodId,
   addReview,
   getFoodRatingSummary,
-  getDeliveryCompanies
+  getDeliveryCompanies,
+  getFoodOrderCounts,
+  getFoodCount
 };

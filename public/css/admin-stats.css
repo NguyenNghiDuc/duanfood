@@ -789,6 +789,8 @@ body{
 
     font-weight:700;
 
+    overflow:hidden;
+
     background:
 
     linear-gradient(
@@ -796,8 +798,13 @@ body{
     #fff8f2,
     white);
 
-    border:2px dashed #ffd6bc;
+    border:2px solid #ffe2d0;
 
+}
+
+.chart-placeholder canvas {
+    width: 100% !important;
+    height: 100% !important;
 }
 
 

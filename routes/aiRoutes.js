@@ -5,32 +5,25 @@ const router = express.Router();
 const {
   chat,
   feedback,
-  correction
-} = require("../controllers/aiController");
-
-const {
+  correction,
   search,
   combo,
-  parse
-} = require("../controllers/aiController");
-const {
+  parse,
   cartCalc,
   alternatives,
-  reviewAnalysis
+  reviewAnalysis,
+  showChat
 } = require("../controllers/aiController");
 
+// Render the AI chat page
+router.get('/', showChat);
+
 router.post("/chat", chat);
-
 router.post("/feedback", feedback);
-
 router.post("/correction", correction);
-
 router.post("/search", search);
-
 router.post("/combo", combo);
-
 router.post("/parse", parse);
-
 router.post('/cart-calc', cartCalc);
 
 router.get('/alternatives/:id', alternatives);
