@@ -20,7 +20,7 @@
     "price": 25000,
     "image": "",
     "url": "/foods/53",
-    "order_count": 0,
+    "order_count": 55,
     "text": "ca phe sua đa ca phe phin pha sua đo uong 25000"
   },
   {
@@ -56,7 +56,7 @@
     "price": 99000,
     "image": "/images/test-bo.png",
     "url": "/foods/39",
-    "order_count": 0,
+    "order_count": 220,
     "text": "bo luc lac đac biet mon bo moi cho test\nnguyen lieu: bo, hanh, xot đo tuoi song 99000"
   },
   {

@@ -30,7 +30,7 @@ html{
 
     --success:#22c55e;
     --warning:#f59e0b;
-    --danger:#ef4444;
+    --danger:#64748b; /* Neutral gray instead of red */
     --info:#3b82f6;
 
     --bg:#f8fafc;
@@ -321,7 +321,7 @@ body{
 
 .logout-link:hover{
 
-    background:#ef4444;
+    background:var(--danger);
 
 }
 
@@ -775,9 +775,13 @@ body{
 
     display:flex;
 
-    align-items:center;
+    flex-direction:column;
 
-    justify-content:center;
+    gap:24px;
+
+    align-items:stretch;
+
+    justify-content:flex-start;
 
     text-align:center;
 
@@ -788,8 +792,6 @@ body{
     font-size:18px;
 
     font-weight:700;
-
-    overflow:hidden;
 
     background:
 
@@ -804,7 +806,10 @@ body{
 
 .chart-placeholder canvas {
     width: 100% !important;
-    height: 100% !important;
+    max-width: 100%;
+    height: auto !important;
+    min-height: 240px;
+    display: block;
 }
 
 
@@ -1188,7 +1193,7 @@ body{
 
 .status.cancel{
 
-    background:#ef4444;
+    background:var(--danger);
 
 }
 
@@ -1336,7 +1341,7 @@ table tbody tr:hover{
 
     linear-gradient(
     135deg,
-    #ef4444,
+    var(--danger),
     #dc2626);
 
 }

@@ -50,12 +50,13 @@ async function getRevenueByDay(days = 7) {
   const to = endDate.toISOString().slice(0, 10)
 
   const [rows] = await db.query(
-    `SELECT DATE(created_at) AS date,
+    `SELECT substr(created_at, 1, 10) AS date,
             SUM(total + shipping_fee) AS revenue
      FROM orders
-     WHERE DATE(created_at) BETWEEN ? AND ?
-     GROUP BY DATE(created_at)
-     ORDER BY DATE(created_at) ASC`,
+     WHERE status = 'Hoàn thành'
+       AND substr(created_at, 1, 10) BETWEEN ? AND ?
+     GROUP BY date
+     ORDER BY date ASC`,
     [from, to]
   )
 
@@ -73,6 +74,35 @@ async function getRevenueByDay(days = 7) {
   return result
 }
 
+async function getRevenueByMonth(months = 12) {
+  const endDate = new Date()
+  const startDate = new Date(endDate)
+  startDate.setMonth(startDate.getMonth() - (months - 1))
+
+  const monthsList = []
+  for (let d = new Date(startDate.getFullYear(), startDate.getMonth(), 1); d <= endDate; d.setMonth(d.getMonth() + 1)) {
+    const year = d.getFullYear()
+    const m = String(d.getMonth() + 1).padStart(2, '0')
+    monthsList.push(`${year}-${m}`)
+  }
+
+  const from = new Date(startDate.getFullYear(), startDate.getMonth(), 1).toISOString().slice(0,10)
+  const to = endDate.toISOString().slice(0,10)
+
+  const [rows] = await db.query(
+    `SELECT substr(created_at, 1, 7) AS month, SUM(total + shipping_fee) AS revenue
+     FROM orders
+     WHERE status = 'Hoàn thành'
+       AND substr(created_at, 1, 10) BETWEEN ? AND ?
+     GROUP BY month
+     ORDER BY month ASC`,
+    [from, to]
+  )
+
+  const revenueMap = new Map(rows.map(r => [r.month, Number(r.revenue || 0)]))
+  return monthsList.map(m => ({ month: m, revenue: revenueMap.get(m) || 0 }))
+}
+
 module.exports = {
   createOrder,
   createOrderItems,
@@ -81,5 +111,6 @@ module.exports = {
   updateOrderStatus,
   updateOrderStatusForUser,
   getStats,
-  getRevenueByDay
+  getRevenueByDay,
+  getRevenueByMonth
 }

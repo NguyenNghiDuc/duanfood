@@ -286,19 +286,20 @@
                         </h2>
 
                         <p>
-                            Doanh thu trong 7 ngày gần nhất
+                            Doanh thu trong 20 ngày gần nhất
                         </p>
                     </div>
 
                     <span class="chart-badge">
-                        7 ngày
+                        20 ngày
                     </span>
 
                 </div>
 
                 <div class="chart-placeholder">
 
-                    <canvas id="revenueChart"></canvas>
+                    <canvas id="revenueChart" height="320"></canvas>
+                    <canvas id="revenueChartMonthly" height="240"></canvas>
 
                     <div
                         class="chart-empty"
@@ -550,13 +551,9 @@
 <script>
 
     /* ================= NGÀY HIỆN TẠI ================= */
-
     const currentDate = document.getElementById('currentDate');
-
     if (currentDate) {
-
         const today = new Date();
-
         currentDate.textContent =
             today.toLocaleDateString('vi-VN', {
                 weekday: 'long',
@@ -566,16 +563,19 @@
             });
 
     }
-
-
     /* ================= DOANH THU ================= */
 
-    const revenueByDay = <%- JSON.stringify(
-        typeof revenueByDay !== 'undefined'
-            ? revenueByDay
-            : []
-    ) %> ;
+    <% if (typeof revenueByDay20Days === 'undefined') { %>
+    const revenueByDay20Days = [];
+    <% } else { %>
+    const revenueByDay20Days = <%- JSON.stringify(revenueByDay20Days) %>;
+    <% } %>
 
+    <% if (typeof revenueByMonth === 'undefined') { %>
+    const revenueByMonth = [];
+    <% } else { %>
+    const revenueByMonth = <%- JSON.stringify(revenueByMonth) %>;
+    <% } %>
 
     function formatDateLabel(value) {
 
@@ -593,23 +593,11 @@
         });
 
     }
+    const chartLabels = revenueByDay20Days.map(item => formatDateLabel(item.date));
+    const chartData = revenueByDay20Days.map(item => Number(item.revenue || 0));
 
-
-    const chartLabels = revenueByDay.map(item =>
-        formatDateLabel(item.date)
-    );
-
-
-    const chartData = revenueByDay.map(item =>
-        Number(item.revenue || 0)
-    );
-
-
-    const chartCanvas =
-        document.getElementById('revenueChart');
-
-    const chartEmpty =
-        document.getElementById('chartEmpty');
+    const chartCanvas = document.getElementById('revenueChart');
+    const chartEmpty = document.getElementById('chartEmpty');
 
 
     if (chartCanvas) {
@@ -646,17 +634,17 @@
 
                             borderWidth: 3,
 
-                            backgroundColor:
-                                'rgba(255, 107, 53, 0.12)',
+                                            backgroundColor:
+                                                'rgba(100,116,139,0.12)',
 
-                            borderColor:
-                                '#ff6b35',
+                                            borderColor:
+                                                '#64748b',
 
-                            pointBackgroundColor:
-                                '#ffffff',
+                                            pointBackgroundColor:
+                                                '#ffffff',
 
-                            pointBorderColor:
-                                '#ff6b35',
+                                            pointBorderColor:
+                                                '#64748b',
 
                             pointBorderWidth: 3,
 
@@ -759,6 +747,51 @@
 
         }
 
+    }
+
+    /* ================= DOANH THU THEO THANG ================= */
+
+    function formatMonthLabel(value) {
+        // value expected in 'YYYY-MM'
+        if (!value) return '';
+        try {
+            const parts = String(value).split('-');
+            if (parts.length >= 2) return parts[1] + '/' + parts[0];
+            return value;
+        } catch (e) { return value }
+    }
+
+    const monthlyLabels = revenueByMonth.map(item => formatMonthLabel(item.month));
+    const monthlyData = revenueByMonth.map(item => Number(item.revenue || 0));
+    const monthlyCanvas = document.getElementById('revenueChartMonthly');
+
+    if (monthlyCanvas) {
+        if (!monthlyData.length) {
+            monthlyCanvas.style.display = 'none';
+        } else {
+            new Chart(monthlyCanvas, {
+                type: 'bar',
+                data: {
+                    labels: monthlyLabels,
+                    datasets: [{
+                        label: 'Doanh thu theo tháng',
+                        data: monthlyData,
+                        backgroundColor: 'rgba(100,116,139,0.12)',
+                        borderColor: '#64748b',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { ticks: { color: '#64748b' } },
+                        y: { ticks: { color: '#64748b', callback: function(v){ return Number(v).toLocaleString('vi-VN') + ' ₫' } } }
+                    }
+                }
+            })
+        }
     }
 
 </script>

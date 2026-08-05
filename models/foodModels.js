@@ -503,6 +503,11 @@ async function deleteFood(id) {
   await db.query(`DELETE FROM foods WHERE id = ?`, [Number(id)]);
 }
 
+async function deleteCategory(id) {
+  await db.ready();
+  await db.query(`DELETE FROM categories WHERE id = ?`, [Number(id)]);
+}
+
 module.exports = {
   initFoodSchema,
   normalizeText,
@@ -512,6 +517,7 @@ module.exports = {
   searchFoodsSmart,
   createFood,
   deleteFood,
+  deleteCategory,
   getReviewsByFoodId,
   addReview,
   getFoodRatingSummary,

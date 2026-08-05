@@ -173,12 +173,44 @@ async function updateOrderStatus(req, res, next) {
 async function showStats(req, res, next) {
   try {
     const stats = await orderModel.getStats()
-    const revenueByDay = await orderModel.getRevenueByDay(7)
+    const revenueByDay20Days = await orderModel.getRevenueByDay(20)
+    const revenueByMonth = await orderModel.getRevenueByMonth(12)
+
+    const [userCountRows] = await db.query('SELECT COUNT(*) AS total FROM users')
+    const totalCustomers = Number(userCountRows[0]?.total || 0)
+
+    const totalFoods = await foodModel.getFoodCount()
+    const categories = await foodModel.getAllCategories()
+    const totalCategories = categories.length
+
+    const [reviewCountRows] = await db.query('SELECT COUNT(*) AS total FROM reviews')
+    const totalReviews = Number(reviewCountRows[0]?.total || 0)
+
+    const [deliveryCountRows] = await db.query('SELECT COUNT(*) AS total FROM order_items')
+    const totalDelivery = Number(deliveryCountRows[0]?.total || 0)
+
+    const [bestRows] = await db.query(`
+      SELECT c.id, c.name, SUM(oi.quantity) AS total
+      FROM order_items oi
+      JOIN foods f ON f.id = oi.food_id
+      JOIN categories c ON c.id = f.category_id
+      GROUP BY c.id, c.name
+      ORDER BY total DESC
+      LIMIT 5
+    `)
+
     res.render('admin-stats', {
       totalRevenue: stats.totalRevenue,
       totalOrders: stats.totalOrders,
       recentOrders: stats.recentOrders,
-      revenueByDay,
+      revenueByDay20Days,
+      revenueByMonth,
+      totalCustomers,
+      totalFoods,
+      totalCategories,
+      totalReviews,
+      totalDelivery,
+      bestCategories: bestRows,
       user: req.session.user
     })
   } catch (error) {
