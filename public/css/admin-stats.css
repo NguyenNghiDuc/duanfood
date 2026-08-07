@@ -767,49 +767,112 @@ body{
         CHART
 ================================= */
 
-.chart-placeholder{
+/* =====================================================
+   CHART CONTAINER
+===================================================== */
 
-    min-height:320px;
-
-    border-radius:24px;
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:24px;
-
-    align-items:stretch;
-
-    justify-content:flex-start;
-
-    text-align:center;
-
-    padding:30px;
-
-    color:#ff6b35;
-
-    font-size:18px;
-
-    font-weight:700;
-
-    background:
-
-    linear-gradient(
-    135deg,
-    #fff8f2,
-    white);
-
-    border:2px solid #ffe2d0;
-
+.chart-box {
+    position: relative;
+    width: 100%;
+    height: 380px;
+    min-height: 380px;
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 20px;
+    background: #fffaf7;
+    border: 1px solid rgba(255, 107, 53, 0.18);
+    overflow: hidden;
 }
 
-.chart-placeholder canvas {
+.category-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    margin-right: 8px;
+    border-radius: 8px;
+    background: rgba(255, 107, 53, 0.12);
+    color: #ff6b35;
+    font-size: 14px;
+}
+
+.order-info span {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+
+/* =====================================================
+   MONTHLY CHART
+===================================================== */
+
+.monthly-chart-box {
+    height: 320px;
+    min-height: 320px;
+}
+
+
+/* =====================================================
+   CANVAS
+===================================================== */
+
+.chart-box canvas {
+    display: block !important;
     width: 100% !important;
+    height: 100% !important;
     max-width: 100%;
-    height: auto !important;
-    min-height: 240px;
-    display: block;
+}
+
+
+/* =====================================================
+   EMPTY
+===================================================== */
+
+.chart-empty {
+    position: absolute;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #64748b;
+    font-size: 15px;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.chart-empty .empty-icon {
+    font-size: 28px;
+}
+
+
+/* =====================================================
+   PANEL
+===================================================== */
+
+.chart-panel {
+    min-width: 0;
+    overflow: hidden;
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 768px) {
+    .chart-box {
+        height: 300px;
+        min-height: 300px;
+        padding: 12px;
+    }
+
+    .monthly-chart-box {
+        height: 280px;
+        min-height: 280px;
+    }
 }
 
 

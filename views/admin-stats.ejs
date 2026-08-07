@@ -274,45 +274,49 @@
         <!-- ================= CHART + BEST CATEGORY ================= -->
         <section class="dashboard-panels">
 
-
-            <!-- BIỂU ĐỒ -->
+            <!-- BIỂU ĐỒ 20 NGÀY -->
             <div class="panel chart-panel">
 
                 <div class="panel-header">
-
                     <div>
-                        <h2>
-                            Biểu đồ doanh thu
-                        </h2>
-
-                        <p>
-                            Doanh thu trong 20 ngày gần nhất
-                        </p>
+                        <span class="panel-title-icon">📈</span>
+                        <h2>Biểu đồ doanh thu 20 ngày</h2>
+                        <p>Doanh thu trong 20 ngày gần nhất</p>
                     </div>
-
-                    <span class="chart-badge">
-                        20 ngày
-                    </span>
-
+                    <span class="chart-badge">20 ngày</span>
                 </div>
 
-                <div class="chart-placeholder">
-
-                    <canvas id="revenueChart" height="320"></canvas>
-                    <canvas id="revenueChartMonthly" height="240"></canvas>
-
-                    <div
-                        class="chart-empty"
-                        id="chartEmpty"
-                        style="display:none;"
-                    >
+                <div class="chart-box">
+                    <canvas id="revenueChart"></canvas>
+                    <div class="chart-empty" id="chartEmpty">
+                        <span class="empty-icon">📉</span>
                         Chưa có dữ liệu doanh thu.
                     </div>
-
                 </div>
 
             </div>
 
+            <!-- BIỂU ĐỒ THEO THÁNG -->
+            <div class="panel chart-panel">
+
+                <div class="panel-header">
+                    <div>
+                        <span class="panel-title-icon">📊</span>
+                        <h2>Biểu đồ doanh thu theo tháng</h2>
+                        <p>Thống kê doanh thu từng tháng</p>
+                    </div>
+                    <span class="chart-badge">Theo tháng</span>
+                </div>
+
+                <div class="chart-box monthly-chart-box">
+                    <canvas id="revenueChartMonthly"></canvas>
+                    <div class="chart-empty" id="monthlyChartEmpty">
+                        <span class="empty-icon">📊</span>
+                        Chưa có dữ liệu doanh thu theo tháng.
+                    </div>
+                </div>
+
+            </div>
 
             <!-- DANH MỤC BÁN CHẠY -->
             <div class="panel best-panel">
@@ -320,21 +324,14 @@
                 <div class="panel-header">
 
                     <div>
-                        <h2>
-                            Danh mục bán chạy
-                        </h2>
-
-                        <p>
-                            Theo số lượng đơn hàng
-                        </p>
+                        <span class="panel-title-icon">🏆</span>
+                        <h2>Danh mục bán chạy</h2>
+                        <p>Theo số lượng đơn hàng</p>
                     </div>
 
-                    <span>
-                        🏆
-                    </span>
+                    <span>🏆</span>
 
                 </div>
-
 
                 <% if (bestCategories && bestCategories.length) { %>
 
@@ -349,7 +346,7 @@
                                 </div>
 
                                 <div class="category-info">
-
+                                    <span class="category-icon">🏷️</span>
                                     <strong>
                                         <%= category.name || category.category_name || 'Không xác định' %>
                                     </strong>
@@ -379,7 +376,6 @@
 
         </section>
 
-
         <!-- ================= RECENT ORDERS ================= -->
         <section class="recent-section">
 
@@ -392,6 +388,7 @@
                     </p>
 
                     <h2>
+                        <span class="section-title-icon">🕒</span>
                         Đơn hàng mới
                     </h2>
 
@@ -417,7 +414,7 @@
                                 <div>
 
                                     <span class="order-label">
-                                        Đơn hàng
+                                        🧾 Đơn hàng
                                     </span>
 
                                     <h3>
@@ -602,7 +599,9 @@
 
     if (chartCanvas) {
 
-        if (!chartData.length) {
+        const chartContext = chartCanvas.getContext ? chartCanvas.getContext('2d') : null;
+
+        if (!chartData.length || !chartContext) {
 
             chartCanvas.style.display = 'none';
 
@@ -612,7 +611,9 @@
 
         } else {
 
-            new Chart(chartCanvas, {
+            if (chartEmpty) chartEmpty.style.display = 'none';
+
+            new Chart(chartContext, {
 
                 type: 'line',
 
@@ -764,12 +765,19 @@
     const monthlyLabels = revenueByMonth.map(item => formatMonthLabel(item.month));
     const monthlyData = revenueByMonth.map(item => Number(item.revenue || 0));
     const monthlyCanvas = document.getElementById('revenueChartMonthly');
+    const monthlyChartEmpty = document.getElementById('monthlyChartEmpty');
 
     if (monthlyCanvas) {
-        if (!monthlyData.length) {
+        const monthlyContext = monthlyCanvas.getContext ? monthlyCanvas.getContext('2d') : null;
+
+        if (!monthlyData.length || !monthlyContext) {
             monthlyCanvas.style.display = 'none';
+            if (monthlyChartEmpty) monthlyChartEmpty.style.display = 'flex';
         } else {
-            new Chart(monthlyCanvas, {
+            monthlyCanvas.style.display = 'block';
+            if (monthlyChartEmpty) monthlyChartEmpty.style.display = 'none';
+
+            new Chart(monthlyContext, {
                 type: 'bar',
                 data: {
                     labels: monthlyLabels,

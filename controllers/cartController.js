@@ -105,7 +105,8 @@ async function placeOrder(req, res, next) {
     const cart = getCart(req)
     if (!cart.length) return res.redirect('/cart')
     const total = getCartTotal(cart)
-    const paymentMethod = req.body.paymentMethod || 'COD'
+    const paymentMethod = String(req.body.paymentMethod || 'COD').trim()
+    const paymentMethodKey = paymentMethod.toLowerCase()
     const deliveryCompanyId = req.body.deliveryCompanyId || null
     const addressId = req.body.addressId || null
     const currentUser = await userModel.findByUsername(req.session.user.username)
@@ -130,7 +131,7 @@ async function placeOrder(req, res, next) {
       })
     }
 
-    if (paymentMethod === 'wallet' && Number(currentUser.balance || 0) < total + shippingFee) {
+    if (paymentMethodKey === 'wallet' && Number(currentUser.balance || 0) < total + shippingFee) {
       return res.render('checkout', {
         cart,
         total,
@@ -144,16 +145,19 @@ async function placeOrder(req, res, next) {
     }
 
     let status = 'Chờ xác nhận'
-    if (paymentMethod === 'wallet') {
+    const orderPaymentMethod = paymentMethodKey === 'wallet' ? 'wallet' : paymentMethod
+
+    if (paymentMethodKey === 'wallet') {
       await userModel.updateBalance(req.session.user.username, -(total + shippingFee))
       status = 'Đã thanh toán bằng ví'
-      req.session.user.balance = Number(currentUser.balance || 0) - total - shippingFee
+      const updatedUser = await userModel.findByUsername(req.session.user.username)
+      req.session.user.balance = Number(updatedUser.balance || 0)
     }
 
     const orderId = await orderModel.createOrder({
       username: req.session.user.username,
       total,
-      paymentMethod,
+      paymentMethod: orderPaymentMethod,
       status,
       deliveryCompany,
       deliveryAddress,

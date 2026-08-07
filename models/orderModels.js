@@ -53,7 +53,7 @@ async function getRevenueByDay(days = 7) {
     `SELECT substr(created_at, 1, 10) AS date,
             SUM(total + shipping_fee) AS revenue
      FROM orders
-     WHERE status = 'Hoàn thành'
+     WHERE status != 'Đã hủy'
        AND substr(created_at, 1, 10) BETWEEN ? AND ?
      GROUP BY date
      ORDER BY date ASC`,
@@ -92,7 +92,7 @@ async function getRevenueByMonth(months = 12) {
   const [rows] = await db.query(
     `SELECT substr(created_at, 1, 7) AS month, SUM(total + shipping_fee) AS revenue
      FROM orders
-     WHERE status = 'Hoàn thành'
+     WHERE status != 'Đã hủy'
        AND substr(created_at, 1, 10) BETWEEN ? AND ?
      GROUP BY month
      ORDER BY month ASC`,

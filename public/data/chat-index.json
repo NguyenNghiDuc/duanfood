@@ -1,29 +1,5 @@
 [
   {
-    "id": 54,
-    "title": "Kem vani",
-    "description": "Kem mát lạnh vị vani",
-    "category_id": 11,
-    "category": "Bánh kẹo",
-    "price": 25000,
-    "image": "",
-    "url": "/foods/54",
-    "order_count": 0,
-    "text": "kem vani kem mat lanh vi vani banh keo 25000"
-  },
-  {
-    "id": 53,
-    "title": "Cà phê sữa đá",
-    "description": "Cà phê phin pha sữa",
-    "category_id": 10,
-    "category": "Đồ uống",
-    "price": 25000,
-    "image": "",
-    "url": "/foods/53",
-    "order_count": 55,
-    "text": "ca phe sua đa ca phe phin pha sua đo uong 25000"
-  },
-  {
     "id": 52,
     "title": "Nước cam tươi",
     "description": "Nước cam ép tươi",
@@ -44,7 +20,7 @@
     "price": 35000,
     "image": "",
     "url": "/foods/51",
-    "order_count": 0,
+    "order_count": 10300,
     "text": "tra sua tran chau tra sua thom beo, topping tran chau đo uong 35000"
   },
   {
