@@ -1,4 +1,5 @@
 const userModel = require('../models/userModels')
+const orderModel = require('../models/orderModels')
 const topupService = require('../lib/topupService')
 
 async function showWallet(req, res, next) {
@@ -30,16 +31,35 @@ async function showBank(req, res, next) {
       if (!request || request.username !== req.session.user.username) return res.status(404).send('Không tìm thấy yêu cầu nạp tiền')
       return res.render('bank', { orderId: null, totalPrice: Number(request.amount), topUpAmount: Number(request.amount), topupRequest: request, user: req.session.user })
     }
+
+    const orderId = Number(req.query.orderId || 0)
+    if (orderId) {
+      const order = await orderModel.getOrderById(orderId)
+      if (!order || order.username !== req.session.user.username) return res.status(404).send('Không tìm thấy đơn hàng')
+      const totalPrice = Number(order.total || 0) + Number(order.shipping_fee || 0)
+      return res.render('bank', { orderId, totalPrice, topUpAmount: 0, topupRequest: null, user: req.session.user })
+    }
+
     return res.redirect('/wallet/top-up')
   } catch (error) { next(error) }
 }
 
 async function confirmTransfer(req, res, next) {
   try {
-    const id = Number(req.body.topupId || 0)
-    const request = await topupService.getById(id)
-    if (!request || request.username !== req.session.user.username) return res.status(404).send('Không tìm thấy yêu cầu nạp tiền')
-    return res.redirect('/wallet/top-up?success=Đã gửi yêu cầu. Tiền chỉ được cộng sau khi shop xác nhận đã nhận chuyển khoản.')
+    const topupId = Number(req.body.topupId || 0)
+    if (topupId) {
+      const request = await topupService.getById(topupId)
+      if (!request || request.username !== req.session.user.username) return res.status(404).send('Không tìm thấy yêu cầu nạp tiền')
+      return res.redirect('/wallet/top-up?success=' + encodeURIComponent('Đã gửi yêu cầu. Tiền chỉ được cộng sau khi shop xác nhận đã nhận chuyển khoản.'))
+    }
+
+    const orderId = Number(req.body.orderId || 0)
+    if (orderId) {
+      await orderModel.updateOrderStatusForUser(orderId, req.session.user.username, 'Đã thanh toán')
+      return res.redirect('/orders')
+    }
+
+    return res.redirect('/wallet/top-up')
   } catch (error) { next(error) }
 }
 
