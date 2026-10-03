@@ -40,6 +40,11 @@ async function sendRegistrationOtp(phone,otp){
   }
 }
 
+function getDevOtp(p){
+  if(process.env.NODE_ENV==='production')return null
+  return p?.devOtp||p?.otp||null
+}
+
 async function showRegister(req,res){res.render('register',{error:null})}
 async function register(req,res,next){
   try{
@@ -62,13 +67,13 @@ async function register(req,res,next){
 async function showVerify(req,res){
   const p=req.session.pendingRegister
   if(!p?.username)return res.redirect('/register')
-  res.render('register-verify',{phone:p.phone,error:p.otpDeliveryError||null,otpSent:Boolean(p.otpSent),devOtp:process.env.NODE_ENV!=='production'?p.devOtp||null:null})
+  res.render('register-verify',{phone:p.phone,error:p.otpDeliveryError||null,otpSent:Boolean(p.otpSent),devOtp:getDevOtp(p)})
 }
 async function verifyRegister(req,res,next){
   try{
     const p=req.session.pendingRegister
     if(!p)return res.redirect('/register')
-    const viewData={phone:p.phone,otpSent:Boolean(p.otpSent),devOtp:process.env.NODE_ENV!=='production'?p.devOtp||null:null}
+    const viewData={phone:p.phone,otpSent:Boolean(p.otpSent),devOtp:getDevOtp(p)}
     const submittedOtp=String(req.body.otp||'').trim()
     if(!/^\d{6}$/.test(submittedOtp))return res.render('register-verify',{...viewData,error:'Vui lòng nhập đúng mã OTP gồm 6 chữ số.'})
     if(Date.now()>(p.otpExpires||0)){req.session.pendingRegister=null;return res.render('register-verify',{...viewData,error:'Mã OTP đã hết hạn. Vui lòng đăng ký lại.'})}
