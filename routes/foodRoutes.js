@@ -2,17 +2,16 @@ const express = require('express')
 const router = express.Router()
 const foodController = require('../controllers/foodController')
 const promotionController = require('../controllers/promotionController')
+const upload = require('../middleware/upload')
 const { requireLogin } = require('../middleware/auth')
 const { requireAdmin } = require('../middleware/admin')
+const { rateLimit } = require('../middleware/rateLimit')
+
 router.get('/', foodController.showHome)
 router.get('/foods', foodController.showFoods)
 router.get('/foods/:id', foodController.showFoodDetail)
 router.get('/api/recommendations/:id', foodController.recommendFoods)
-router.post(
-  '/foods/:id/review',
-  requireLogin,
-  foodController.createReview
-)
+router.post('/foods/:id/review', requireLogin, rateLimit({ max: 8, windowMs: 60 * 60_000, keyPrefix: 'review' }), upload.single('image'), foodController.createReview)
 router.get('/categories', foodController.showCategories)
 router.get('/promotion', promotionController.showPromotion)
 router.post('/promotion/add', requireLogin, requireAdmin, promotionController.store)

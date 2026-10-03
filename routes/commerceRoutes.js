@@ -1,0 +1,22 @@
+const express = require('express')
+const router = express.Router()
+const c = require('../controllers/commerceController')
+const { requireLogin } = require('../middleware/auth')
+const { rateLimit } = require('../middleware/rateLimit')
+
+router.use(requireLogin)
+router.get('/favorites', c.showFavorites)
+router.post('/favorites/:id/toggle', c.toggleFavorite)
+router.get('/notifications/stream', c.streamNotifications)
+router.get('/notifications', c.notifications)
+router.post('/notifications/:id/read', c.readNotification)
+router.get('/wallet/history', c.walletHistory)
+router.post('/voucher/preview', rateLimit({ max: 20, keyPrefix: 'voucher' }), c.voucherPreview)
+router.post('/orders/:id/reorder', c.reorder)
+router.get('/orders/:id/timeline', c.orderTimeline)
+router.get('/support', c.showTickets)
+router.get('/support/:id', c.showTicket)
+router.post('/support', rateLimit({ max: 10, windowMs: 10 * 60_000, keyPrefix: 'support-create' }), c.createTicket)
+router.post('/support/:id/reply', rateLimit({ max: 30, keyPrefix: 'support-reply' }), c.replyTicket)
+
+module.exports = router
