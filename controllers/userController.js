@@ -48,7 +48,9 @@ async function register(req,res,next){
     const hash=await bcrypt.hash(password,12)
     if(phone&&phone.trim()){
       const normalizedPhone=normalizePhone(phone)
-      const otp=process.env.NODE_ENV==='test'&&process.env.TEST_OTP?String(process.env.TEST_OTP):String(crypto.randomInt(100000,1000000))
+      const otp=process.env.NODE_ENV==='development'
+        ? '111111'
+        : (process.env.NODE_ENV==='test'&&process.env.TEST_OTP?String(process.env.TEST_OTP):String(crypto.randomInt(100000,1000000)))
       const expires=Date.now()+5*60*1000
       const delivery=await sendRegistrationOtp(normalizedPhone,otp)
       if(process.env.NODE_ENV==='production'&&!delivery.sent)return res.render('register',{error:delivery.error||'Không thể gửi OTP. Vui lòng thử lại.'})
