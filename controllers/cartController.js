@@ -31,7 +31,7 @@ function formatAddress(a){return a?`${a.full_name} — ${a.detail_address}, ${a.
 async function showCheckout(req,res,next){try{const cart=await hydrateCart(getCart(req)),deliveryCompanies=await foodModel.getDeliveryCompanies(),addresses=await addressModel.getAddressesByUsername(req.session.user.username),currentUser=await userModel.findByUsername(req.session.user.username);if(currentUser)req.session.user.balance=Number(currentUser.balance||0);res.render('checkout',{cart,total:getCartTotal(cart),error:null,user:req.session.user,isEmptyCart:cart.length===0,deliveryCompanies,addresses,selectedAddressId:addresses.find(a=>a.is_default)?.id||null})}catch(e){next(e)}}
 
 async function rollbackVoucher(orderId, voucher) {
-  if (!orderId || !voucher) return
+  if (!orderId || !voucher?.id) return
   const [rows] = await db.query('SELECT id FROM voucher_usages WHERE order_id=? AND voucher_id=? LIMIT 1', [orderId, voucher.id]).catch(()=>[[]])
   if (!rows[0]) return
   const [removed] = await db.query('DELETE FROM voucher_usages WHERE id=?', [rows[0].id]).catch(()=>[{affectedRows:0}])
@@ -40,7 +40,7 @@ async function rollbackVoucher(orderId, voucher) {
 
 async function placeOrder(req,res,next){
   let orderId=null
-  let voucherApplied=false
+  let appliedVoucher=null
   const decremented=[]
   try{
     const cart=await hydrateCart(getCart(req));if(!cart.length)return res.redirect('/cart')
@@ -56,17 +56,17 @@ async function placeOrder(req,res,next){
     orderId=await orderModel.createOrder({username:req.session.user.username,total:subtotal,paymentMethod:paymentKey==='wallet'?'wallet':paymentMethod,status:paymentKey==='wallet'?'Đã thanh toán bằng ví':'Chờ xác nhận',deliveryCompany:delivery?delivery.name:'Giao hàng tiêu chuẩn',deliveryAddress,shippingFee,discountAmount:discount,voucherCode:voucherResult.valid?voucherResult.voucher.code:''})
     await orderModel.createOrderItems(orderId,cart)
     for(const item of cart){const [result]=await db.query('UPDATE foods SET stock=stock-? WHERE id=? AND COALESCE(stock,0)>=?',[item.quantity,item.foodId,item.quantity]);if(!result.affectedRows)throw new Error(`Tồn kho ${item.title} vừa thay đổi`);decremented.push(item)}
-    if(voucherResult.valid){await commerce.useVoucher(voucherResult.voucher,req.session.user.username,orderId,discount);voucherApplied=true}
+    if(voucherResult.valid){await commerce.useVoucher(voucherResult.voucher,req.session.user.username,orderId,discount);appliedVoucher=voucherResult.voucher}
     if(paymentKey==='wallet')await walletLedger.recordTransaction({username:req.session.user.username,type:'order_payment',amount:-payable,referenceType:'order',referenceId:orderId,note:`Thanh toán đơn #${orderId}`})
 
     req.session.cart=[]
-    const updated=await userModel.findByUsername(req.session.user.username);if(updated)req.session.user.balance=Number(updated.balance||0)
+    const updated=await userModel.findByUsername(req.session.user.username).catch(()=>null);if(updated)req.session.user.balance=Number(updated.balance||0)
     await commerce.notify(req.session.user.username,'Đặt hàng thành công',`Đơn #${orderId} đã được tạo.`,`/orders/${orderId}/timeline`).catch(()=>{})
     await commerce.audit(req.session.user.username,'create_order','order',orderId,`payable=${payable}`).catch(()=>{})
     if(paymentMethod==='Banking'||paymentMethod==='Momo')return res.redirect(`/bank?orderId=${orderId}`)
     return res.redirect('/orders')
   }catch(error){
-    if(voucherApplied&&orderId){const order=await orderModel.getOrderById(orderId).catch(()=>null);if(order)await rollbackVoucher(orderId,{id:(await commerce.validateVoucher(order.voucher_code,req.session.user.username,Number(order.total||0)).catch(()=>({voucher:null}))).voucher?.id}).catch(()=>{})}
+    if(appliedVoucher&&orderId)await rollbackVoucher(orderId,appliedVoucher).catch(()=>{})
     for(const item of decremented)await db.query('UPDATE foods SET stock=COALESCE(stock,0)+? WHERE id=?',[item.quantity,item.foodId]).catch(()=>{})
     if(orderId)await db.query("UPDATE orders SET status='Lỗi xử lý - cần kiểm tra',stock_restored=1 WHERE id=?",[orderId]).catch(()=>{})
     return next(error)
