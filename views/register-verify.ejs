@@ -8,24 +8,41 @@
   </head>
   <body>
     <div class="auth-container">
-      <div class="auth-card">
+      <div class="auth-card auth-card-compact">
         <div class="auth-header">
           <span class="auth-icon">🔒</span>
           <h1>Xác thực số điện thoại</h1>
         </div>
-        <p class="auth-subtitle">Chúng tôi đã gửi mã OTP tới số <strong><%= phone %></strong>. Vui lòng nhập mã để hoàn tất đăng ký.</p>
-        <% if(error){ %>
-        <div class="error-box"><%= error %></div>
+
+        <% if (otpSent) { %>
+          <p class="auth-subtitle">Mã OTP đã được gửi tới <strong><%= phone %></strong>. Vui lòng nhập mã để hoàn tất đăng ký.</p>
+          <div class="success-box">SMS OTP đã được Twilio chấp nhận gửi.</div>
+        <% } else { %>
+          <p class="auth-subtitle">SMS OTP chưa được gửi thành công tới <strong><%= phone %></strong>.</p>
         <% } %>
-        <form method="POST" action="/register/verify" class="auth-form">
-          <div class="form-group">
-            <label>Mã OTP</label>
-            <input type="text" name="otp" placeholder="Nhập mã OTP" required />
+
+        <% if(error){ %>
+          <div class="error-box"><%= error %></div>
+        <% } %>
+
+        <% if(devOtp){ %>
+          <div class="dev-otp-box">
+            <span>Chế độ development</span>
+            <strong><%= devOtp %></strong>
+            <small>Twilio chưa được cấu hình nên dùng mã này để test. Production sẽ không hiển thị mã OTP.</small>
           </div>
-          <button type="submit" class="btn btn-primary">Xác nhận</button>
+        <% } %>
+
+        <form method="POST" action="/register/verify" class="auth-form otp-form">
+          <div class="form-group">
+            <label>Mã OTP 6 số</label>
+            <input type="text" name="otp" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}" placeholder="••••••" required />
+          </div>
+          <button type="submit" class="btn btn-primary">Xác nhận OTP</button>
         </form>
+
         <div class="auth-footer">
-          Nếu bạn không nhận được mã, thử đăng ký lại hoặc kiểm tra số điện thoại.
+          <a href="/register">← Nhập lại thông tin / số điện thoại</a>
         </div>
       </div>
     </div>
