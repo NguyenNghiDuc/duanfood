@@ -7,9 +7,11 @@ const { requireLogin } = require('../middleware/auth')
 const { rateLimit } = require('../middleware/rateLimit')
 const { registerValidation, loginValidation, handleValidationErrors } = require('../middleware/validation')
 
-const otpVerifyMiddleware = process.env.NODE_ENV === 'development'
-  ? (req, res, next) => next()
-  : rateLimit({ max: 10, windowMs: 10 * 60_000, keyPrefix: 'otp' })
+const productionOtpLimiter = rateLimit({ max: 10, windowMs: 10 * 60_000, keyPrefix: 'otp' })
+function otpVerifyMiddleware(req, res, next) {
+  if (String(process.env.NODE_ENV || '').toLowerCase() !== 'production') return next()
+  return productionOtpLimiter(req, res, next)
+}
 
 router.get('/register', userController.showRegister)
 router.post('/register', rateLimit({ max: 5, windowMs: 15 * 60_000, keyPrefix: 'register' }), registerValidation, handleValidationErrors, userController.register)
