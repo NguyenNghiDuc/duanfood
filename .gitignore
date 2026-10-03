@@ -8,6 +8,7 @@ data/*.db
 data/*.sqlite
 public/uploads/*
 !public/uploads/.gitkeep
+backups/
 coverage/
 .DS_Store
 .vscode/

@@ -1,0 +1,9 @@
+[
+  {"id":"shipping","question":"Phí giao hàng được tính như thế nào?","answer":"Phí giao hàng phụ thuộc đơn vị vận chuyển khách chọn ở bước checkout và được hiển thị trước khi đặt đơn."},
+  {"id":"wallet-topup","question":"Khi nào tiền nạp vào ví được cộng?","answer":"Khách tạo yêu cầu nạp và chuyển khoản đúng nội dung. Số dư chỉ được cộng sau khi shop xác nhận tiền thực sự đã vào tài khoản."},
+  {"id":"refund","question":"Đơn bị hủy có được hoàn tiền không?","answer":"Đơn đã thanh toán đủ điều kiện sẽ được hoàn về ví một lần khi admin chuyển trạng thái sang Đã hủy."},
+  {"id":"voucher","question":"Voucher dùng thế nào?","answer":"Nhập mã ở checkout. Hệ thống kiểm tra thời gian, đơn tối thiểu, lượt dùng và giới hạn của từng tài khoản trước khi áp dụng."},
+  {"id":"reviews","question":"Ai được đánh giá món?","answer":"Chỉ tài khoản đã từng mua món và đơn không bị hủy mới có thể gửi hoặc cập nhật đánh giá."},
+  {"id":"payment","question":"VNPay xác nhận thanh toán thế nào?","answer":"Đơn chỉ chuyển sang đã thanh toán sau khi server xác minh chữ ký VNPay, đúng mã đơn và đúng số tiền qua return/IPN."},
+  {"id":"support","question":"Liên hệ CSKH ở đâu?","answer":"Khách có thể tạo ticket trong mục hỗ trợ. Nhân viên support/staff/admin có thể trả lời và đóng ticket."}
+]
