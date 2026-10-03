@@ -1,4 +1,17 @@
 {
+  "name": "mini-food-store",
+  "version": "1.1.0",
+  "description": "Mini Food Store with wallet, admin and food assistant",
+  "main": "app.js",
+  "scripts": {
+    "dev": "nodemon app.js",
+    "start": "node app.js",
+    "test": "node --check app.js && node --check routes/apiRoutes.js && node --check routes/userRoutes.js && node --check routes/adminRoutes.js && node --check lib/foodAssistant.js && node --check lib/topupService.js && node --check controllers/walletController.js && node --check controllers/adminTopupController.js"
+  },
+  "keywords": ["food", "express", "ejs"],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
   "dependencies": {
     "bcryptjs": "^3.0.3",
     "dotenv": "^16.3.1",
@@ -10,20 +23,6 @@
     "mysql2": "^3.22.5",
     "sqlite3": "^5.1.6"
   },
-  "name": "baitap",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "prestart": "node -e \"const { execSync } = require('child_process'); try { const pids = execSync('lsof -ti tcp:5000', { encoding: 'utf8' }).split(/\\s+/).filter(Boolean); if (pids.length) execSync('kill -9 ' + pids.join(' '), { stdio: 'ignore' }); } catch (e) {}\"",
-    "dev": "nodemon app.js",
-    "start": "node app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
   "devDependencies": {
     "nodemon": "^3.1.14"
   }
