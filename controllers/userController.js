@@ -48,12 +48,13 @@ async function register(req,res,next){
     const hash=await bcrypt.hash(password,12)
     if(phone&&phone.trim()){
       const normalizedPhone=normalizePhone(phone)
-      const otp=process.env.NODE_ENV==='development'
-        ? '111111'
-        : (process.env.NODE_ENV==='test'&&process.env.TEST_OTP?String(process.env.TEST_OTP):String(crypto.randomInt(100000,1000000)))
+      const isProduction=String(process.env.NODE_ENV||'').toLowerCase()==='production'
+      const otp=isProduction
+        ? String(crypto.randomInt(100000,1000000))
+        : (process.env.NODE_ENV==='test'&&process.env.TEST_OTP?String(process.env.TEST_OTP):'111111')
       const expires=Date.now()+5*60*1000
       const delivery=await sendRegistrationOtp(normalizedPhone,otp)
-      if(process.env.NODE_ENV==='production'&&!delivery.sent)return res.render('register',{error:delivery.error||'Không thể gửi OTP. Vui lòng thử lại.'})
+      if(isProduction&&!delivery.sent)return res.render('register',{error:delivery.error||'Không thể gửi OTP. Vui lòng thử lại.'})
       req.session.pendingRegister={username,passwordHash:hash,phone:normalizedPhone,fullname:fullname||'',email:email||'',otp,otpExpires:expires,otpSent:delivery.sent,otpDeliveryError:delivery.error||null,devOtp:delivery.devOtp||null}
       return res.render('register-verify',{phone:normalizedPhone,error:delivery.error||null,otpSent:delivery.sent,devOtp:delivery.devOtp||null})
     }
