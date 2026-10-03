@@ -1,35 +1,20 @@
-const express = require("express");
+const express = require('express')
+const router = express.Router()
+const { chat, feedback, correction, search, combo, parse, cartCalc, alternatives, reviewAnalysis, showChat } = require('../controllers/aiController')
+const { requireAdmin } = require('../middleware/admin')
+const foodAssistant = require('../lib/foodAssistant')
 
-const router = express.Router();
+router.get('/', showChat)
+router.post('/chat', foodAssistant.middleware, chat)
+router.post('/feedback', feedback)
+router.post('/correction', requireAdmin, correction)
+router.post('/search', search)
+router.post('/combo', combo)
+router.post('/parse', parse)
+router.post('/cart-calc', cartCalc)
+router.get('/alternatives/:id', alternatives)
+router.post('/alternatives', alternatives)
+router.get('/review-analysis/:id', reviewAnalysis)
+router.post('/review-analysis', reviewAnalysis)
 
-const {
-  chat,
-  feedback,
-  correction,
-  search,
-  combo,
-  parse,
-  cartCalc,
-  alternatives,
-  reviewAnalysis,
-  showChat
-} = require("../controllers/aiController");
-
-// Render the AI chat page
-router.get('/', showChat);
-
-router.post("/chat", chat);
-router.post("/feedback", feedback);
-router.post("/correction", correction);
-router.post("/search", search);
-router.post("/combo", combo);
-router.post("/parse", parse);
-router.post('/cart-calc', cartCalc);
-
-router.get('/alternatives/:id', alternatives);
-router.post('/alternatives', alternatives);
-
-router.get('/review-analysis/:id', reviewAnalysis);
-router.post('/review-analysis', reviewAnalysis);
-
-module.exports = router;
+module.exports = router
