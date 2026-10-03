@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const c = require('../controllers/adminCommerceController')
+const exportController = require('../controllers/exportController')
 const { requireLogin } = require('../middleware/auth')
 const { requireRole } = require('../middleware/role')
 const { rateLimit } = require('../middleware/rateLimit')
@@ -21,6 +22,7 @@ router.post('/tickets/:id/close', requireRole('support','staff','admin','super_a
 router.get('/audit', requireRole('admin','super_admin'), c.auditLogs)
 router.get('/insights', requireRole('staff','admin','super_admin'), c.insights)
 router.get('/export/:type', requireRole('admin','super_admin'), c.exportData)
+router.get('/export-excel/:type', requireRole('admin','super_admin'), exportController.exportExcel)
 router.post('/ai/query', requireRole('staff','admin','super_admin'), rateLimit({ max: 30, keyPrefix: 'admin-ai' }), c.adminAi)
 
 module.exports = router
