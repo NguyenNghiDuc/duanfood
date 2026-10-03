@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Duyệt nạp tiền</title></head>
+<body class="app-page admin-page">
+<main class="app-shell">
+  <header class="page-hero"><div><span class="eyebrow">MINI FOOD ADMIN</span><h1>Duyệt nạp tiền</h1><p>Chỉ bấm xác nhận sau khi tiền thực sự xuất hiện trong tài khoản ngân hàng của shop.</p></div><a class="btn btn-secondary" href="/admin">← Trang quản trị</a></header>
+  <% if (success) { %><div class="notice success"><%= success %></div><% } %>
+  <% if (error) { %><div class="notice error"><%= error %></div><% } %>
+  <section class="panel"><div class="table-wrap"><table class="data-table"><thead><tr><th>Mã</th><th>Khách</th><th>Số tiền</th><th>Nội dung CK</th><th>Trạng thái</th><th>Xử lý</th></tr></thead><tbody>
+  <% if (!topups.length) { %><tr><td colspan="6" class="empty-state">Chưa có yêu cầu nạp tiền.</td></tr><% } %>
+  <% topups.forEach(item => { %><tr><td>#<%= item.id %></td><td><strong><%= item.username %></strong></td><td><%= Number(item.amount).toLocaleString('vi-VN') %> ₫</td><td><code><%= item.reference_code %></code></td><td><span class="status-pill status-<%= item.status %>"><%= item.status %></span></td><td>
+    <% if (item.status === 'pending') { %>
+      <form method="POST" action="/admin/topups/<%= item.id %>/approve" class="inline-form"><button class="btn btn-small" type="submit">Đã nhận tiền → Cộng ví</button></form>
+      <form method="POST" action="/admin/topups/<%= item.id %>/reject" class="inline-form"><input name="note" placeholder="Lý do từ chối"><button class="btn btn-danger btn-small" type="submit">Từ chối</button></form>
+    <% } else { %><small><%= item.approved_by || '' %></small><% } %>
+  </td></tr><% }) %></tbody></table></div></section>
+</main>
+</body>
+</html>
