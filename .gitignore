@@ -1,1 +1,14 @@
 node_modules/
+.env
+.env.*
+!.env.example
+*.log
+npm-debug.log*
+data/*.db
+data/*.sqlite
+public/uploads/*
+!public/uploads/.gitkeep
+coverage/
+.DS_Store
+.vscode/
+.idea/
