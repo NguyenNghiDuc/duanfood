@@ -1,193 +1,65 @@
+const db = require('../config/db')
 const foodModel = require('../models/foodModels')
 const postModel = require('../models/postModels')
+const commerce = require('../lib/commerceService')
+const { ensureCommerceSchema } = require('../lib/commerceSchema')
 
-async function showHome(req, res, next) {
-  try {
-    const foods = await foodModel.getFoods({})
-    const categories = await foodModel.getAllCategories()
-    const posts = await postModel.getAllPosts()
+function normalize(text){return String(text||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d').toLowerCase().trim()}
+function distance(a,b){a=normalize(a);b=normalize(b);const m=Array.from({length:a.length+1},()=>Array(b.length+1).fill(0));for(let i=0;i<=a.length;i++)m[i][0]=i;for(let j=0;j<=b.length;j++)m[0][j]=j;for(let i=1;i<=a.length;i++)for(let j=1;j<=b.length;j++)m[i][j]=Math.min(m[i-1][j]+1,m[i][j-1]+1,m[i-1][j-1]+(a[i-1]===b[j-1]?0:1));return m[a.length][b.length]}
 
-    res.render('home', {
-      foods: (foods || []).slice(0, 6),
-      categories: categories || [],
-      posts: posts || []
-    })
-  } catch (error) {
-    next(error)
-  }
+async function withSale(food){const sale=await commerce.currentSaleForFood(food.id);return {...food,original_price:Number(food.price||0),display_price:sale?Number(sale.sale_price):Number(food.price||0),flash_sale:sale||null}}
+async function withSales(foods){return Promise.all((foods||[]).map(withSale))}
+
+async function showHome(req,res,next){try{const foods=await withSales((await foodModel.getFoods({})).slice(0,6));res.render('home',{foods,categories:await foodModel.getAllCategories(),posts:await postModel.getAllPosts()})}catch(e){next(e)}}
+
+async function showFoods(req,res,next){
+  try{
+    const keyword=String(req.query.keyword||'').trim(),categoryId=String(req.query.categoryId||'').trim(),sort=String(req.query.sort||'new').trim()
+    const minPrice=req.query.minPrice!==undefined&&req.query.minPrice!==''?Number(req.query.minPrice):null,maxPrice=req.query.maxPrice!==undefined&&req.query.maxPrice!==''?Number(req.query.maxPrice):null
+    const categories=await foodModel.getAllCategories();let foods=await foodModel.getFoods({keyword,categoryId,sort,minPrice,maxPrice})
+    let fuzzy=false
+    if(keyword&&foods.length===0){const all=await foodModel.getFoods({categoryId,sort,limit:100});const q=normalize(keyword);foods=all.map(f=>{const hay=normalize(`${f.title} ${f.description||''} ${f.ingredients||''} ${f.category_name||''}`);const words=hay.split(/\s+/);const score=Math.min(distance(q,normalize(f.title)),...words.map(w=>distance(q,w)));return{f,score}}).filter(x=>x.score<=Math.max(2,Math.floor(q.length*.4))).sort((a,b)=>a.score-b.score).slice(0,30).map(x=>x.f);fuzzy=foods.length>0}
+    foods=await withSales(foods)
+    res.render('foods',{foods,categories,keyword,categoryId,sort,minPrice,maxPrice,fuzzy,success:null,user:req.session.user||null})
+  }catch(e){next(e)}
 }
 
-async function showFoods(req, res, next) {
-  try {
-    const keyword = (req.query.keyword || '').trim()
-    const categoryId = (req.query.categoryId || '').trim()
-    const sort = (req.query.sort || 'new').trim()
-    const successKey = String(req.query.success || '')
-    const successMessage = {
-      created: 'Thêm món thành công.',
-      updated: 'Cập nhật món thành công.',
-      deleted: 'Xóa món thành công.'
-    }[successKey] || null
-
-    console.log('[showFoods] keyword=', keyword, 'categoryId=', categoryId, 'sort=', sort)
-
-    const categories = await foodModel.getAllCategories()
-
-    const foods = await foodModel.getFoods({
-      keyword,
-      categoryId,
-      sort
-    })
-
-    res.render('foods', {
-      foods,
-      categories,
-      keyword,
-      categoryId,
-      sort,
-      success: successMessage,
-      user: req.session.user || null
-    })
-  } catch (error) {
-    next(error)
-  }
+async function showFoodDetail(req,res,next){
+  try{
+    const raw=await foodModel.getFoodById(req.params.id);if(!raw)return res.status(404).send('Không tìm thấy món ăn')
+    const food=await withSale(raw),reviews=await foodModel.getReviewsByFoodId(req.params.id),ratingSummary=await foodModel.getFoodRatingSummary(req.params.id)
+    let canReview=false,isFavorite=false
+    if(req.session.user){const [p]=await db.query("SELECT 1 FROM order_items oi JOIN orders o ON o.id=oi.order_id WHERE o.username=? AND oi.food_id=? AND o.status<>'Đã hủy' LIMIT 1",[req.session.user.username,food.id]);canReview=p.length>0;const [fav]=await db.query('SELECT id FROM favorites WHERE username=? AND food_id=?',[req.session.user.username,food.id]).catch(()=>[[]]);isFavorite=fav.length>0}
+    res.render('food-detail',{food,reviews,ratingSummary,user:req.session.user,canReview,isFavorite,seo:{title:`${food.title} | MINI FOOD`,description:String(food.description||'').slice(0,155),image:food.image||''}})
+  }catch(e){next(e)}
 }
 
-async function showFoodDetail(req, res, next) {
-  try {
-    const food = await foodModel.getFoodById(req.params.id)
-
-    if (!food) {
-      return res.status(404).send('Không tìm thấy món ăn')
-    }
-
-    const reviews = await foodModel.getReviewsByFoodId(req.params.id)
-    const ratingSummary = await foodModel.getFoodRatingSummary(req.params.id)
-
-    res.render('food-detail', {
-      food,
-      reviews,
-      ratingSummary,
-      user: req.session.user
-    })
-  } catch (error) {
-    next(error)
-  }
+async function createReview(req,res,next){
+  try{
+    await ensureCommerceSchema();const username=req.session.user.username,foodId=Number(req.params.id)
+    const [purchased]=await db.query("SELECT 1 FROM order_items oi JOIN orders o ON o.id=oi.order_id WHERE o.username=? AND oi.food_id=? AND o.status<>'Đã hủy' LIMIT 1",[username,foodId]);if(!purchased.length)return res.status(403).send('Bạn chỉ có thể đánh giá món đã mua.')
+    const rating=Math.max(1,Math.min(5,Number(req.body.rating||5))),comment=String(req.body.comment||'').trim().slice(0,2000),image=req.file?`/uploads/${req.file.filename}`:''
+    const [existing]=await db.query('SELECT id FROM reviews WHERE food_id=? AND username=? LIMIT 1',[foodId,username])
+    if(existing.length)await db.query('UPDATE reviews SET rating=?,comment=?,image=?,created_at=CURRENT_TIMESTAMP WHERE id=?',[rating,comment,image,existing[0].id])
+    else await db.query('INSERT INTO reviews(food_id,username,rating,comment,image) VALUES(?,?,?,?,?)',[foodId,username,rating,comment,image])
+    await commerce.audit(username,'review_food','food',foodId,`rating=${rating}`);res.redirect(`/foods/${foodId}`)
+  }catch(e){next(e)}
 }
 
-async function createReview(req, res, next) {
-  try {
-    const { rating, comment } = req.body
+async function showCategories(req,res,next){try{res.render('categories',{categories:await foodModel.getAllCategories()})}catch(e){next(e)}}
+function showPromotion(req,res){res.render('promotion')}
+function showAbout(req,res){res.render('about')}
+function showContact(req,res){res.render('contact',{user:req.session.user||null})}
+function redirectMenu(req,res){res.redirect('/foods')}
 
-    await foodModel.addReview(
-      req.params.id,
-      req.session.user.username,
-      Number(rating),
-      comment
-    )
-
-    res.redirect(`/foods/${req.params.id}`)
-  } catch (error) {
-    next(error)
-  }
+async function recommendFoods(req,res,next){
+  try{
+    const id=Number(req.params.id),base=await foodModel.getFoodById(id);if(!base)return res.status(404).json({error:'Không tìm thấy món ăn'})
+    const foods=await foodModel.getFoods({limit:100});const cartIds=new Set((req.session.cart||[]).map(x=>Number(x.foodId)))
+    const baseWords=new Set(normalize(`${base.title} ${base.description||''} ${base.ingredients||''}`).split(/\W+/).filter(Boolean))
+    const scored=foods.filter(f=>Number(f.id)!==id&&!cartIds.has(Number(f.id))).map(f=>{let score=0;if(Number(f.category_id)===Number(base.category_id))score+=5;const words=new Set(normalize(`${f.title} ${f.description||''} ${f.ingredients||''}`).split(/\W+/).filter(Boolean));for(const w of words)if(baseWords.has(w))score++;const diff=Math.abs(Number(base.price||0)-Number(f.price||0));score+=Math.max(0,3-Math.floor(diff/20000));if(/đồ uống|do uong|nước|nuoc/.test(normalize(f.category_name)))score+=1;return{f,score}}).sort((a,b)=>b.score-a.score).slice(0,6)
+    res.json({recommendations:await withSales(scored.map(x=>x.f))})
+  }catch(e){next(e)}
 }
 
-async function showCategories(req, res, next) {
-  try {
-    const categories = await foodModel.getAllCategories()
-
-    res.render('categories', {
-      categories
-    })
-  } catch (error) {
-    next(error)
-  }
-}
-
-function showPromotion(req, res) {
-  res.render('promotion')
-}
-
-function showAbout(req, res) {
-  res.render('about')
-}
-
-function showContact(req, res) {
-  res.render('contact', { user: req.session.user || null })
-}
-
-function redirectMenu(req, res) {
-  res.redirect('/foods')
-}
-
-async function recommendFoods(req, res, next) {
-  try {
-    const id = Number(req.params.id)
-    const baseFood = await foodModel.getFoodById(id)
-
-    if (!baseFood) {
-      return res.status(404).json({ error: 'Không tìm thấy món ăn' })
-    }
-
-    const foods = await foodModel.getFoods({})
-
-    // simple content-based scoring
-    function normalize(text) {
-      return String(text || '')
-        .trim()
-        .normalize('NFD')
-        .replace(/\p{Diacritic}/gu, '')
-        .toLowerCase()
-    }
-
-    const baseWords = new Set(
-      normalize(baseFood.title + ' ' + (baseFood.description || '')).split(/\W+/).filter(Boolean)
-    )
-
-    const scored = foods
-      .filter((f) => f.id !== id)
-      .map((f) => {
-        let score = 0
-        if (f.category_id && baseFood.category_id && Number(f.category_id) === Number(baseFood.category_id)) {
-          score += 5
-        }
-
-        const words = new Set(
-          normalize(f.title + ' ' + (f.description || '')).split(/\W+/).filter(Boolean)
-        )
-        let overlap = 0
-        for (const w of words) if (baseWords.has(w)) overlap++
-        score += overlap
-
-        // small boost for closer price
-        try {
-          const p1 = Number(baseFood.price || 0)
-          const p2 = Number(f.price || 0)
-          const diff = Math.abs(p1 - p2)
-          if (!isNaN(diff)) score += Math.max(0, 2 - Math.floor(diff / 20000))
-        } catch (e) {}
-
-        return { food: f, score }
-      })
-      .sort((a, b) => b.score - a.score)
-
-    const results = scored.slice(0, 6).map((s) => s.food)
-
-    res.json({ recommendations: results })
-  } catch (error) {
-    next(error)
-  }
-}
-
-module.exports = {
-  showHome,
-  showFoods,
-  showFoodDetail,
-  createReview,
-  showCategories,
-  showPromotion,
-  showAbout,
-  showContact,
-  redirectMenu
-  ,recommendFoods
-}
+module.exports={showHome,showFoods,showFoodDetail,createReview,showCategories,showPromotion,showAbout,showContact,redirectMenu,recommendFoods}
