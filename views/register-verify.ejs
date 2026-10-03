@@ -7,6 +7,12 @@
     <link rel="stylesheet" href="/css/register.css" />
   </head>
   <body>
+    <%
+      const safePhone = typeof phone !== 'undefined' && phone ? phone : '';
+      const safeError = typeof error !== 'undefined' ? error : null;
+      const safeOtpSent = typeof otpSent !== 'undefined' ? Boolean(otpSent) : false;
+      const safeDevOtp = typeof devOtp !== 'undefined' ? devOtp : null;
+    %>
     <div class="auth-container">
       <div class="auth-card auth-card-compact">
         <div class="auth-header">
@@ -14,21 +20,21 @@
           <h1>Xác thực số điện thoại</h1>
         </div>
 
-        <% if (otpSent) { %>
-          <p class="auth-subtitle">Mã OTP đã được gửi tới <strong><%= phone %></strong>. Vui lòng nhập mã để hoàn tất đăng ký.</p>
+        <% if (safeOtpSent) { %>
+          <p class="auth-subtitle">Mã OTP đã được gửi tới <strong><%= safePhone %></strong>. Vui lòng nhập mã để hoàn tất đăng ký.</p>
           <div class="success-box">SMS OTP đã được Twilio chấp nhận gửi.</div>
         <% } else { %>
-          <p class="auth-subtitle">SMS OTP chưa được gửi thành công tới <strong><%= phone %></strong>.</p>
+          <p class="auth-subtitle">SMS OTP chưa được gửi thành công tới <strong><%= safePhone %></strong>.</p>
         <% } %>
 
-        <% if(error){ %>
-          <div class="error-box"><%= error %></div>
+        <% if (safeError) { %>
+          <div class="error-box"><%= safeError %></div>
         <% } %>
 
-        <% if(devOtp){ %>
+        <% if (safeDevOtp) { %>
           <div class="dev-otp-box">
             <span>Chế độ development</span>
-            <strong><%= devOtp %></strong>
+            <strong><%= safeDevOtp %></strong>
             <small>Twilio chưa được cấu hình nên dùng mã này để test. Production sẽ không hiển thị mã OTP.</small>
           </div>
         <% } %>
