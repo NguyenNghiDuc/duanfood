@@ -1,0 +1,7 @@
+require('dotenv').config()
+const fs=require('fs/promises')
+const path=require('path')
+const db=require('../config/db')
+const {runMigrations}=require('../lib/migrationRunner')
+const TABLES=['users','categories','foods','reviews','orders','order_items','addresses','delivery_companies','promotions','wallet_transactions','wallet_topups','vouchers','voucher_usages','favorites','notifications','flash_sales','support_tickets','ticket_messages','audit_logs','password_reset_codes','ai_memory','ai_feedback','ai_corrections','ai_training_examples','ai_conversations','rag_documents','schema_migrations']
+;(async()=>{let rowCount=0;try{await db.ready();await runMigrations();const data={createdAt:new Date().toISOString(),engine:db.engine(),tables:{}};for(const table of TABLES){try{const [rows]=await db.query(`SELECT * FROM ${table}`);data.tables[table]=rows;rowCount+=rows.length}catch(_){data.tables[table]=null}}const dir=path.join(__dirname,'..','backups');await fs.mkdir(dir,{recursive:true});const stamp=new Date().toISOString().replace(/[:.]/g,'-'),file=path.join(dir,`mini-food-${stamp}.json`);await fs.writeFile(file,JSON.stringify(data,null,2));await db.query('INSERT INTO backup_runs(engine,file_path,row_count,status) VALUES(?,?,?,?)',[db.engine(),file,rowCount,'ok']).catch(()=>{});console.log(`Backup saved: ${file} (${rowCount} rows)`);await db.close()}catch(e){console.error(e);process.exitCode=1}})()
