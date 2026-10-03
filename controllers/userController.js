@@ -15,6 +15,7 @@ function normalizePhone(raw){
 
 async function sendRegistrationOtp(phone,otp){
   const configured=Boolean(process.env.TWILIO_SID&&process.env.TWILIO_TOKEN&&process.env.TWILIO_FROM)
+  const devFallback=process.env.NODE_ENV!=='production'?otp:null
   if(!configured){
     if(process.env.NODE_ENV==='production')return{sent:false,error:'Dịch vụ SMS chưa được cấu hình trên máy chủ.'}
     console.log(`[REGISTER OTP DEV] ${phone}: ${otp}`)
@@ -28,12 +29,14 @@ async function sendRegistrationOtp(phone,otp){
     if(!response.ok){
       const detail=payload.message||`HTTP ${response.status}`
       console.error('Twilio SMS error:',detail)
-      return{sent:false,error:`Không gửi được SMS OTP (${detail}).`}
+      if(devFallback)console.log(`[REGISTER OTP DEV FALLBACK] ${phone}: ${otp}`)
+      return{sent:false,devOtp:devFallback,error:`Không gửi được SMS OTP (${detail}).`}
     }
     return{sent:true,sid:payload.sid||null,error:null}
   }catch(error){
     console.error('SMS send error:',error.message)
-    return{sent:false,error:`Không gửi được SMS OTP (${error.message}).`}
+    if(devFallback)console.log(`[REGISTER OTP DEV FALLBACK] ${phone}: ${otp}`)
+    return{sent:false,devOtp:devFallback,error:`Không gửi được SMS OTP (${error.message}).`}
   }
 }
 
@@ -66,8 +69,10 @@ async function verifyRegister(req,res,next){
     const p=req.session.pendingRegister
     if(!p)return res.redirect('/register')
     const viewData={phone:p.phone,otpSent:Boolean(p.otpSent),devOtp:process.env.NODE_ENV!=='production'?p.devOtp||null:null}
+    const submittedOtp=String(req.body.otp||'').trim()
+    if(!/^\d{6}$/.test(submittedOtp))return res.render('register-verify',{...viewData,error:'Vui lòng nhập đúng mã OTP gồm 6 chữ số.'})
     if(Date.now()>(p.otpExpires||0)){req.session.pendingRegister=null;return res.render('register-verify',{...viewData,error:'Mã OTP đã hết hạn. Vui lòng đăng ký lại.'})}
-    if(String(req.body.otp||'').trim()!==String(p.otp).trim())return res.render('register-verify',{...viewData,error:'Mã OTP không chính xác'})
+    if(submittedOtp!==String(p.otp).trim())return res.render('register-verify',{...viewData,error:'Mã OTP không chính xác'})
     await userModel.createUser({username:p.username,password:p.passwordHash,fullname:p.fullname,phone:p.phone,email:p.email})
     req.session.pendingRegister=null
     res.redirect('/login')
