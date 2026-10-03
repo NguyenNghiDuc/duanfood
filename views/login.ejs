@@ -1,77 +1,90 @@
 <!DOCTYPE html>
 <html lang="vi">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>
-      Đăng nhập - Food
-    </title>
-    <link rel="stylesheet" href="/css/login.css" />
-  </head>
-  <body>
-    <div class="auth-container">
-      <div class="auth-card">
-        <div class="auth-header">
-          <span class="auth-icon">
-            🍃
-          </span>
-          <h1>
-            Đăng nhập
-          </h1>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Đăng nhập | MINI FOOD</title>
+  <link rel="stylesheet" href="/css/login.css">
+</head>
+<body>
+  <main class="auth-page">
+    <section class="auth-shell">
+      <aside class="auth-visual" aria-hidden="true">
+        <div class="brand-mark">🍜</div>
+        <span class="eyebrow">MINI FOOD</span>
+        <h2>Đặt món nhanh.<br>Ăn ngon mỗi ngày.</h2>
+        <p>Đăng nhập để tiếp tục đặt món, theo dõi đơn hàng, dùng voucher và quản lý ví của bạn.</p>
+        <div class="visual-points">
+          <span>✓ Đặt món dễ dàng</span>
+          <span>✓ Theo dõi đơn realtime</span>
+          <span>✓ Ưu đãi dành riêng cho thành viên</span>
         </div>
-        <p class="auth-subtitle">
-          Đăng nhập để tiếp tục trải nghiệm mua hàng và ưu đãi từ Food.
-        </p>
+      </aside>
+
+      <section class="auth-card">
+        <div class="mobile-brand"><span>🍜</span> MINI FOOD</div>
+        <div class="auth-heading">
+          <span class="auth-kicker">CHÀO MỪNG TRỞ LẠI</span>
+          <h1>Đăng nhập</h1>
+          <p>Nhập tài khoản và mật khẩu để tiếp tục.</p>
+        </div>
+
         <% if (error) { %>
-        <div class="error-box">
-          <%= error %>
-        </div>
+          <div class="error-box" role="alert"><span>!</span><%= error %></div>
         <% } %>
-        <form method="POST" action="/login" class="auth-form login-form">
-          <label>
-            Email hoặc tên đăng nhập
-          </label
-          >
-          <input
-            type="text"
-            name="username"
-            placeholder="Nhập email hoặc username"
-            required
-          />
-          <label>
-            Mật khẩu
-          </label
-          >
-          <input
-            type="password"
-            name="password"
-            placeholder="Nhập mật khẩu"
-            required
-          />
-          <label class="checkbox-row"
-            >
-            <input type="checkbox" name="remember" />
-            Ghi nhớ đăng nhập
-          </label
-          >
-          <button type="submit" class="btn btn-primary">
-            Đăng nhập
-          </button>
+
+        <form method="POST" action="/login" class="auth-form">
+          <div class="form-group">
+            <label for="username">Email hoặc tên đăng nhập</label>
+            <div class="input-wrap">
+              <span class="input-icon">👤</span>
+              <input id="username" type="text" name="username" placeholder="Nhập email hoặc username" autocomplete="username" required autofocus>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="label-row">
+              <label for="password">Mật khẩu</label>
+              <a href="/forgot-password" class="text-link">Quên mật khẩu?</a>
+            </div>
+            <div class="input-wrap">
+              <span class="input-icon">🔒</span>
+              <input id="password" type="password" name="password" placeholder="Nhập mật khẩu" autocomplete="current-password" required>
+              <button class="password-toggle" type="button" data-toggle-password="password" aria-label="Hiện mật khẩu">Hiện</button>
+            </div>
+          </div>
+
+          <label class="checkbox-row">
+            <input type="checkbox" name="remember">
+            <span>Ghi nhớ đăng nhập trên thiết bị này</span>
+          </label>
+
+          <button type="submit" class="btn-primary">Đăng nhập</button>
         </form>
+
+        <div class="auth-divider"><span>hoặc</span></div>
+
         <div class="auth-footer">
-          <span>
-            Chưa có tài khoản?
-          </span>
-          <a href="/register">
-            Đăng ký ngay
-          </a>
+          <span>Chưa có tài khoản?</span>
+          <a href="/register">Tạo tài khoản mới</a>
         </div>
-        <div class="back-home">
-          <a href="/">
-            ← Quay về Trang chủ
-          </a>
-        </div>
-      </div>
-    </div>
-  </body>
+
+        <a class="back-home" href="/">← Quay về trang chủ</a>
+      </section>
+    </section>
+  </main>
+
+  <script>
+    document.querySelectorAll('[data-toggle-password]').forEach(button => {
+      button.addEventListener('click', () => {
+        const input = document.getElementById(button.dataset.togglePassword)
+        if (!input) return
+        const showing = input.type === 'text'
+        input.type = showing ? 'password' : 'text'
+        button.textContent = showing ? 'Hiện' : 'Ẩn'
+        button.setAttribute('aria-label', showing ? 'Hiện mật khẩu' : 'Ẩn mật khẩu')
+      })
+    })
+  </script>
+</body>
 </html>
