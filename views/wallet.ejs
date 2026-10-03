@@ -1,79 +1,23 @@
 <!DOCTYPE html>
 <html lang="vi">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>
-      Nạp tiền vào ví
-    </title>
-    <link rel="stylesheet" href="/css/wallet.css" />
-  </head>
-  <body>
-    <main class="wallet-page">
-      <section class="wallet-card">
-        <div class="wallet-header">
-          <div>
-            <h1>
-              Nạp tiền vào ví
-            </h1>
-            <p>
-              Chọn số tiền bạn muốn nạp và tiếp tục thanh toán nhanh chóng.
-            </p>
-          </div>
-        </div>
-        <div class="page-nav">
-          <a href="/" class="active">
-            Trang chủ
-          </a>
-          <a href="/cart">
-            Giỏ hàng
-          </a
-          >
-          <a href="/orders">
-            Đơn hàng
-          </a>
-          <a href="/bank">
-            Nạp tiền
-          </a>
-        </div>
-        <% if (error) { %>
-        <p class="notice error">
-          <%= error %>
-        </p>
-        <% } %>
-        <% if (success) { %>
-        <p class="notice success">
-          <%= success %>
-        </p>
-        <% } %>
-        <form method="GET" action="/bank" class="wallet-form">
-          <label>
-            Số tiền nạp (₫)
-            <input
-              type="number"
-              name="amount"
-              min="1000"
-              step="1000"
-              required />
-          </label
-          >
-          <button type="submit" class="btn">
-            Nạp tiền
-          </button>
-        </form>
-        <div class="wallet-summary">
-          <span>
-            Số dư hiện tại
-          </span
-          >
-          <strong
-            >
-            <%= Number(user.balance || 0).toLocaleString('vi-VN') %>
-            ₫
-          </strong
-          >
-        </div>
-      </section>
-    </main>
-  </body>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Nạp tiền vào ví</title><link rel="stylesheet" href="/css/wallet.css"></head>
+<body>
+<main class="wallet-page">
+  <section class="wallet-card">
+    <div class="wallet-header"><div><span class="eyebrow">MINI FOOD WALLET</span><h1>Nạp tiền vào ví</h1><p>Tiền chỉ được cộng sau khi shop kiểm tra và xác nhận giao dịch ngân hàng.</p></div></div>
+    <div class="page-nav"><a href="/">Trang chủ</a><a href="/cart">Giỏ hàng</a><a href="/orders">Đơn hàng</a><a href="/wallet/top-up" class="active">Nạp tiền</a></div>
+    <% if (error) { %><p class="notice error"><%= error %></p><% } %>
+    <% if (success) { %><p class="notice success"><%= success %></p><% } %>
+    <form method="POST" action="/wallet/top-up" class="wallet-form">
+      <label>Số tiền muốn nạp (₫)<input type="number" name="amount" min="1000" max="100000000" step="1000" placeholder="Ví dụ: 100000" required></label>
+      <button type="submit" class="btn">Tạo yêu cầu nạp</button>
+    </form>
+    <div class="wallet-summary"><span>Số dư hiện tại</span><strong><%= Number(user.balance || 0).toLocaleString('vi-VN') %> ₫</strong></div>
+    <div class="topup-history"><h2>Lịch sử yêu cầu nạp</h2><div class="table-wrap"><table class="data-table"><thead><tr><th>Mã</th><th>Số tiền</th><th>Nội dung CK</th><th>Trạng thái</th></tr></thead><tbody>
+      <% if (!topups || !topups.length) { %><tr><td colspan="4" class="empty-state">Chưa có yêu cầu nạp tiền.</td></tr><% } %>
+      <% (topups || []).forEach(item => { %><tr><td>#<%= item.id %></td><td><%= Number(item.amount).toLocaleString('vi-VN') %> ₫</td><td><code><%= item.reference_code %></code></td><td><span class="status-pill status-<%= item.status %>"><%= item.status === 'pending' ? 'Chờ shop xác nhận' : item.status === 'approved' ? 'Đã cộng ví' : 'Đã từ chối' %></span></td></tr><% }) %>
+    </tbody></table></div></div>
+  </section>
+</main>
+</body>
 </html>
