@@ -1,19 +1,23 @@
 <!DOCTYPE html>
 <html lang="vi">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Chuyển khoản nạp ví</title><link rel="stylesheet" href="/css/bank.css"></head>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title><%= topupRequest ? 'Nạp tiền vào ví' : 'Thanh toán đơn hàng' %></title><link rel="stylesheet" href="/css/bank.css"></head>
 <body class="bank-page">
 <div class="container"><div class="card">
-  <span class="eyebrow">MINI FOOD PAYMENT</span><h1>Nạp tiền qua chuyển khoản</h1>
-  <p class="notice"><strong>Lưu ý:</strong> bấm xác nhận bên dưới không tự cộng tiền. Shop sẽ kiểm tra tài khoản ngân hàng và admin duyệt giao dịch trước khi ví được cộng.</p>
+  <span class="eyebrow">MINI FOOD PAYMENT</span><h1><%= topupRequest ? 'Nạp tiền qua chuyển khoản' : 'Thanh toán đơn hàng' %></h1>
+  <% if (topupRequest) { %><p class="notice"><strong>Lưu ý:</strong> bấm xác nhận bên dưới không tự cộng tiền. Shop sẽ kiểm tra tài khoản ngân hàng và admin duyệt giao dịch trước khi ví được cộng.</p><% } %>
   <h3>Thông tin tài khoản shop</h3>
   <p><strong>Ngân hàng:</strong> Techcombank</p>
   <p><strong>Số tài khoản:</strong> 400949785379</p>
   <p><strong>Chủ tài khoản:</strong> MINI FOOD STORE</p>
-  <p><strong>Nội dung chuyển khoản:</strong> <code><%= topupRequest ? topupRequest.reference_code : '' %></code></p>
+  <p><strong>Nội dung chuyển khoản:</strong> <code><%= topupRequest ? topupRequest.reference_code : `DH${orderId || ''}` %></code></p>
   <hr><h3>Số tiền cần chuyển</h3><p class="price"><%= Number(totalPrice || 0).toLocaleString('vi-VN') %> ₫</p>
   <div class="bank-qr-box"><p class="small-note">Quét QR, kiểm tra đúng số tài khoản, số tiền và nhập chính xác nội dung chuyển khoản ở trên.</p><img src="/images/bank.png" alt="Mã QR tài khoản shop" width="250" height="250"></div>
-  <form action="/payment-success" method="POST" style="margin-top:20px"><input type="hidden" name="topupId" value="<%= topupRequest ? topupRequest.id : '' %>"><button type="submit" class="btn">Tôi đã chuyển khoản — gửi shop kiểm tra</button></form>
-  <p style="margin-top:12px"><a href="/wallet/top-up" class="btn btn-secondary">Quay lại ví</a></p>
+  <form action="/payment-success" method="POST" style="margin-top:20px">
+    <input type="hidden" name="topupId" value="<%= topupRequest ? topupRequest.id : '' %>">
+    <input type="hidden" name="orderId" value="<%= orderId || '' %>">
+    <button type="submit" class="btn"><%= topupRequest ? 'Tôi đã chuyển khoản — gửi shop kiểm tra' : 'Tôi đã thanh toán' %></button>
+  </form>
+  <p style="margin-top:12px"><a href="<%= topupRequest ? '/wallet/top-up' : '/orders' %>" class="btn btn-secondary">Quay lại</a></p>
 </div></div>
 </body>
 </html>
