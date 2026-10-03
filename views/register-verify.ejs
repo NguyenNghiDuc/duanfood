@@ -21,7 +21,7 @@
         </div>
 
         <% if (safeOtpSent) { %>
-          <p class="auth-subtitle">Mã OTP đã được gửi tới <strong><%= safePhone %></strong>. Vui lòng nhập mã để hoàn tất đăng ký.</p>
+          <p class="auth-subtitle">Mã OTP đã được gửi tới <strong><%= safePhone %></strong>. Vui lòng nhập đủ 6 số để hoàn tất đăng ký.</p>
           <div class="success-box">SMS OTP đã được Twilio chấp nhận gửi.</div>
         <% } else { %>
           <p class="auth-subtitle">SMS OTP chưa được gửi thành công tới <strong><%= safePhone %></strong>.</p>
@@ -33,16 +33,28 @@
 
         <% if (safeDevOtp) { %>
           <div class="dev-otp-box">
-            <span>Chế độ development</span>
+            <span>Mã OTP test (development)</span>
             <strong><%= safeDevOtp %></strong>
-            <small>Twilio chưa được cấu hình nên dùng mã này để test. Production sẽ không hiển thị mã OTP.</small>
+            <small>Dùng đúng 6 số này để đăng ký. Khi chạy production, mã OTP sẽ không bao giờ hiển thị trên web.</small>
           </div>
         <% } %>
 
         <form method="POST" action="/register/verify" class="auth-form otp-form">
           <div class="form-group">
             <label>Mã OTP 6 số</label>
-            <input type="text" name="otp" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}" placeholder="••••••" required />
+            <input
+              type="text"
+              name="otp"
+              inputmode="numeric"
+              autocomplete="one-time-code"
+              maxlength="6"
+              pattern="[0-9]{6}"
+              title="Vui lòng nhập đúng 6 chữ số OTP"
+              placeholder="••••••"
+              oninvalid="this.setCustomValidity('Vui lòng nhập đúng mã OTP gồm 6 chữ số.')"
+              oninput="this.setCustomValidity(''); this.value=this.value.replace(/[^0-9]/g,'').slice(0,6)"
+              required
+            />
           </div>
           <button type="submit" class="btn btn-primary">Xác nhận OTP</button>
         </form>
